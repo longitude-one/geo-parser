@@ -23,12 +23,12 @@
     },
     "autoload": {
         "psr-0": {
-            "CrEOF\\Geo\\String": "lib/"
+            "LongitudeOne\\Geo\\String": "lib/"
         }
     },
     "autoload-dev": {
         "psr-0": {
-            "CrEOF\\Geo\\String\\Tests": "tests/"
+            "LongitudeOne\\Geo\\String\\Tests": "tests/"
         }
     }
 }

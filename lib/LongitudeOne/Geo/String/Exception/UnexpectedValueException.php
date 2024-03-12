@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-namespace CrEOF\Geo\String\Exception;
+namespace LongitudeOne\Geo\String\Exception;
 
 /**
  * UnexpectedValueException

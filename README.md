@@ -1,8 +1,4 @@
-# creof/geo-parser
-
-[![Code Climate](https://codeclimate.com/github/creof/geo-parser/badges/gpa.svg)](https://codeclimate.com/github/creof/geo-parser)
-[![Test Coverage](https://codeclimate.com/github/creof/geo-parser/badges/coverage.svg)](https://codeclimate.com/github/creof/geo-parser/coverage)
-[![Build Status](https://travis-ci.org/creof/geo-parser.svg)](https://travis-ci.org/creof/geo-parser)
+# longitude-one/geo-parser
 
 Lexer and parser library for geometric and geographic point string values.
 
@@ -90,8 +86,8 @@ Both single values and pairs are supported. Some samples of supported formats ar
 
 ## Return
 
-The parser will return a integer/float or an array containing a pair of these values.
+The parser will return an integer/float or an array containing a pair of these values.
 
 ## Exceptions
 
-The ```Lexer``` and ```Parser``` will throw exceptions implementing interface ```CrEOF\Geo\String\Exception\ExceptionInterface```.
+The ```Lexer``` and ```Parser``` will throw exceptions implementing interface ```LongitudeOne\Geo\String\Exception\ExceptionInterface```.

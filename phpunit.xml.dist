@@ -9,7 +9,7 @@
 
     <testsuites>
         <testsuite name="Tests">
-            <directory>./tests/CrEOF/Geo/String/Tests</directory>
+            <directory>./tests/LongitudeOne/Geo/String/Tests</directory>
         </testsuite>
     </testsuites>
 

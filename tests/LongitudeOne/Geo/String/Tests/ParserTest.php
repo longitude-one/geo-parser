@@ -21,9 +21,9 @@
  * SOFTWARE.
  */
 
-namespace CrEOF\Geo\String\Tests;
+namespace LongitudeOne\Geo\String\Tests;
 
-use CrEOF\Geo\String\Parser;
+use LongitudeOne\Geo\String\Parser;
 
 /**
  * Parser tests
@@ -236,7 +236,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return string[]
+     * @return array[]
      */
     public function dataSourceBad()
     {
@@ -244,57 +244,57 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             array(
                 'input'     => '-40°N 45°W',
                 'exception' => 'UnexpectedValueException',
-                'message'   => '[Syntax Error] line 0, col 5: Error: Expected CrEOF\Geo\String\Lexer::T_INTEGER or CrEOF\Geo\String\Lexer::T_FLOAT, got "N" in value "-40°N 45°W"'
+                'message'   => '[Syntax Error] line 0, col 5: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "N" in value "-40°N 45°W"'
             ),
             array(
                 'input'     => '+40°N 45°W',
                 'exception' => 'UnexpectedValueException',
-                'message'   => '[Syntax Error] line 0, col 5: Error: Expected CrEOF\Geo\String\Lexer::T_INTEGER or CrEOF\Geo\String\Lexer::T_FLOAT, got "N" in value "+40°N 45°W"'
+                'message'   => '[Syntax Error] line 0, col 5: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "N" in value "+40°N 45°W"'
             ),
             array(
                 'input'     => '40°N +45°W',
                 'exception' => 'UnexpectedValueException',
-                'message'   => '[Syntax Error] line 0, col 6: Error: Expected CrEOF\Geo\String\Lexer::T_INTEGER or CrEOF\Geo\String\Lexer::T_FLOAT, got "+" in value "40°N +45°W"'
+                'message'   => '[Syntax Error] line 0, col 6: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "+" in value "40°N +45°W"'
             ),
             array(
                 'input'     => '40°N -45W',
                 'exception' => 'UnexpectedValueException',
-                'message'   => '[Syntax Error] line 0, col 6: Error: Expected CrEOF\Geo\String\Lexer::T_INTEGER or CrEOF\Geo\String\Lexer::T_FLOAT, got "-" in value "40°N -45W"'
+                'message'   => '[Syntax Error] line 0, col 6: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "-" in value "40°N -45W"'
             ),
             array(
                 'input'     => '40N -45°W',
                 'exception' => 'UnexpectedValueException',
-                'message'   => '[Syntax Error] line 0, col 4: Error: Expected CrEOF\Geo\String\Lexer::T_INTEGER or CrEOF\Geo\String\Lexer::T_FLOAT, got "-" in value "40N -45°W"'
+                'message'   => '[Syntax Error] line 0, col 4: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "-" in value "40N -45°W"'
             ),
             array(
                 'input'     => '40N 45°W',
                 'exception' => 'UnexpectedValueException',
-                'message'   => '[Syntax Error] line 0, col 6: Error: Expected CrEOF\Geo\String\Lexer::T_CARDINAL_LON, got "°" in value "40N 45°W"'
+                'message'   => '[Syntax Error] line 0, col 6: Error: Expected LongitudeOne\Geo\String\Lexer::T_CARDINAL_LON, got "°" in value "40N 45°W"'
             ),
             array(
                 'input'     => '40°N 45°S',
                 'exception' => 'UnexpectedValueException',
-                'message'   => '[Syntax Error] line 0, col 10: Error: Expected CrEOF\Geo\String\Lexer::T_CARDINAL_LON, got "S" in value "40°N 45°S"'
+                'message'   => '[Syntax Error] line 0, col 10: Error: Expected LongitudeOne\Geo\String\Lexer::T_CARDINAL_LON, got "S" in value "40°N 45°S"'
             ),
             array(
                 'input'     => '40°W 45°E',
                 'exception' => 'UnexpectedValueException',
-                'message'   => '[Syntax Error] line 0, col 10: Error: Expected CrEOF\Geo\String\Lexer::T_CARDINAL_LAT, got "E" in value "40°W 45°E"'
+                'message'   => '[Syntax Error] line 0, col 10: Error: Expected LongitudeOne\Geo\String\Lexer::T_CARDINAL_LAT, got "E" in value "40°W 45°E"'
             ),
             array(
                 'input'     => '40° 45',
                 'exception' => 'UnexpectedValueException',
-                'message'   => '[Syntax Error] line 0, col -1: Error: Expected CrEOF\Geo\String\Lexer::T_APOSTROPHE, got end of string. in value "40° 45"'
+                'message'   => '[Syntax Error] line 0, col -1: Error: Expected LongitudeOne\Geo\String\Lexer::T_APOSTROPHE, got end of string. in value "40° 45"'
             ),
             array(
                 'input'     => '40°, 45',
                 'exception' => 'UnexpectedValueException',
-                'message'   => '[Syntax Error] line 0, col -1: Error: Expected CrEOF\Geo\String\Lexer::T_DEGREE, got end of string. in value "40°, 45"'
+                'message'   => '[Syntax Error] line 0, col -1: Error: Expected LongitudeOne\Geo\String\Lexer::T_DEGREE, got end of string. in value "40°, 45"'
             ),
             array(
                 'input'     => '40N 45',
                 'exception' => 'UnexpectedValueException',
-                'message'   => '[Syntax Error] line 0, col -1: Error: Expected CrEOF\Geo\String\Lexer::T_CARDINAL_LON, got end of string. in value "40N 45"'
+                'message'   => '[Syntax Error] line 0, col -1: Error: Expected LongitudeOne\Geo\String\Lexer::T_CARDINAL_LON, got end of string. in value "40N 45"'
             ),
             array(
                 'input'     => '40 45W',
@@ -309,37 +309,37 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             array(
                 'input'     => '40.757°N -45.567°W',
                 'exception' => 'UnexpectedValueException',
-                'message'   => '[Syntax Error] line 0, col 10: Error: Expected CrEOF\Geo\String\Lexer::T_INTEGER or CrEOF\Geo\String\Lexer::T_FLOAT, got "-" in value "40.757°N -45.567°W"'
+                'message'   => '[Syntax Error] line 0, col 10: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "-" in value "40.757°N -45.567°W"'
             ),
             array(
                 'input'     => '44°58\'53.9N 93°19\'25.8"W',
                 'exception' => 'UnexpectedValueException',
-                'message'   => '[Syntax Error] line 0, col 11: Error: Expected CrEOF\Geo\String\Lexer::T_QUOTE, got "N" in value "44°58\'53.9N 93°19\'25.8"W"'
+                'message'   => '[Syntax Error] line 0, col 11: Error: Expected LongitudeOne\Geo\String\Lexer::T_QUOTE, got "N" in value "44°58\'53.9N 93°19\'25.8"W"'
             ),
             array(
                 'input'     => '40:26\'',
                 'exception' => 'UnexpectedValueException',
-                'message'   => '[Syntax Error] line 0, col 5: Error: Expected CrEOF\Geo\String\Lexer::T_INTEGER or CrEOF\Geo\String\Lexer::T_FLOAT, got "\'" in value "40:26\'"'
+                'message'   => '[Syntax Error] line 0, col 5: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "\'" in value "40:26\'"'
             ),
             array(
                 'input'     => '132.4432:',
                 'exception' => 'UnexpectedValueException',
-                'message'   => '[Syntax Error] line 0, col 8: Error: Expected CrEOF\Geo\String\Lexer::T_INTEGER or CrEOF\Geo\String\Lexer::T_FLOAT, got ":" in value "132.4432:"'
+                'message'   => '[Syntax Error] line 0, col 8: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got ":" in value "132.4432:"'
             ),
             array(
                 'input'     => '55:34:22°',
                 'exception' => 'UnexpectedValueException',
-                'message'   => '[Syntax Error] line 0, col 8: Error: Expected CrEOF\Geo\String\Lexer::T_INTEGER or CrEOF\Geo\String\Lexer::T_FLOAT, got "°" in value "55:34:22°"'
+                'message'   => '[Syntax Error] line 0, col 8: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "°" in value "55:34:22°"'
             ),
             array(
                 'input'     => '55:34.22',
                 'exception' => 'UnexpectedValueException',
-                'message'   => '[Syntax Error] line 0, col 3: Error: Expected CrEOF\Geo\String\Lexer::T_INTEGER, got "34.22" in value "55:34.22"'
+                'message'   => '[Syntax Error] line 0, col 3: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER, got "34.22" in value "55:34.22"'
             ),
             array(
                 'input'     => '55#34.22',
                 'exception' => 'UnexpectedValueException',
-                'message'   => '[Syntax Error] line 0, col 2: Error: Expected CrEOF\Geo\String\Lexer::T_INTEGER or CrEOF\Geo\String\Lexer::T_FLOAT, got "#" in value "55#34.22"'
+                'message'   => '[Syntax Error] line 0, col 2: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "#" in value "55#34.22"'
             ),
             array(
                 'input'     => '200N',
