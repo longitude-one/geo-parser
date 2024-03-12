@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-namespace CrEOF\Geo\String;
+namespace LongitudeOne\Geo\String;
 
 use Doctrine\Common\Lexer\AbstractLexer;
 

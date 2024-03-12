@@ -21,9 +21,9 @@
  * SOFTWARE.
  */
 
-namespace CrEOF\Geo\String\Tests;
+namespace LongitudeOne\Geo\String\Tests;
 
-use CrEOF\Geo\String\Lexer;
+use LongitudeOne\Geo\String\Lexer;
 
 /**
  * Lexer tests
