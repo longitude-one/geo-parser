@@ -222,7 +222,7 @@ class Parser
         $glimpse = $this->lexer->glimpse();
 
         // If a colon hasn't been matched, and next token is a number followed by degree symbol, when tuple separator is space instead of comma, this value is complete
-        if (Lexer::T_COLON !== $this->nextSymbol && $this->lexer->isNextTokenAny(array(Lexer::T_INTEGER, Lexer::T_FLOAT)) && Lexer::T_DEGREE === $glimpse['type']) {
+        if (Lexer::T_COLON !== $this->nextSymbol && $this->lexer->isNextTokenAny(array(Lexer::T_INTEGER, Lexer::T_FLOAT)) && isset($glimpse['type']) && Lexer::T_DEGREE === $glimpse['type']) {
             return $degrees;
         }
 
