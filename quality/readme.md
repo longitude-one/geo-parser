@@ -54,7 +54,7 @@ docker exec geo-parser composer update --working-dir=quality/php-mess-detector
 
 To test files:
 ```bash
-docker exec geo-parser quality/php-mess-detector/vendor/bin/phpmd src text quality/php-mess-detector/ruleset.xml
+docker exec geo-parser quality/php-mess-detector/vendor/bin/phpmd lib text quality/php-mess-detector/ruleset.xml
 docker exec geo-parser quality/php-mess-detector/vendor/bin/phpmd tests text quality/php-mess-detector/test-ruleset.xml
 ```
 

@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<ruleset name="My first PHPMD rule set"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+    <description>
+        My custom rule set that checks my code...
+    </description>
+    <!-- Import the entire unused code rule set-->
+    <rule ref="rulesets/unusedcode.xml"/>
+    <!-- Import the entire codesize rule -->
+    <rule ref="rulesets/codesize.xml">
+        <exclude name="CyclomaticComplexity"/>
+        <exclude name="ExcessiveClassComplexity"/>
+    </rule>
+
+    <rule ref="rulesets/codesize.xml/CyclomaticComplexity">
+        <properties>
+            <!-- Set the report level to 17, because of historical code -->
+            <property name="reportLevel" value="17" />
+        </properties>
+    </rule>
+    <rule ref="rulesets/codesize.xml/ExcessiveClassComplexity">
+        <properties>
+            <!-- Set the maximum complexity to 68, because of historical code -->
+            <property name="maximum" value="68" />
+        </properties>
+    </rule>
+    <!-- Import the entire naming rule set -->
+    <rule ref="rulesets/naming.xml">
+        <exclude name="ShortVariable" /> <!-- Short variable names are allowed because of $x, $y, $z, $t -->
+    </rule>
+    <rule ref="rulesets/naming.xml/ShortVariable">
+        <properties>
+            <property name="minimum" value="3" />
+            <property name="exceptions" value="x,y" />
+        </properties>
+    </rule>
+    <!-- Import the entire controversial rule set -->
+    <rule ref="rulesets/controversial.xml" />
+    <!-- Import the entire design rule set -->
+    <rule ref="rulesets/design.xml">
+        <exclude name="CouplingBetweenObjects"/>
+    </rule>
+    <rule ref="rulesets/design.xml/CouplingBetweenObjects">
+        <properties>
+            <property name="maximum" value="16" />
+        </properties>
+    </rule>
+</ruleset>
