@@ -76,6 +76,6 @@ jobs:
               run: composer update --working-dir=quality/php-mess-detector
 
             - name: Run PHP-MESS-DETECTOR on lib directory
-              run: ./ quality/php-mess-detector/vendor/bin/phpmd lib text quality/php-mess-detector/ruleset.xml
+              run: ./quality/php-mess-detector/vendor/bin/phpmd lib text quality/php-mess-detector/ruleset.xml
             - name: Run PHP-MESS-DETECTOR on tests directory
-              run: ./ quality/php-mess-detector/vendor/bin/phpmd tests text quality/php-mess-detector/test-ruleset.xml
+              run: ./quality/php-mess-detector/vendor/bin/phpmd tests text quality/php-mess-detector/test-ruleset.xml
