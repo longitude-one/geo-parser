@@ -49,7 +49,7 @@ jobs:
               run: ./vendor/bin/phpunit -v
 
             - name: Cache Composer PHP-CS-FIXER packages
-              id: composer-cache
+              id: composer-phpcsfixer-cache
               uses: actions/cache@v4
               with:
                   path: quality/php-cs-fixer/vendor/
