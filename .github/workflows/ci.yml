@@ -46,7 +46,7 @@ jobs:
               run: composer --prefer-source install
 
             - name: Run tests
-              run: ./vendor/bin/phpunit -v
+              run: ./vendor/bin/phpunit
 
             ## Quality checks
             ## PHP-CS-Fixer
