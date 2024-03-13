@@ -47,3 +47,9 @@ jobs:
 
             - name: Run tests
               run: ./vendor/bin/phpunit -v
+
+            - name: Install PHP-CS-Fixer
+              run: composer update --working-dir=quality/php-cs-fixer
+
+            - name: Run PHP-CS-Fixer
+              run: ./quality/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=quality/php-cs-fixer/.php-cs-fixer.php --dry-run --allow-risky=yes
