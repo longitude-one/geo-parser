@@ -48,6 +48,8 @@ jobs:
             - name: Run tests
               run: ./vendor/bin/phpunit -v
 
+            ## Quality checks
+            ## PHP-CS-Fixer
             - name: Cache Composer PHP-CS-FIXER packages
               id: composer-phpcsfixer-cache
               uses: actions/cache@v4
@@ -63,6 +65,7 @@ jobs:
             - name: Run PHP-CS-Fixer
               run: ./quality/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=quality/php-cs-fixer/.php-cs-fixer.php --dry-run --allow-risky=yes
 
+            ## PHP-MESS-DETECTOR
             - name: Cache Composer PHP-MESS-DETECTOR packages
               id: composer-phpmd-cache
               uses: actions/cache@v4
@@ -71,11 +74,23 @@ jobs:
                   key: ${{ runner.os }}-phpmd-${{ hashFiles('**/composer.lock') }}
                   restore-keys: |
                       ${{ runner.os }}-phpmd-
-
             - name: Install PHP-MESS-DETECTOR
               run: composer update --working-dir=quality/php-mess-detector
-
             - name: Run PHP-MESS-DETECTOR on lib directory
               run: ./quality/php-mess-detector/vendor/bin/phpmd lib text quality/php-mess-detector/ruleset.xml
             - name: Run PHP-MESS-DETECTOR on tests directory
               run: ./quality/php-mess-detector/vendor/bin/phpmd tests text quality/php-mess-detector/test-ruleset.xml
+
+            ## PHP-STAN
+            - name: Cache Composer PHP-STAN packages
+              id: composer-php-stan-cache
+              uses: actions/cache@v4
+              with:
+                  path: quality/php-cs-fixer/vendor/
+                  key: ${{ runner.os }}-php-stan-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-php-stan-
+            - name: Install PHP-STAN
+              run: composer update --working-dir=quality/php-stan
+            - name: Run PHP-STAN
+              run: ./quality/php-stan/vendor/bin/phpstan analyse --configuration=quality/php-stan/php-stan.neon lib tests --error-format=table --no-progress --no-interaction --no-ansi --level=9 --memory-limit=256M -v

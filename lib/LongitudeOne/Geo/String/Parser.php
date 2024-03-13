@@ -25,23 +25,18 @@ class Parser
 {
     /**
      * Original input string.
-     *
-     * @var string
      */
-    private $input;
+    private string $input;
+
+    private Lexer $lexer;
 
     /**
-     * @var Lexer
-     */
-    private $lexer;
-
-    /**
-     * @var int
+     * @var int|null
      */
     private $nextCardinal;
 
     /**
-     * @var int
+     * @var int|false|null
      */
     private $nextSymbol;
 
@@ -50,7 +45,7 @@ class Parser
      *
      * Setup up instance properties
      *
-     * @param string|null $input
+     * @param string|float|int|null $input
      */
     public function __construct($input = null)
     {
@@ -91,7 +86,7 @@ class Parser
      *
      * @param int|float $value
      *
-     * @return int
+     * @return int|float
      *
      * @throws RangeException
      */
@@ -435,7 +430,7 @@ class Parser
     /**
      * Match value component symbol if required or present.
      *
-     * @return bool|int
+     * @return bool|int|null
      */
     private function symbol()
     {

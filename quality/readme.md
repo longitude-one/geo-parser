@@ -36,12 +36,12 @@ docker exec geo-parser composer update --working-dir=quality/php-stan
 
 To test files:
 ```bash
-docker exec geo-parser quality/php-stan/vendor/bin/phpstan analyse --configuration=quality/php-stan/php-stan.neon src tests --error-format=table --no-progress --no-interaction --no-ansi --level=9 --memory-limit=256M
+docker exec geo-parser quality/php-stan/vendor/bin/phpstan analyse --configuration=quality/php-stan/php-stan.neon lib tests --error-format=table --no-progress --no-interaction --no-ansi --level=9 --memory-limit=256M
 ```
 
 To add a file at exception baseline:
 ```bash
-docker exec geo-parser quality/php-stan/vendor/bin/phpstan analyse --configuration=quality/php-stan/php-stan.neon src tests --error-format=table --no-progress --no-interaction --no-ansi --level=9 --generate-baseline quality/php-stan/phpstan-baseline.neon
+docker exec geo-parser quality/php-stan/vendor/bin/phpstan analyse --configuration=quality/php-stan/php-stan.neon lib tests --error-format=table --no-progress --no-interaction --no-ansi --level=9 --generate-baseline quality/php-stan/phpstan-baseline.neon
 ```
 
 ## PHP Mess Detector

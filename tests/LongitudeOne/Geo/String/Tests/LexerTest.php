@@ -23,9 +23,9 @@ use LongitudeOne\Geo\String\Lexer;
 class LexerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @return array[]
+     * @return array<int, array<string, array<int, array<string, float|int|string>>|string>>
      */
-    public function testDataSource()
+    public function testDataSource(): array
     {
         return [
             [
@@ -178,7 +178,7 @@ class LexerTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider testDataSource
      */
-    public function testLexer($input, array $expectedTokens)
+    public function testLexer($input, array $expectedTokens): void
     {
         $lexer = new Lexer($input);
         $index = 0;
@@ -188,7 +188,7 @@ class LexerTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testReusedLexer()
+    public function testReusedLexer(): void
     {
         $lexer = new Lexer();
 

@@ -23,9 +23,9 @@ use LongitudeOne\Geo\String\Parser;
 class ParserTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @return array[]
+     * @return array<array<string,string>>
      */
-    public function dataSourceBad()
+    public function dataSourceBad(): array
     {
         return [
             [
@@ -152,9 +152,9 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return array[]
+     * @return array<int, array<string, array<int,float|int>|float|int|string>>
      */
-    public function dataSourceGood()
+    public function dataSourceGood(): array
     {
         return [
             [
@@ -309,13 +309,9 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $input
-     * @param string $exception
-     * @param string $message
-     *
      * @dataProvider dataSourceBad
      */
-    public function testBadValues($input, $exception, $message)
+    public function testBadValues(string $input, string $exception, string $message): void
     {
         $this->setExpectedException($exception, $message);
 
@@ -325,11 +321,11 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $input
+     * @param int|float|int[]|float[] $expected
      *
      * @dataProvider dataSourceGood
      */
-    public function testGoodValues($input, $expected)
+    public function testGoodValues(string $input, $expected): void
     {
         $parser = new Parser($input);
 
@@ -338,7 +334,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $value);
     }
 
-    public function testParserReuse()
+    public function testParserReuse(): void
     {
         $parser = new Parser();
 

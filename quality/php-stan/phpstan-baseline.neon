@@ -1,0 +1,46 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method LongitudeOne\\\\Geo\\\\String\\\\Parser\\:\\:match\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: ../../lib/LongitudeOne/Geo/String/Parser.php
+
+		-
+			message: "#^Method LongitudeOne\\\\Geo\\\\String\\\\Parser\\:\\:parse\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../../lib/LongitudeOne/Geo/String/Parser.php
+
+		-
+			message: "#^Method LongitudeOne\\\\Geo\\\\String\\\\Parser\\:\\:point\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../../lib/LongitudeOne/Geo/String/Parser.php
+
+		-
+			message: "#^Offset 'type' does not exist on array\\{value\\: int\\|string, type\\: int\\|string\\|null, position\\: int\\}\\|null\\.$#"
+			count: 1
+			path: ../../lib/LongitudeOne/Geo/String/Parser.php
+
+		-
+			message: "#^Offset 'value' does not exist on array\\{value\\: int\\|string, type\\: int\\|string\\|null, position\\: int\\}\\|null\\.$#"
+			count: 2
+			path: ../../lib/LongitudeOne/Geo/String/Parser.php
+
+		-
+			message: "#^Parameter \\#1 \\$expected of method LongitudeOne\\\\Geo\\\\String\\\\Parser\\:\\:syntaxError\\(\\) expects string, int\\|string given\\.$#"
+			count: 1
+			path: ../../lib/LongitudeOne/Geo/String/Parser.php
+
+		-
+			message: "#^Method LongitudeOne\\\\Geo\\\\String\\\\Tests\\\\LexerTest\\:\\:testLexer\\(\\) has parameter \\$expectedTokens with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: ../../tests/LongitudeOne/Geo/String/Tests/LexerTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$input of method Doctrine\\\\Common\\\\Lexer\\\\AbstractLexer\\:\\:setInput\\(\\) expects string, array\\<int, array\\<string, float\\|int\\|string\\>\\>\\|string given\\.$#"
+			count: 1
+			path: ../../tests/LongitudeOne/Geo/String/Tests/LexerTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$input of method LongitudeOne\\\\Geo\\\\String\\\\Parser\\:\\:parse\\(\\) expects string\\|null, array\\<int, float\\|int\\>\\|float\\|int\\|string given\\.$#"
+			count: 1
+			path: ../../tests/LongitudeOne/Geo/String/Tests/ParserTest.php
