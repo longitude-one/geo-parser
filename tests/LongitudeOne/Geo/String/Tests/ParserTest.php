@@ -12,7 +12,10 @@
 
 namespace LongitudeOne\Geo\String\Tests;
 
+use LongitudeOne\Geo\String\Exception\RangeException;
+use LongitudeOne\Geo\String\Exception\UnexpectedValueException;
 use LongitudeOne\Geo\String\Parser;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Parser tests.
@@ -20,132 +23,132 @@ use LongitudeOne\Geo\String\Parser;
  * @author  Derek J. Lambert <dlambert@dereklambert.com>
  * @license http://dlambert.mit-license.org MIT
  */
-class ParserTest extends \PHPUnit_Framework_TestCase
+class ParserTest extends TestCase
 {
     /**
      * @return array<array<string,string>>
      */
-    public function dataSourceBad(): array
+    public static function dataSourceBad(): array
     {
         return [
             [
                 'input' => '-40°N 45°W',
-                'exception' => 'UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => '[Syntax Error] line 0, col 5: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "N" in value "-40°N 45°W"',
             ],
             [
                 'input' => '+40°N 45°W',
-                'exception' => 'UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => '[Syntax Error] line 0, col 5: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "N" in value "+40°N 45°W"',
             ],
             [
                 'input' => '40°N +45°W',
-                'exception' => 'UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => '[Syntax Error] line 0, col 6: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "+" in value "40°N +45°W"',
             ],
             [
                 'input' => '40°N -45W',
-                'exception' => 'UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => '[Syntax Error] line 0, col 6: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "-" in value "40°N -45W"',
             ],
             [
                 'input' => '40N -45°W',
-                'exception' => 'UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => '[Syntax Error] line 0, col 4: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "-" in value "40N -45°W"',
             ],
             [
                 'input' => '40N 45°W',
-                'exception' => 'UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => '[Syntax Error] line 0, col 6: Error: Expected LongitudeOne\Geo\String\Lexer::T_CARDINAL_LON, got "°" in value "40N 45°W"',
             ],
             [
                 'input' => '40°N 45°S',
-                'exception' => 'UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => '[Syntax Error] line 0, col 10: Error: Expected LongitudeOne\Geo\String\Lexer::T_CARDINAL_LON, got "S" in value "40°N 45°S"',
             ],
             [
                 'input' => '40°W 45°E',
-                'exception' => 'UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => '[Syntax Error] line 0, col 10: Error: Expected LongitudeOne\Geo\String\Lexer::T_CARDINAL_LAT, got "E" in value "40°W 45°E"',
             ],
             [
                 'input' => '40° 45',
-                'exception' => 'UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => '[Syntax Error] line 0, col -1: Error: Expected LongitudeOne\Geo\String\Lexer::T_APOSTROPHE, got end of string. in value "40° 45"',
             ],
             [
                 'input' => '40°, 45',
-                'exception' => 'UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => '[Syntax Error] line 0, col -1: Error: Expected LongitudeOne\Geo\String\Lexer::T_DEGREE, got end of string. in value "40°, 45"',
             ],
             [
                 'input' => '40N 45',
-                'exception' => 'UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => '[Syntax Error] line 0, col -1: Error: Expected LongitudeOne\Geo\String\Lexer::T_CARDINAL_LON, got end of string. in value "40N 45"',
             ],
             [
                 'input' => '40 45W',
-                'exception' => 'UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => '[Syntax Error] line 0, col 5: Error: Expected end of string, got "W" in value "40 45W"',
             ],
             [
                 'input' => '-40.757° 45°W',
-                'exception' => 'UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => '[Syntax Error] line 0, col 14: Error: Expected end of string, got "W" in value "-40.757° 45°W"',
             ],
             [
                 'input' => '40.757°N -45.567°W',
-                'exception' => 'UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => '[Syntax Error] line 0, col 10: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "-" in value "40.757°N -45.567°W"',
             ],
             [
                 'input' => '44°58\'53.9N 93°19\'25.8"W',
-                'exception' => 'UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => '[Syntax Error] line 0, col 11: Error: Expected LongitudeOne\Geo\String\Lexer::T_QUOTE, got "N" in value "44°58\'53.9N 93°19\'25.8"W"',
             ],
             [
                 'input' => '40:26\'',
-                'exception' => 'UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => '[Syntax Error] line 0, col 5: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "\'" in value "40:26\'"',
             ],
             [
                 'input' => '132.4432:',
-                'exception' => 'UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => '[Syntax Error] line 0, col 8: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got ":" in value "132.4432:"',
             ],
             [
                 'input' => '55:34:22°',
-                'exception' => 'UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => '[Syntax Error] line 0, col 8: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "°" in value "55:34:22°"',
             ],
             [
                 'input' => '55:34.22',
-                'exception' => 'UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => '[Syntax Error] line 0, col 3: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER, got "34.22" in value "55:34.22"',
             ],
             [
                 'input' => '55#34.22',
-                'exception' => 'UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => '[Syntax Error] line 0, col 2: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "#" in value "55#34.22"',
             ],
             [
                 'input' => '200N',
-                'exception' => 'RangeException',
+                'exception' => RangeException::class,
                 'message' => '[Range Error] Error: Degrees out of range -90 to 90 in value "200N"',
             ],
             [
                 'input' => '55:200:32',
-                'exception' => 'RangeException',
+                'exception' => RangeException::class,
                 'message' => '[Range Error] Error: Minutes greater than 60 in value "55:200:32"',
             ],
             [
                 'input' => '55:20:99',
-                'exception' => 'RangeException',
+                'exception' => RangeException::class,
                 'message' => '[Range Error] Error: Seconds greater than 60 in value "55:20:99"',
             ],
             [
                 'input' => '55°70.99\'',
-                'exception' => 'RangeException',
+                'exception' => RangeException::class,
                 'message' => '[Range Error] Error: Minutes greater than 60 in value "55°70.99\'"',
             ],
         ];
@@ -154,7 +157,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array<int, array<string, array<int,float|int>|float|int|string>>
      */
-    public function dataSourceGood(): array
+    public static function dataSourceGood(): array
     {
         return [
             [
@@ -202,6 +205,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase
                 'expected' => 45.24,
             ],
             [
+                'input' => 45.24,
+                'expected' => 45.24,
+            ],
+            [
                 'input' => '45.24°',
                 'expected' => 45.24,
             ],
@@ -215,19 +222,19 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'input' => '40° 26\' 46" N',
-                'expected' => 40.446111111111,
+                'expected' => 40.44611111111111,
             ],
             [
                 'input' => '40:26S',
-                'expected' => -40.43333333333333,
+                'expected' => -40.4333333333333333,
             ],
             [
                 'input' => '79:56:55W',
-                'expected' => -79.948611111111,
+                'expected' => -79.94861111111111,
             ],
             [
                 'input' => '40:26:46N',
-                'expected' => 40.446111111111,
+                'expected' => 40.44611111111111,
             ],
             [
                 'input' => '40° N 79° W',
@@ -251,11 +258,11 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'input' => '40° 26\' 46" N 79° 58\' 56" W',
-                'expected' => [40.446111111111, -79.982222222222],
+                'expected' => [40.44611111111111, -79.98222222222222],
             ],
             [
                 'input' => '40° 26\' N 79° 58\' W',
-                'expected' => [40.43333333333333, -79.966666666666669],
+                'expected' => [40.4333333333333333, -79.96666666666666669],
             ],
             [
                 'input' => '40.4738° N, 79.553° W',
@@ -267,15 +274,15 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'input' => '40° 26.222\' N 79° 58.52\' E',
-                'expected' => [40.437033333333, 79.975333333333],
+                'expected' => [40.43703333333333, 79.97533333333334],
             ],
             [
                 'input' => '40°26.222\'N 79°58.52\'E',
-                'expected' => [40.437033333333, 79.975333333333],
+                'expected' => [40.43703333333333, 79.97533333333334],
             ],
             [
                 'input' => '40°26.222\' 79°58.52\'',
-                'expected' => [40.437033333333, 79.975333333333],
+                'expected' => [40.43703333333333, 79.97533333333334],
             ],
             [
                 'input' => '40.222° -79.5852°',
@@ -287,33 +294,36 @@ class ParserTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'input' => '44°58\'53.9"N 93°19\'25.8"W',
-                'expected' => [44.981638888888888, -93.32383333333334],
+                'expected' => [44.98163888888888888, -93.3238333333333334],
             ],
             [
                 'input' => '44°58\'53.9"N, 93°19\'25.8"W',
-                'expected' => [44.981638888888888, -93.32383333333334],
+                'expected' => [44.98163888888888888, -93.3238333333333334],
             ],
             [
                 'input' => '79:56:55W 40:26:46N',
-                'expected' => [-79.948611111111, 40.446111111111],
+                'expected' => [-79.94861111111111, 40.44611111111111],
             ],
             [
                 'input' => '79:56:55 W, 40:26:46 N',
-                'expected' => [-79.948611111111, 40.446111111111],
+                'expected' => [-79.94861111111111, 40.44611111111111],
             ],
             [
                 'input' => '79°56′55″W, 40°26′46″N',
-                'expected' => [-79.948611111111, 40.446111111111],
+                'expected' => [-79.94861111111111, 40.44611111111111],
             ],
         ];
     }
 
     /**
      * @dataProvider dataSourceBad
+     *
+     * @param class-string<\Throwable> $exception
      */
-    public function testBadValues(string $input, string $exception, string $message): void
+    public function testBadValues(string|int|float $input, string $exception, string $message): void
     {
-        $this->setExpectedException($exception, $message);
+        self::expectException($exception);
+        self::expectExceptionMessage($message);
 
         $parser = new Parser($input);
 
@@ -325,7 +335,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider dataSourceGood
      */
-    public function testGoodValues(string $input, $expected): void
+    public function testGoodValues(string|int|float $input, $expected): void
     {
         $parser = new Parser($input);
 
@@ -338,13 +348,13 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     {
         $parser = new Parser();
 
-        foreach ($this->dataSourceGood() as $data) {
+        foreach (static::dataSourceGood() as $data) {
             $input = $data['input'];
             $expected = $data['expected'];
 
             $value = $parser->parse($input);
 
-            $this->assertEquals($expected, $value);
+            self::assertEquals($expected, $value);
         }
     }
 }

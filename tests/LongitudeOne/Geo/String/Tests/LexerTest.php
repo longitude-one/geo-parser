@@ -13,6 +13,7 @@
 namespace LongitudeOne\Geo\String\Tests;
 
 use LongitudeOne\Geo\String\Lexer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Lexer tests.
@@ -20,12 +21,12 @@ use LongitudeOne\Geo\String\Lexer;
  * @author  Derek J. Lambert <dlambert@dereklambert.com>
  * @license http://dlambert.mit-license.org MIT
  */
-class LexerTest extends \PHPUnit_Framework_TestCase
+class LexerTest extends TestCase
 {
     /**
      * @return array<int, array<string, array<int, array<string, float|int|string>>|string>>
      */
-    public function testDataSource(): array
+    public static function dataProvider(): array
     {
         return [
             [
@@ -176,7 +177,7 @@ class LexerTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $input
      *
-     * @dataProvider testDataSource
+     * @dataProvider dataProvider
      */
     public function testLexer($input, array $expectedTokens): void
     {
@@ -184,7 +185,7 @@ class LexerTest extends \PHPUnit_Framework_TestCase
         $index = 0;
 
         while (null !== $actual = $lexer->peek()) {
-            $this->assertEquals($expectedTokens[$index++], $actual);
+            self::assertEquals($expectedTokens[$index++], $actual);
         }
     }
 
@@ -192,7 +193,7 @@ class LexerTest extends \PHPUnit_Framework_TestCase
     {
         $lexer = new Lexer();
 
-        foreach ($this->testDataSource() as $data) {
+        foreach (self::dataProvider() as $data) {
             $input = $data['input'];
             $expectedTokens = $data['expectedTokens'];
             $index = 0;

@@ -1,4 +1,4 @@
-FROM php:7-fpm-alpine
+FROM php:8.1-fpm-alpine
 
 #remove openssh-client when PR dmish-setting is accepted
 #RUN apk --update --no-cache add bash zip

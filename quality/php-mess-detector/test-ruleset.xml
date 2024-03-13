@@ -14,8 +14,9 @@
         <exclude name="ExcessiveMethodLength"/>
     </rule>
     <rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
+        <!-- Set the maximum method length to 158 because of dataProviders -->
         <properties>
-            <property name="minimum" value="155"/>
+            <property name="minimum" value="158"/>
         </properties>
     </rule>
     <!-- Import the entire naming rule set -->
