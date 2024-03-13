@@ -48,6 +48,15 @@ jobs:
             - name: Run tests
               run: ./vendor/bin/phpunit -v
 
+            - name: Cache Composer PHP-CS-FIXER packages
+              id: composer-cache
+              uses: actions/cache@v4
+              with:
+                  path: quality/php-cs-fixer/vendor/
+                  key: ${{ runner.os }}-phpcsfixer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-phpcsfixer-
+
             - name: Install PHP-CS-Fixer
               run: composer update --working-dir=quality/php-cs-fixer
 
