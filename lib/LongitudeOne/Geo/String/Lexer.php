@@ -51,7 +51,7 @@ class Lexer extends AbstractLexer
     /**
      * @return string[]
      */
-    protected function getCatchablePatterns()
+    protected function getCatchablePatterns(): array
     {
         return [
             '[nesw\'",]',
@@ -62,17 +62,15 @@ class Lexer extends AbstractLexer
     /**
      * @return string[]
      */
-    protected function getNonCatchablePatterns()
+    protected function getNonCatchablePatterns(): array
     {
         return ['\s+'];
     }
 
     /**
      * @param string &$value
-     *
-     * @return int
      */
-    protected function getType(&$value)
+    protected function getType(&$value): int
     {
         if (is_numeric($value)) {
             $value += 0;

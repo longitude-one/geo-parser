@@ -61,10 +61,8 @@ class Parser
      * Parse input string.
      *
      * @param string|null $input
-     *
-     * @return float|int|array
      */
-    public function parse($input = null)
+    public function parse($input = null): float|int|array
     {
         if (null !== $input) {
             $this->input = (string) $input;
@@ -317,11 +315,9 @@ class Parser
     /**
      * Match and return single value or pair.
      *
-     * @return float|int|array
-     *
      * @throws UnexpectedValueException
      */
-    private function point()
+    private function point(): float|int|array
     {
         // Get first coordinate value
         $x = $this->coordinate();
@@ -350,14 +346,8 @@ class Parser
 
     /**
      * Create out of range exception.
-     *
-     * @param string $type
-     * @param int    $high
-     * @param int    $low
-     *
-     * @return RangeException
      */
-    private function rangeError($type, $high, $low = null)
+    private function rangeError(string $type, int $high, ?int $low = null): RangeException
     {
         $range = null === $low ? sprintf('greater than %d', $high) : sprintf('out of range %d to %d', $low, $high);
         $message = sprintf('[Range Error] Error: %s %s in value "%s"', $type, $range, $this->input);
@@ -368,11 +358,9 @@ class Parser
     /**
      * Match and return seconds value.
      *
-     * @return float|int
-     *
      * @throws RangeException
      */
-    private function seconds()
+    private function seconds(): int|float
     {
         // Seconds value can be an integer or float
         if ($this->lexer->isNextTokenAny([Lexer::T_INTEGER, Lexer::T_FLOAT])) {
@@ -401,10 +389,8 @@ class Parser
 
     /**
      * Match plus or minus sign and return coefficient.
-     *
-     * @return int
      */
-    private function sign()
+    private function sign(): int
     {
         if ($this->lexer->isNextToken(Lexer::T_PLUS)) {
             // Match plus and set sign
@@ -421,10 +407,8 @@ class Parser
 
     /**
      * Match value component symbol if required or present.
-     *
-     * @return bool|int|null
      */
-    private function symbol()
+    private function symbol(): bool|int|null
     {
         // If symbol requirement not set match colon if present
         if (null === $this->nextSymbol && $this->lexer->isNextToken(Lexer::T_COLON)) {
