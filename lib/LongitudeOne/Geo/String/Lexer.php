@@ -19,6 +19,8 @@ use Doctrine\Common\Lexer\AbstractLexer;
  *
  * @author  Derek J. Lambert <dlambert@dereklambert.com>
  * @license http://dlambert.mit-license.org MIT
+ *
+ * @extends AbstractLexer<int, int|float|string>
  */
 class Lexer extends AbstractLexer
 {

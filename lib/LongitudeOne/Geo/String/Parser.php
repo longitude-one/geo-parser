@@ -12,6 +12,7 @@
 
 namespace LongitudeOne\Geo\String;
 
+use Doctrine\Common\Lexer\Token;
 use LongitudeOne\Geo\String\Exception\RangeException;
 use LongitudeOne\Geo\String\Exception\UnexpectedValueException;
 
@@ -84,22 +85,19 @@ class Parser
     /**
      * Match cardinal direction and return sign.
      *
-     * @param int|float $value
-     *
-     * @return int|float
-     *
      * @throws RangeException
      */
-    private function cardinal($value)
+    private function cardinal(int|float $value): int|float
     {
-        // If cardinal direction was not on previous coordinate it can be anything
+        // If the cardinal direction was not on the previous coordinate, it can be anything
         if (null === $this->nextCardinal) {
-            $this->nextCardinal = Lexer::T_CARDINAL_LON === $this->lexer->lookahead['type'] ? Lexer::T_CARDINAL_LON : Lexer::T_CARDINAL_LAT;
+            $this->nextCardinal = Lexer::T_CARDINAL_LON === $this->lexer->lookahead?->type ? Lexer::T_CARDINAL_LON : Lexer::T_CARDINAL_LAT;
         }
 
-        // Match cardinal direction
+        // Match the cardinal direction
+        /** @var string $cardinal N, W, S, E, or n, w, s, e */
         $cardinal = $this->match($this->nextCardinal);
-        // By default don't change sign
+        // By default, don't change sign
         $sign = 1;
         // Define value range
         $range = 0;
@@ -138,15 +136,13 @@ class Parser
 
     /**
      * Match and return single coordinate value.
-     *
-     * @return float|int
      */
-    private function coordinate()
+    private function coordinate(): float|int
     {
-        // By default don't change sign
+        // By default, don't change sign
         $sign = false;
 
-        // Match sign if cardinal direction has not been seen
+        // Match sign if the cardinal direction has not been seen
         if (!($this->nextCardinal > 0) && $this->lexer->isNextTokenAny([Lexer::T_PLUS, Lexer::T_MINUS])) {
             $sign = $this->sign();
         }
@@ -168,23 +164,22 @@ class Parser
     }
 
     /**
-     * Match and return degrees value.
-     *
-     * @return float|int
+     * Match and return degree value.
      */
-    private function degrees()
+    private function degrees(): float|int
     {
         // Reset symbol requirement
         if (Lexer::T_APOSTROPHE === $this->nextSymbol || Lexer::T_QUOTE === $this->nextSymbol) {
             $this->nextSymbol = Lexer::T_DEGREE;
         }
 
-        // If degrees is a float there will be no minutes or seconds
+        // If degrees is a float, there will be no minutes or seconds
         if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
             // Get degree value
+            /** @var float $degrees */
             $degrees = $this->match(Lexer::T_FLOAT);
 
-            // Degree float values may be followed by degree symbol
+            // Degree symbol may follow degree float values
             if ($this->lexer->isNextToken(Lexer::T_DEGREE)) {
                 $this->match(Lexer::T_DEGREE);
 
@@ -192,14 +187,14 @@ class Parser
                 $this->nextSymbol = Lexer::T_DEGREE;
             }
 
-            // Return value
+            // Return the float value
             return $degrees;
         }
 
-        // If degrees isn't a float it must be an integer
+        // If degrees isn't a float, it must be an integer
         $degrees = $this->number();
 
-        // If integer is not followed by a symbol this value is complete
+        // If a symbol does not follow integer, this value is complete
         if (!$this->symbol()) {
             return $degrees;
         }
@@ -221,45 +216,43 @@ class Parser
 
     /**
      * Match token and return value.
-     *
-     * @param int $token
-     *
-     * @throws UnexpectedValueException
      */
-    private function match($token)
+    private function match(int $token): string|float|int
     {
-        // If next token isn't type specified throw error
+        // If the next token isn't type specified throw error
         if (!$this->lexer->isNextToken($token)) {
             throw $this->syntaxError($this->lexer->getLiteral($token));
         }
 
-        // Move lexer to next token
+        // Move lexer to the next token
         $this->lexer->moveNext();
 
-        // Return the token value
-        return $this->lexer->token['value'];
+        /** @var Token<int, string|int|float> $nextToken nextToken cannot be null, because of the above test. */
+        $nextToken = $this->lexer->token;
+
+        // FIXME We currently return string|int|float and this is not good. We should return only string|int.
+        return $nextToken->value;
     }
 
     /**
      * Match and return minutes value.
      *
-     * @return float|int
-     *
      * @throws RangeException
      */
-    private function minutes()
+    private function minutes(): float|int
     {
         // If using colon or minutes is an integer parse value
         if (Lexer::T_COLON === $this->nextSymbol || $this->lexer->isNextToken(Lexer::T_INTEGER)) {
-            $minutes = $this->match(Lexer::T_INTEGER);
+            /** @var int $readMinutes */
+            $readMinutes = $this->match(Lexer::T_INTEGER);
 
             // Throw exception if minutes are greater than 60
-            if ($minutes > 60) {
+            if ($readMinutes > 60) {
                 throw $this->rangeError('Minutes', 60);
             }
 
             // Get fractional minutes
-            $minutes = $minutes / 60;
+            $minutes = $readMinutes / 60;
 
             // If using colon and one doesn't follow value is done
             if (Lexer::T_COLON === $this->nextSymbol && !$this->lexer->isNextToken(Lexer::T_COLON)) {
@@ -278,6 +271,7 @@ class Parser
 
         // If minutes is a float there will be no seconds
         if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
+            /** @var float $minutes */
             $minutes = $this->match(Lexer::T_FLOAT);
 
             // Throw exception if minutes are greater than 60
@@ -302,18 +296,16 @@ class Parser
     /**
      * Match integer or float token and return value.
      *
-     * @return int|float
-     *
      * @throws UnexpectedValueException
      */
-    private function number()
+    private function number(): int|float
     {
-        // If next token is a float match and return it
+        // If the next token is a float match, then return it
         if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
             return $this->match(Lexer::T_FLOAT);
         }
 
-        // If next token is an integer match and return it
+        // If the next token is an integer match, then return it
         if ($this->lexer->isNextToken(Lexer::T_INTEGER)) {
             return $this->match(Lexer::T_INTEGER);
         }
@@ -477,21 +469,17 @@ class Parser
     }
 
     /**
-     * Create exception with descriptive error message.
-     *
-     * @param string $expected
-     *
-     * @return UnexpectedValueException
+     * Create exception with a descriptive error message.
      */
-    private function syntaxError($expected)
+    private function syntaxError(string $expected): UnexpectedValueException
     {
         $expected = sprintf('Expected %s, got', $expected);
         $token = $this->lexer->lookahead;
-        $found = null === $this->lexer->lookahead ? 'end of string.' : sprintf('"%s"', $token['value']);
+        $found = null === $token ? 'end of string.' : sprintf('"%s"', $token->value);
 
         $message = sprintf(
             '[Syntax Error] line 0, col %d: Error: %s %s in value "%s"',
-            isset($token['position']) ? $token['position'] : '-1',
+            $token->position ?? -1,
             $expected,
             $found,
             $this->input

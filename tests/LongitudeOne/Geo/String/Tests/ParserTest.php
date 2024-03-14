@@ -26,7 +26,7 @@ use PHPUnit\Framework\TestCase;
 class ParserTest extends TestCase
 {
     /**
-     * @return array<array<string,string>>
+     * @return array<string,string>[]
      */
     public static function dataSourceBad(): array
     {
