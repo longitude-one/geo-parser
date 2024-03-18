@@ -19,6 +19,8 @@ use Doctrine\Common\Lexer\AbstractLexer;
  *
  * @author  Derek J. Lambert <dlambert@dereklambert.com>
  * @license http://dlambert.mit-license.org MIT
+ *
+ * @extends AbstractLexer<int, int|float|string>
  */
 class Lexer extends AbstractLexer
 {
@@ -49,7 +51,7 @@ class Lexer extends AbstractLexer
     /**
      * @return string[]
      */
-    protected function getCatchablePatterns()
+    protected function getCatchablePatterns(): array
     {
         return [
             '[nesw\'",]',
@@ -60,17 +62,15 @@ class Lexer extends AbstractLexer
     /**
      * @return string[]
      */
-    protected function getNonCatchablePatterns()
+    protected function getNonCatchablePatterns(): array
     {
         return ['\s+'];
     }
 
     /**
      * @param string &$value
-     *
-     * @return int
      */
-    protected function getType(&$value)
+    protected function getType(&$value): int
     {
         if (is_numeric($value)) {
             $value += 0;

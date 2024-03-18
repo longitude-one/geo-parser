@@ -1,8 +1,13 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method LongitudeOne\\\\Geo\\\\String\\\\Parser\\:\\:match\\(\\) has no return type specified\\.$#"
+			message: "#^Type float\\|int\\|string in generic type Doctrine\\\\Common\\\\Lexer\\\\AbstractLexer\\<int, float\\|int\\|string\\> in PHPDoc tag @extends is not subtype of template type V of int\\|string of class Doctrine\\\\Common\\\\Lexer\\\\AbstractLexer\\.$#"
 			count: 1
+			path: ../../lib/LongitudeOne/Geo/String/Lexer.php
+
+		-
+			message: "#^Method LongitudeOne\\\\Geo\\\\String\\\\Parser\\:\\:number\\(\\) should return float\\|int but returns float\\|int\\|string\\.$#"
+			count: 2
 			path: ../../lib/LongitudeOne/Geo/String/Parser.php
 
 		-
@@ -16,31 +21,16 @@ parameters:
 			path: ../../lib/LongitudeOne/Geo/String/Parser.php
 
 		-
-			message: "#^Offset 'type' does not exist on array\\{value\\: int\\|string, type\\: int\\|string\\|null, position\\: int\\}\\|null\\.$#"
-			count: 1
-			path: ../../lib/LongitudeOne/Geo/String/Parser.php
-
-		-
-			message: "#^Offset 'value' does not exist on array\\{value\\: int\\|string, type\\: int\\|string\\|null, position\\: int\\}\\|null\\.$#"
-			count: 2
-			path: ../../lib/LongitudeOne/Geo/String/Parser.php
-
-		-
 			message: "#^Parameter \\#1 \\$expected of method LongitudeOne\\\\Geo\\\\String\\\\Parser\\:\\:syntaxError\\(\\) expects string, int\\|string given\\.$#"
 			count: 1
 			path: ../../lib/LongitudeOne/Geo/String/Parser.php
 
 		-
-			message: "#^Method LongitudeOne\\\\Geo\\\\String\\\\Tests\\\\LexerTest\\:\\:testLexer\\(\\) has parameter \\$expectedTokens with no value type specified in iterable type array\\.$#"
+			message: "#^Type float\\|int\\|string in generic type Doctrine\\\\Common\\\\Lexer\\\\Token\\<int, float\\|int\\|string\\> in PHPDoc tag @var for variable \\$nextToken is not subtype of template type V of int\\|string of class Doctrine\\\\Common\\\\Lexer\\\\Token\\.$#"
 			count: 1
-			path: ../../tests/LongitudeOne/Geo/String/Tests/LexerTest.php
+			path: ../../lib/LongitudeOne/Geo/String/Parser.php
 
 		-
-			message: "#^Parameter \\#1 \\$input of method Doctrine\\\\Common\\\\Lexer\\\\AbstractLexer\\:\\:setInput\\(\\) expects string, array\\<int, array\\<string, float\\|int\\|string\\>\\>\\|string given\\.$#"
+			message: "#^Method LongitudeOne\\\\Geo\\\\String\\\\Tests\\\\LexerTest\\:\\:dataProvider\\(\\) return type with generic class Doctrine\\\\Common\\\\Lexer\\\\Token does not specify its types\\: T, V$#"
 			count: 1
 			path: ../../tests/LongitudeOne/Geo/String/Tests/LexerTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$input of method LongitudeOne\\\\Geo\\\\String\\\\Parser\\:\\:parse\\(\\) expects string\\|null, array\\<int, float\\|int\\>\\|float\\|int\\|string given\\.$#"
-			count: 1
-			path: ../../tests/LongitudeOne/Geo/String/Tests/ParserTest.php
