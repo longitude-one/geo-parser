@@ -12,14 +12,12 @@
 
 namespace LongitudeOne\Geo\String\Exception;
 
-use Throwable;
-
 /**
  * Exception interface for library exceptions.
  *
  * @author  Derek J. Lambert <dlambert@dereklambert.com>
  * @license http://dlambert.mit-license.org MIT
  */
-interface ExceptionInterface extends Throwable
+interface ExceptionInterface extends \Throwable
 {
 }

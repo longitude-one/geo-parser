@@ -12,7 +12,6 @@
 
 namespace LongitudeOne\Geo\String\Tests;
 
-use Generator;
 use LongitudeOne\Geo\String\Exception\ExceptionInterface;
 use LongitudeOne\Geo\String\Exception\RangeException;
 use LongitudeOne\Geo\String\Exception\UnexpectedValueException;
@@ -28,9 +27,9 @@ use PHPUnit\Framework\TestCase;
 class ParserTest extends TestCase
 {
     /**
-     * @return Generator<array{string, class-string<ExceptionInterface>, string}>
+     * @return \Generator<array{string, class-string<ExceptionInterface>, string}>
      */
-    public static function dataSourceBad(): Generator
+    public static function dataSourceBad(): \Generator
     {
         yield ['-40°N 45°W', UnexpectedValueException::class, '[Syntax Error] line 0, col 5: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "N" in value "-40°N 45°W"'];
         yield ['+40°N 45°W', UnexpectedValueException::class, '[Syntax Error] line 0, col 5: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "N" in value "+40°N 45°W"'];
@@ -59,9 +58,9 @@ class ParserTest extends TestCase
     }
 
     /**
-     * @return Generator<array{int|string|float, int|string|float|int[]|float[]}>
+     * @return \Generator<array{int|string|float, int|string|float|int[]|float[]}>
      */
-    public static function dataSourceGood(): Generator
+    public static function dataSourceGood(): \Generator
     {
         yield [40, 40];
         yield ['40', 40];
