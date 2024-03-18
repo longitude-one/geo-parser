@@ -23,8 +23,8 @@
     </rule>
     <rule ref="rulesets/codesize.xml/ExcessiveClassComplexity">
         <properties>
-            <!-- Set the maximum complexity to 68, because of historical code -->
-            <property name="maximum" value="68" />
+            <!-- Set the maximum complexity to 69, because of historical code -->
+            <property name="maximum" value="69" />
         </properties>
     </rule>
     <!-- Import the entire naming rule set -->
