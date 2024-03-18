@@ -5,20 +5,12 @@
          xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
          xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
     <description>
-        My custom rule set that checks my code...
+        My custom rule set that checks my test code.
     </description>
     <!-- Import the entire unused code rule set, but UnusedPrivateMethod -->
     <rule ref="rulesets/unusedcode.xml" />
-    <!-- Import the entire cyclomatic complexity rule -->
-    <rule ref="rulesets/codesize.xml">
-        <exclude name="ExcessiveMethodLength"/>
-    </rule>
-    <rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
-        <!-- Set the maximum method length to 158 because of dataProviders -->
-        <properties>
-            <property name="minimum" value="158"/>
-        </properties>
-    </rule>
+    <!-- Import the entire codeside rule -->
+    <rule ref="rulesets/codesize.xml" />
     <!-- Import the entire naming rule set -->
     <rule ref="rulesets/naming.xml" />
     <!-- Import the entire controversial rule set -->

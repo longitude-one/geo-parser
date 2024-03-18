@@ -34,8 +34,3 @@ parameters:
 			message: "#^Method LongitudeOne\\\\Geo\\\\String\\\\Tests\\\\LexerTest\\:\\:dataProvider\\(\\) return type with generic class Doctrine\\\\Common\\\\Lexer\\\\Token does not specify its types\\: T, V$#"
 			count: 1
 			path: ../../tests/LongitudeOne/Geo/String/Tests/LexerTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$input of method LongitudeOne\\\\Geo\\\\String\\\\Parser\\:\\:parse\\(\\) expects string\\|null, array\\<int, float\\|int\\>\\|float\\|int\\|string given\\.$#"
-			count: 1
-			path: ../../tests/LongitudeOne/Geo/String/Tests/ParserTest.php

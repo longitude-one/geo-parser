@@ -60,7 +60,7 @@ class Parser
     /**
      * Parse input string.
      *
-     * @param string|null $input
+     * @param int|float|string|null $input
      */
     public function parse($input = null): float|int|array
     {
@@ -149,7 +149,7 @@ class Parser
         $coordinate = $this->degrees();
 
         // If sign not matched determine sign from cardinal direction when required
-        // or if cardinal direction is present and this is first coordinate in a pair
+        // or if a cardinal direction is present and this is first coordinate in a pair
         if (false === $sign && ($this->nextCardinal > 0 || (null === $this->nextCardinal && $this->lexer->isNextTokenAny([Lexer::T_CARDINAL_LAT, Lexer::T_CARDINAL_LON])))) {
             return $this->cardinal($coordinate);
         }

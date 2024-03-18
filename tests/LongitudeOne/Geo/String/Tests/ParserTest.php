@@ -12,6 +12,8 @@
 
 namespace LongitudeOne\Geo\String\Tests;
 
+use Generator;
+use LongitudeOne\Geo\String\Exception\ExceptionInterface;
 use LongitudeOne\Geo\String\Exception\RangeException;
 use LongitudeOne\Geo\String\Exception\UnexpectedValueException;
 use LongitudeOne\Geo\String\Parser;
@@ -26,299 +28,94 @@ use PHPUnit\Framework\TestCase;
 class ParserTest extends TestCase
 {
     /**
-     * @return array<string,string>[]
+     * @return Generator<array{string, class-string<ExceptionInterface>, string}>
      */
-    public static function dataSourceBad(): array
+    public static function dataSourceBad(): Generator
     {
-        return [
-            [
-                'input' => '-40°N 45°W',
-                'exception' => UnexpectedValueException::class,
-                'message' => '[Syntax Error] line 0, col 5: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "N" in value "-40°N 45°W"',
-            ],
-            [
-                'input' => '+40°N 45°W',
-                'exception' => UnexpectedValueException::class,
-                'message' => '[Syntax Error] line 0, col 5: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "N" in value "+40°N 45°W"',
-            ],
-            [
-                'input' => '40°N +45°W',
-                'exception' => UnexpectedValueException::class,
-                'message' => '[Syntax Error] line 0, col 6: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "+" in value "40°N +45°W"',
-            ],
-            [
-                'input' => '40°N -45W',
-                'exception' => UnexpectedValueException::class,
-                'message' => '[Syntax Error] line 0, col 6: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "-" in value "40°N -45W"',
-            ],
-            [
-                'input' => '40N -45°W',
-                'exception' => UnexpectedValueException::class,
-                'message' => '[Syntax Error] line 0, col 4: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "-" in value "40N -45°W"',
-            ],
-            [
-                'input' => '40N 45°W',
-                'exception' => UnexpectedValueException::class,
-                'message' => '[Syntax Error] line 0, col 6: Error: Expected LongitudeOne\Geo\String\Lexer::T_CARDINAL_LON, got "°" in value "40N 45°W"',
-            ],
-            [
-                'input' => '40°N 45°S',
-                'exception' => UnexpectedValueException::class,
-                'message' => '[Syntax Error] line 0, col 10: Error: Expected LongitudeOne\Geo\String\Lexer::T_CARDINAL_LON, got "S" in value "40°N 45°S"',
-            ],
-            [
-                'input' => '40°W 45°E',
-                'exception' => UnexpectedValueException::class,
-                'message' => '[Syntax Error] line 0, col 10: Error: Expected LongitudeOne\Geo\String\Lexer::T_CARDINAL_LAT, got "E" in value "40°W 45°E"',
-            ],
-            [
-                'input' => '40° 45',
-                'exception' => UnexpectedValueException::class,
-                'message' => '[Syntax Error] line 0, col -1: Error: Expected LongitudeOne\Geo\String\Lexer::T_APOSTROPHE, got end of string. in value "40° 45"',
-            ],
-            [
-                'input' => '40°, 45',
-                'exception' => UnexpectedValueException::class,
-                'message' => '[Syntax Error] line 0, col -1: Error: Expected LongitudeOne\Geo\String\Lexer::T_DEGREE, got end of string. in value "40°, 45"',
-            ],
-            [
-                'input' => '40N 45',
-                'exception' => UnexpectedValueException::class,
-                'message' => '[Syntax Error] line 0, col -1: Error: Expected LongitudeOne\Geo\String\Lexer::T_CARDINAL_LON, got end of string. in value "40N 45"',
-            ],
-            [
-                'input' => '40 45W',
-                'exception' => UnexpectedValueException::class,
-                'message' => '[Syntax Error] line 0, col 5: Error: Expected end of string, got "W" in value "40 45W"',
-            ],
-            [
-                'input' => '-40.757° 45°W',
-                'exception' => UnexpectedValueException::class,
-                'message' => '[Syntax Error] line 0, col 14: Error: Expected end of string, got "W" in value "-40.757° 45°W"',
-            ],
-            [
-                'input' => '40.757°N -45.567°W',
-                'exception' => UnexpectedValueException::class,
-                'message' => '[Syntax Error] line 0, col 10: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "-" in value "40.757°N -45.567°W"',
-            ],
-            [
-                'input' => '44°58\'53.9N 93°19\'25.8"W',
-                'exception' => UnexpectedValueException::class,
-                'message' => '[Syntax Error] line 0, col 11: Error: Expected LongitudeOne\Geo\String\Lexer::T_QUOTE, got "N" in value "44°58\'53.9N 93°19\'25.8"W"',
-            ],
-            [
-                'input' => '40:26\'',
-                'exception' => UnexpectedValueException::class,
-                'message' => '[Syntax Error] line 0, col 5: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "\'" in value "40:26\'"',
-            ],
-            [
-                'input' => '132.4432:',
-                'exception' => UnexpectedValueException::class,
-                'message' => '[Syntax Error] line 0, col 8: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got ":" in value "132.4432:"',
-            ],
-            [
-                'input' => '55:34:22°',
-                'exception' => UnexpectedValueException::class,
-                'message' => '[Syntax Error] line 0, col 8: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "°" in value "55:34:22°"',
-            ],
-            [
-                'input' => '55:34.22',
-                'exception' => UnexpectedValueException::class,
-                'message' => '[Syntax Error] line 0, col 3: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER, got "34.22" in value "55:34.22"',
-            ],
-            [
-                'input' => '55#34.22',
-                'exception' => UnexpectedValueException::class,
-                'message' => '[Syntax Error] line 0, col 2: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "#" in value "55#34.22"',
-            ],
-            [
-                'input' => '200N',
-                'exception' => RangeException::class,
-                'message' => '[Range Error] Error: Degrees out of range -90 to 90 in value "200N"',
-            ],
-            [
-                'input' => '55:200:32',
-                'exception' => RangeException::class,
-                'message' => '[Range Error] Error: Minutes greater than 60 in value "55:200:32"',
-            ],
-            [
-                'input' => '55:20:99',
-                'exception' => RangeException::class,
-                'message' => '[Range Error] Error: Seconds greater than 60 in value "55:20:99"',
-            ],
-            [
-                'input' => '55°70.99\'',
-                'exception' => RangeException::class,
-                'message' => '[Range Error] Error: Minutes greater than 60 in value "55°70.99\'"',
-            ],
-        ];
+        yield ['-40°N 45°W', UnexpectedValueException::class, '[Syntax Error] line 0, col 5: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "N" in value "-40°N 45°W"'];
+        yield ['+40°N 45°W', UnexpectedValueException::class, '[Syntax Error] line 0, col 5: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "N" in value "+40°N 45°W"'];
+        yield ['40°N +45°W', UnexpectedValueException::class, '[Syntax Error] line 0, col 6: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "+" in value "40°N +45°W"'];
+        yield ['40°N -45W', UnexpectedValueException::class, '[Syntax Error] line 0, col 6: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "-" in value "40°N -45W"'];
+        yield ['40N -45°W', UnexpectedValueException::class, '[Syntax Error] line 0, col 4: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "-" in value "40N -45°W"'];
+        yield ['40N 45°W', UnexpectedValueException::class, '[Syntax Error] line 0, col 6: Error: Expected LongitudeOne\Geo\String\Lexer::T_CARDINAL_LON, got "°" in value "40N 45°W"'];
+        yield ['40°N 45°S', UnexpectedValueException::class, '[Syntax Error] line 0, col 10: Error: Expected LongitudeOne\Geo\String\Lexer::T_CARDINAL_LON, got "S" in value "40°N 45°S"'];
+        yield ['40°W 45°E', UnexpectedValueException::class, '[Syntax Error] line 0, col 10: Error: Expected LongitudeOne\Geo\String\Lexer::T_CARDINAL_LAT, got "E" in value "40°W 45°E"'];
+        yield ['40° 45', UnexpectedValueException::class, '[Syntax Error] line 0, col -1: Error: Expected LongitudeOne\Geo\String\Lexer::T_APOSTROPHE, got end of string. in value "40° 45"'];
+        yield ['40°, 45', UnexpectedValueException::class, '[Syntax Error] line 0, col -1: Error: Expected LongitudeOne\Geo\String\Lexer::T_DEGREE, got end of string. in value "40°, 45"'];
+        yield ['40N 45', UnexpectedValueException::class, '[Syntax Error] line 0, col -1: Error: Expected LongitudeOne\Geo\String\Lexer::T_CARDINAL_LON, got end of string. in value "40N 45"'];
+        yield ['40 45W', UnexpectedValueException::class, '[Syntax Error] line 0, col 5: Error: Expected end of string, got "W" in value "40 45W"'];
+        yield ['-40.757° 45°W', UnexpectedValueException::class, '[Syntax Error] line 0, col 14: Error: Expected end of string, got "W" in value "-40.757° 45°W"'];
+        yield ['40.757°N -45.567°W', UnexpectedValueException::class, '[Syntax Error] line 0, col 10: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "-" in value "40.757°N -45.567°W"'];
+        yield ['44°58\'53.9N 93°19\'25.8"W', UnexpectedValueException::class, '[Syntax Error] line 0, col 11: Error: Expected LongitudeOne\Geo\String\Lexer::T_QUOTE, got "N" in value "44°58\'53.9N 93°19\'25.8"W"'];
+        yield ['40:26\'', UnexpectedValueException::class, '[Syntax Error] line 0, col 5: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "\'" in value "40:26\'"'];
+        yield ['132.4432:', UnexpectedValueException::class, '[Syntax Error] line 0, col 8: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got ":" in value "132.4432:"'];
+        yield ['55:34:22°', UnexpectedValueException::class, '[Syntax Error] line 0, col 8: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "°" in value "55:34:22°"'];
+        yield ['55:34.22', UnexpectedValueException::class, '[Syntax Error] line 0, col 3: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER, got "34.22" in value "55:34.22"'];
+        yield ['55#34.22', UnexpectedValueException::class, '[Syntax Error] line 0, col 2: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "#" in value "55#34.22"'];
+        yield ['200N', RangeException::class, '[Range Error] Error: Degrees out of range -90 to 90 in value "200N"'];
+        yield ['55:200:32', RangeException::class, '[Range Error] Error: Minutes greater than 60 in value "55:200:32"'];
+        yield ['55:20:99', RangeException::class, '[Range Error] Error: Seconds greater than 60 in value "55:20:99"'];
+        yield ['55°70.99\'', RangeException::class, '[Range Error] Error: Minutes greater than 60 in value "55°70.99\'"'];
     }
 
     /**
-     * @return array<int, array<string, array<int,float|int>|float|int|string>>
+     * @return Generator<array{int|string|float, int|string|float|int[]|float[]}>
      */
-    public static function dataSourceGood(): array
+    public static function dataSourceGood(): Generator
     {
-        return [
-            [
-                'input' => 40,
-                'expected' => 40,
-            ],
-            [
-                'input' => '40',
-                'expected' => 40,
-            ],
-            [
-                'input' => '-40',
-                'expected' => -40,
-            ],
-            [
-                'input' => '1E5',
-                'expected' => 100000,
-            ],
-            [
-                'input' => '1e5',
-                'expected' => 100000,
-            ],
-            [
-                'input' => '1e5°',
-                'expected' => 100000,
-            ],
-            [
-                'input' => '40°',
-                'expected' => 40,
-            ],
-            [
-                'input' => '-40°',
-                'expected' => -40,
-            ],
-            [
-                'input' => '40° N',
-                'expected' => 40,
-            ],
-            [
-                'input' => '40° S',
-                'expected' => -40,
-            ],
-            [
-                'input' => '45.24',
-                'expected' => 45.24,
-            ],
-            [
-                'input' => 45.24,
-                'expected' => 45.24,
-            ],
-            [
-                'input' => '45.24°',
-                'expected' => 45.24,
-            ],
-            [
-                'input' => '+45.24°',
-                'expected' => 45.24,
-            ],
-            [
-                'input' => '45.24° S',
-                'expected' => -45.24,
-            ],
-            [
-                'input' => '40° 26\' 46" N',
-                'expected' => 40.44611111111111,
-            ],
-            [
-                'input' => '40:26S',
-                'expected' => -40.4333333333333333,
-            ],
-            [
-                'input' => '79:56:55W',
-                'expected' => -79.94861111111111,
-            ],
-            [
-                'input' => '40:26:46N',
-                'expected' => 40.44611111111111,
-            ],
-            [
-                'input' => '40° N 79° W',
-                'expected' => [40, -79],
-            ],
-            [
-                'input' => '40 79',
-                'expected' => [40, 79],
-            ],
-            [
-                'input' => '40° 79°',
-                'expected' => [40, 79],
-            ],
-            [
-                'input' => '40, 79',
-                'expected' => [40, 79],
-            ],
-            [
-                'input' => '40°, 79°',
-                'expected' => [40, 79],
-            ],
-            [
-                'input' => '40° 26\' 46" N 79° 58\' 56" W',
-                'expected' => [40.44611111111111, -79.98222222222222],
-            ],
-            [
-                'input' => '40° 26\' N 79° 58\' W',
-                'expected' => [40.4333333333333333, -79.96666666666666669],
-            ],
-            [
-                'input' => '40.4738° N, 79.553° W',
-                'expected' => [40.4738, -79.553],
-            ],
-            [
-                'input' => '40.4738° S, 79.553° W',
-                'expected' => [-40.4738, -79.553],
-            ],
-            [
-                'input' => '40° 26.222\' N 79° 58.52\' E',
-                'expected' => [40.43703333333333, 79.97533333333334],
-            ],
-            [
-                'input' => '40°26.222\'N 79°58.52\'E',
-                'expected' => [40.43703333333333, 79.97533333333334],
-            ],
-            [
-                'input' => '40°26.222\' 79°58.52\'',
-                'expected' => [40.43703333333333, 79.97533333333334],
-            ],
-            [
-                'input' => '40.222° -79.5852°',
-                'expected' => [40.222, -79.5852],
-            ],
-            [
-                'input' => '40.222°, -79.5852°',
-                'expected' => [40.222, -79.5852],
-            ],
-            [
-                'input' => '44°58\'53.9"N 93°19\'25.8"W',
-                'expected' => [44.98163888888888888, -93.3238333333333334],
-            ],
-            [
-                'input' => '44°58\'53.9"N, 93°19\'25.8"W',
-                'expected' => [44.98163888888888888, -93.3238333333333334],
-            ],
-            [
-                'input' => '79:56:55W 40:26:46N',
-                'expected' => [-79.94861111111111, 40.44611111111111],
-            ],
-            [
-                'input' => '79:56:55 W, 40:26:46 N',
-                'expected' => [-79.94861111111111, 40.44611111111111],
-            ],
-            [
-                'input' => '79°56′55″W, 40°26′46″N',
-                'expected' => [-79.94861111111111, 40.44611111111111],
-            ],
-        ];
+        yield [40, 40];
+        yield ['40', 40];
+        yield ['-40', -40];
+        yield ['1E5', 100000];
+        yield ['1e5', 100000];
+        yield ['1e5°', 100000];
+        yield ['40°', 40];
+        yield ['-40°', -40];
+        yield ['40° N', 40];
+        yield ['40° S', -40];
+        yield ['40°N', 40];
+        yield ['40°S', -40];
+        yield ['45.24', 45.24];
+        yield [45.24, 45.24];
+        yield ['45.24°', 45.24];
+        yield ['+45.24°', 45.24];
+        yield ['45.24° S', -45.24];
+        yield ['45.24°N', 45.24];
+        yield ['45.24°S', -45.24];
+        yield ['40° 26\' 46" N', 40.44611111111111];
+        yield ['40° 26\' 46"N', 40.44611111111111];
+        yield ['40° 26\' 46" S', -40.44611111111111];
+        yield ['40° 26\' 46"S', -40.44611111111111];
+        yield ['40:26', 40.4333333333333333];
+        yield ['40:26:46', 40.44611111111111];
+        yield ['79:56:55W', -79.94861111111111];
+        yield ['79:56:55 W', -79.94861111111111];
+        yield ['40:26:46N', 40.44611111111111];
+        yield ['40° N 79° W', [40, -79]];
+        yield ['40 79', [40, 79]];
+        yield ['40° 79°', [40, 79]];
+        yield ['40, 79', [40, 79]];
+        yield ['40°, 79°', [40, 79]];
+        yield ['40° 26\' 46" N 79° 58\' 56" W', [40.44611111111111, -79.98222222222222]];
+        yield ['40° 26\' N, 79° 58\' W', [40.4333333333333333, -79.96666666666666669]];
+        yield ['40.4738° N, 79.553° W', [40.4738, -79.553]];
+        yield ['40.4738° S, 79.553° W', [-40.4738, -79.553]];
+        yield ['40° 26.222\' N 79° 58.52\' E', [40.43703333333333, 79.97533333333334]];
+        yield ['40°26.222\'N 79°58.52\'E', [40.43703333333333, 79.97533333333334]];
+        yield ['40°26.222\' 79°58.52\'', [40.43703333333333, 79.97533333333334]];
+        yield ['40.222° -79.5852°', [40.222, -79.5852]];
+        yield ['40.222°, -79.5852°', [40.222, -79.5852]];
+        yield ['44°58\'53.9"N 93°19\'25.8"W', [44.98163888888888888, -93.3238333333333334]];
+        yield ['44°58\'53.9"N, 93°19\'25.8"W', [44.98163888888888888, -93.3238333333333334]];
+        yield ['79:56:55W 40:26:46N', [-79.94861111111111, 40.44611111111111]];
+        yield ['79:56:55 W, 40:26:46 N', [-79.94861111111111, 40.44611111111111]];
+        yield ['79°56′55″W, 40°26′46″N', [-79.94861111111111, 40.44611111111111]];
     }
 
     /**
      * @dataProvider dataSourceBad
      *
-     * @param class-string<\Throwable> $exception
+     * @param class-string<ExceptionInterface> $exception
      */
     public function testBadValues(string|int|float $input, string $exception, string $message): void
     {
@@ -349,8 +146,8 @@ class ParserTest extends TestCase
         $parser = new Parser();
 
         foreach (static::dataSourceGood() as $data) {
-            $input = $data['input'];
-            $expected = $data['expected'];
+            $input = $data[0];
+            $expected = $data[1];
 
             $value = $parser->parse($input);
 
