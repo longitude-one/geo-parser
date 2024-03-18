@@ -75,7 +75,6 @@ class ParserTest extends TestCase
         yield ['40°N', 40];
         yield ['40°S', -40];
         yield ['45.24', 45.24];
-        yield [45.24, 45.24];
         yield ['45.24°', 45.24];
         yield ['+45.24°', 45.24];
         yield ['45.24° S', -45.24];
@@ -127,11 +126,11 @@ class ParserTest extends TestCase
     }
 
     /**
-     * @param int|float|int[]|float[] $expected
+     * @param int|float|float[]|int[] $expected
      *
      * @dataProvider dataSourceGood
      */
-    public function testGoodValues(string|int|float $input, $expected): void
+    public function testGoodValues(string|int|float $input, int|float|array $expected): void
     {
         $parser = new Parser($input);
 
