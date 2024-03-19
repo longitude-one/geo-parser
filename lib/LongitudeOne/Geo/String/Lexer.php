@@ -89,31 +89,17 @@ class Lexer extends AbstractLexer
             return self::T_FLOAT;
         }
 
-        switch ($value) {
-            case ':':
-                return self::T_COLON;
-            case '\'':
-            case "\xe2\x80\xb2": // prime
-                return self::T_APOSTROPHE;
-            case '"':
-            case "\xe2\x80\xb3": // double prime
-                return self::T_QUOTE;
-            case ',':
-                return self::T_COMMA;
-            case '-':
-                return self::T_MINUS;
-            case '+':
-                return self::T_PLUS;
-            case '°':
-                return self::T_DEGREE;
-            case 'N':
-            case 'S':
-                return self::T_CARDINAL_LAT;
-            case 'E':
-            case 'W':
-                return self::T_CARDINAL_LON;
-            default:
-                return self::T_NONE;
-        }
+        return match ($value) {
+            ':' => self::T_COLON,
+            '\'', "\xe2\x80\xb2" => self::T_APOSTROPHE,
+            '"', "\xe2\x80\xb3" => self::T_QUOTE,
+            ',' => self::T_COMMA,
+            '-' => self::T_MINUS,
+            '+' => self::T_PLUS,
+            '°' => self::T_DEGREE,
+            'N', 'S' => self::T_CARDINAL_LAT,
+            'E', 'W' => self::T_CARDINAL_LON,
+            default => self::T_NONE,
+        };
     }
 }

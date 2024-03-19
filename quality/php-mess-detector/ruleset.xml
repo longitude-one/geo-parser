@@ -14,11 +14,10 @@
         <exclude name="CyclomaticComplexity"/>
         <exclude name="ExcessiveClassComplexity"/>
     </rule>
-
     <rule ref="rulesets/codesize.xml/CyclomaticComplexity">
         <properties>
-            <!-- Set the report level to 17, because of historical code -->
-            <property name="reportLevel" value="17" />
+            <!-- The report level was 17, because of historical code. Now 11 because of optimizations. -->
+            <property name="reportLevel" value="11" />
         </properties>
     </rule>
     <rule ref="rulesets/codesize.xml/ExcessiveClassComplexity">
@@ -40,12 +39,5 @@
     <!-- Import the entire controversial rule set -->
     <rule ref="rulesets/controversial.xml" />
     <!-- Import the entire design rule set -->
-    <rule ref="rulesets/design.xml">
-        <exclude name="CouplingBetweenObjects"/>
-    </rule>
-    <rule ref="rulesets/design.xml/CouplingBetweenObjects">
-        <properties>
-            <property name="maximum" value="16" />
-        </properties>
-    </rule>
+    <rule ref="rulesets/design.xml"/>
 </ruleset>
