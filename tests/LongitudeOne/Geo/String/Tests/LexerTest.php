@@ -36,8 +36,8 @@ class LexerTest extends TestCase
         yield ['1E5', [new Token(100000, Lexer::T_FLOAT, 0)]]; // 1E5 is 100000
         yield ['1e5', [new Token(100000, Lexer::T_FLOAT, 0)]];
         yield ['1.5E5', [new Token(150000, Lexer::T_FLOAT, 0)]]; // 1.5E5 is 150000
-        yield ['1e-5', [new Token('0.00001', Lexer::T_FLOAT, 0)]]; // 1e-5 is 0.00001
-        yield ['0.00001', [new Token('0.00001', Lexer::T_FLOAT, 0)]]; // 1e-5 is 0.00001
+        yield ['1e-5', [new Token('1.0E-5', Lexer::T_FLOAT, 0)]]; // 1e-5 is 0.00001
+        yield ['0.00003', [new Token('3.0E-5', Lexer::T_FLOAT, 0)]]; // 1e-5 is 0.00001
         yield ['40° 26\' 46" N', [
             new Token(40, Lexer::T_INTEGER, 0),
             new Token('°', Lexer::T_DEGREE, 2),

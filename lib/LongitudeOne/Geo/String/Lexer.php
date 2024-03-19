@@ -84,6 +84,7 @@ class Lexer extends AbstractLexer
             if (is_int($value)) {
                 return self::T_INTEGER;
             }
+            $value = (string) $value;
 
             return self::T_FLOAT;
         }
