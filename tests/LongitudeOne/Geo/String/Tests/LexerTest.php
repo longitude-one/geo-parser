@@ -47,6 +47,24 @@ class LexerTest extends TestCase
             new Token('"', Lexer::T_QUOTE, 11),
             new Token('N', Lexer::T_CARDINAL_LAT, 13),
         ]];
+        yield ["40° 26\xe2\x80\xb2 46\xe2\x80\xb3 N", [
+            new Token(40, Lexer::T_INTEGER, 0),
+            new Token('°', Lexer::T_DEGREE, 2),
+            new Token(26, Lexer::T_INTEGER, 5),
+            new Token("\xe2\x80\xb2", Lexer::T_APOSTROPHE, 7),
+            new Token(46, Lexer::T_INTEGER, 11),
+            new Token("\xe2\x80\xb3", Lexer::T_QUOTE, 13),
+            new Token('N', Lexer::T_CARDINAL_LAT, 17),
+        ]];
+        yield ['40° 26′ 46″ N', [
+            new Token(40, Lexer::T_INTEGER, 0),
+            new Token('°', Lexer::T_DEGREE, 2),
+            new Token(26, Lexer::T_INTEGER, 5),
+            new Token('′', Lexer::T_APOSTROPHE, 7),
+            new Token(46, Lexer::T_INTEGER, 11),
+            new Token('″', Lexer::T_QUOTE, 13),
+            new Token('N', Lexer::T_CARDINAL_LAT, 17),
+        ]];
         yield ['40° 26\' 46" N 79° 58\' 56" W', [
             new Token(40, Lexer::T_INTEGER, 0),
             new Token('°', Lexer::T_DEGREE, 2),

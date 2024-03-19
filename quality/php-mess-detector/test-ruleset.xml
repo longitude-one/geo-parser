@@ -10,7 +10,14 @@
     <!-- Import the entire unused code rule set, but UnusedPrivateMethod -->
     <rule ref="rulesets/unusedcode.xml" />
     <!-- Import the entire codeside rule -->
-    <rule ref="rulesets/codesize.xml" />
+    <rule ref="rulesets/codesize.xml">
+        <exclude name="ExcessiveMethodLength"/>
+    </rule>
+    <rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
+        <properties>
+            <property name="minimum" value="116"/>
+        </properties>
+    </rule>
     <!-- Import the entire naming rule set -->
     <rule ref="rulesets/naming.xml" />
     <!-- Import the entire controversial rule set -->
