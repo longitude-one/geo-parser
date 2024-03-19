@@ -58,7 +58,7 @@ class ParserTest extends TestCase
     }
 
     /**
-     * @return \Generator<array{int|string|float, int|string|float|int[]|float[]}>
+     * @return \Generator<array{int|string, int|string|float|int[]|float[]}>
      */
     public static function dataSourceGood(): \Generator
     {
@@ -115,7 +115,7 @@ class ParserTest extends TestCase
      *
      * @param class-string<ExceptionInterface> $exception
      */
-    public function testBadValues(string|int|float $input, string $exception, string $message): void
+    public function testBadValues(string $input, string $exception, string $message): void
     {
         self::expectException($exception);
         self::expectExceptionMessage($message);
@@ -130,7 +130,7 @@ class ParserTest extends TestCase
      *
      * @dataProvider dataSourceGood
      */
-    public function testGoodValues(string|int|float $input, int|float|array $expected): void
+    public function testGoodValues(string|int $input, int|float|array $expected): void
     {
         $parser = new Parser($input);
 

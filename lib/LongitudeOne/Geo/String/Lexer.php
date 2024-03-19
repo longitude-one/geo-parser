@@ -43,8 +43,14 @@ class Lexer extends AbstractLexer
      */
     public function __construct($input = null)
     {
+        if (!is_null($input) && !is_string($input)) {
+            trigger_error(sprintf(
+                'Passing a non-string "%s" value in LongitudeOne\Geo\String\Lexer::__construct() is deprecated',
+                $input), E_USER_DEPRECATED);
+        }
+
         if (null !== $input) {
-            $this->setInput($input);
+            $this->setInput((string) $input);
         }
     }
 
