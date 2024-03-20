@@ -46,7 +46,6 @@ jobs:
               run: composer --prefer-source install
 
             - name: Run test with coverage
-              if: env.HAS_CC_SECRET == 'true'
               uses: paambaati/codeclimate-action@v5.0.0
               env:
                   CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
