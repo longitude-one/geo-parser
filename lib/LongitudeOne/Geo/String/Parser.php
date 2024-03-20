@@ -49,16 +49,10 @@ class Parser
      * Constructor.
      *
      * Setup up instance properties
-     *
-     * @param string|float|int|null $input
      */
-    public function __construct($input = null)
+    public function __construct(string|int|null $input = null)
     {
         $this->lexer = new Lexer();
-
-        if (is_float($input)) {
-            trigger_error('Since longitudeone/geo-parser 2.1: Passing a float to LongitudeOne\Geo\String\Parser::__construct() is deprecated. Use a string instead.', E_USER_DEPRECATED);
-        }
 
         if (null !== $input) {
             $this->input = (string) $input;
@@ -67,15 +61,9 @@ class Parser
 
     /**
      * Parse input string.
-     *
-     * @param int|float|string|null $input
      */
-    public function parse($input = null): float|int|array
+    public function parse(string|int|null $input = null): float|int|array
     {
-        if (is_float($input)) {
-            trigger_error('Since longitudeone/geo-parser 2.1: Passing a float to LongitudeOne\Geo\String\Parser::parse() is deprecated. Use a string instead.', E_USER_DEPRECATED);
-        }
-
         if (null !== $input) {
             $this->input = (string) $input;
         }

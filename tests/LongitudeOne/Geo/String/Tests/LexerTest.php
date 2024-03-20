@@ -26,6 +26,7 @@ use PHPUnit\Framework\TestCase;
 class LexerTest extends TestCase
 {
     /**
+     * @see https://stackoverflow.com/questions/78159317/how-to-typehint-this-generator
      * return Generator<array{string, Token<int, int|string>[]}>.
      *
      * @return \Generator<array{string, Token[]}>
