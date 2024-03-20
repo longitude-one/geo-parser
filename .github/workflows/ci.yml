@@ -18,7 +18,8 @@ jobs:
         strategy:
             matrix:
                 php-version: [ '8.1', '8.2', '8.3' ]
-
+        env:
+            HAS_CC_SECRET: ${{secrets.CC_TEST_REPORTER_ID != '' }}
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
@@ -39,14 +40,24 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php-version }}
-                  coverage: none
+                  coverage: pcov
                   tools: composer:v2
 
             - name: Install dependencies
               run: composer --prefer-source install
 
-            - name: Run tests
-              run: ./vendor/bin/phpunit
+            - name: Run test with coverage
+              uses: paambaati/codeclimate-action@v5.0.0
+              if: env.HAS_CC_SECRET == 'true'
+              env:
+                  CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
+              with:
+                  coverageCommand: vendor/bin/phpunit --coverage-clover=.phpunit.cache/clover-${{ matrix.php-version }}.xml
+                  coverageLocations: ${{github.workspace}}/.phpunit.cache/clover*.xml:clover
+
+            - name: Run tests for forks
+              if: env.HAS_CC_SECRET != 'true'
+              run: vendor/bin/phpunit
 
             ## Quality checks
             ## PHP-CS-Fixer
