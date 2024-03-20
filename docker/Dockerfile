@@ -1,10 +1,13 @@
 FROM php:8.1-fpm-alpine
 
-#remove openssh-client when PR dmish-setting is accepted
-#RUN apk --update --no-cache add bash zip
+#These packages are need to configure and compile pcov
+RUN apk --update --no-cache add autoconf gcc make g++
 
 #Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
+#Install PCOV
+RUN pecl install pcov && docker-php-ext-enable pcov
 
 ##Install symfony
 #RUN wget https://get.symfony.com/cli/installer -O /tmp/installer && \

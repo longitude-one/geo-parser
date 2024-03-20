@@ -45,8 +45,14 @@ jobs:
             - name: Install dependencies
               run: composer --prefer-source install
 
-            - name: Run tests
-              run: ./vendor/bin/phpunit
+            - name: Run test with coverage
+              if: env.HAS_CC_SECRET == 'true'
+              uses: paambaati/codeclimate-action@v5.0.0
+              env:
+                  CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
+              with:
+                  coverageCommand: vendor/bin/phpunit --coverage-clover=.phpunit.cache/clover.xml
+                  coverageLocations: ${{github.workspace}}/.phpunit.cache/clover.xml:clover
 
             ## Quality checks
             ## PHP-CS-Fixer
