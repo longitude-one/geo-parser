@@ -72,7 +72,7 @@ class Lexer extends AbstractLexer
         return ['\s+'];
     }
 
-    /***
+    /**
      * Retrieve a token type.
      * Also processes the token value if necessary.
      *
