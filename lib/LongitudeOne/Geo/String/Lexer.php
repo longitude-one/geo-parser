@@ -17,7 +17,7 @@ use Doctrine\Common\Lexer\AbstractLexer;
 /**
  * Tokenize geographic coordinates.
  *
- * @extends AbstractLexer<int, int|float|string>
+ * @extends AbstractLexer<int, int|string>
  */
 class Lexer extends AbstractLexer
 {

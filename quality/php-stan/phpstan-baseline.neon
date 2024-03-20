@@ -6,11 +6,6 @@ parameters:
 			path: ../../lib/LongitudeOne/Geo/String/Lexer.php
 
 		-
-			message: "#^Type float\\|int\\|string in generic type Doctrine\\\\Common\\\\Lexer\\\\AbstractLexer\\<int, float\\|int\\|string\\> in PHPDoc tag @extends is not subtype of template type V of int\\|string of class Doctrine\\\\Common\\\\Lexer\\\\AbstractLexer\\.$#"
-			count: 1
-			path: ../../lib/LongitudeOne/Geo/String/Lexer.php
-
-		-
 			message: "#^Method LongitudeOne\\\\Geo\\\\String\\\\Parser\\:\\:number\\(\\) should return float\\|int but returns float\\|int\\|string\\.$#"
 			count: 2
 			path: ../../lib/LongitudeOne/Geo/String/Parser.php
