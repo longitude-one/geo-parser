@@ -15,6 +15,14 @@ Then you can launch the following command to run the tests:
 docker compose exec geo-parser-app vendor/bin/phpunit
 ```
 
+## PHP Linters: Php-CS-Fixer, PHP-Mess-detector PHP-Stan 
+
+This project uses PHP-CS-Fixer, PHP-Mess-detector and PHP-Stan to ensure code quality.
+These tools are set up in the `quality` directory.
+Before committing,
+you should run some commands to ensure that your code is properly formatted and free of errors.
+Read the [readme.md file](./quality/readme.md) for more information.
+
 ## Development
 - Code formatting MUST follow PSR-2.
 - Issues SHOULD include code and/or data to reproduce the issue.

@@ -17,9 +17,6 @@ use Doctrine\Common\Lexer\AbstractLexer;
 /**
  * Tokenize geographic coordinates.
  *
- * @author  Derek J. Lambert <dlambert@dereklambert.com>
- * @license http://dlambert.mit-license.org MIT
- *
  * @extends AbstractLexer<int, int|float|string>
  */
 class Lexer extends AbstractLexer
@@ -61,6 +58,8 @@ class Lexer extends AbstractLexer
     {
         return [
             '[nesw\'",]',
+            // By combining these parts, this regular expression can identify decimal numbers in various formats,
+            // including with or without a decimal part and/or scientific notation.
             '(?:[0-9]+)(?:[\.][0-9]+)?(?:e[+-]?[0-9]+)?',
         ];
     }
@@ -74,6 +73,9 @@ class Lexer extends AbstractLexer
     }
 
     /**
+     * Retrieve a token type.
+     * Also processes the token value if necessary.
+     *
      * @param string &$value
      */
     protected function getType(&$value): int

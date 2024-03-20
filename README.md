@@ -1,6 +1,6 @@
-# longitude-one/geo-parser
+# Geographic parser: longitude-one/geo-parser
 
-Lexer and parser library for geometric and geographic point string values.
+Lexer and parser library for geographic point string values.
 
 [![PHP CI](https://github.com/longitude-one/geo-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/longitude-one/geo-parser/actions/workflows/ci.yml)
 ## Usage
