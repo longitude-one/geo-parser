@@ -3,6 +3,9 @@
 Lexer and parser library for geographic point string values.
 
 [![PHP CI](https://github.com/longitude-one/geo-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/longitude-one/geo-parser/actions/workflows/ci.yml)
+[![Maintainability](https://api.codeclimate.com/v1/badges/395f661509f03ebed0ee/maintainability)](https://codeclimate.com/github/longitude-one/geo-parser/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/395f661509f03ebed0ee/test_coverage)](https://codeclimate.com/github/longitude-one/geo-parser/test_coverage)
+
 ## Usage
 
 There are two use patterns for the parser. The value to be parsed can be passed into the constructor, then parse()
