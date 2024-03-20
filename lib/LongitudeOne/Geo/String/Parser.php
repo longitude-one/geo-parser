@@ -61,6 +61,8 @@ class Parser
 
     /**
      * Parse input string.
+     *
+     * @return float|int|array<int|float>
      */
     public function parse(string|int|null $input = null): float|int|array
     {
@@ -190,6 +192,7 @@ class Parser
         }
 
         // If degrees isn't a float, it must be an integer
+        /** @var int $degrees */
         $degrees = $this->number();
 
         // If a symbol does not follow integer, this value is complete
@@ -206,7 +209,7 @@ class Parser
         }
 
         // Add minutes to value
-        $degrees += $this->minutes();
+        $degrees += (float) $this->minutes();
 
         // Return value
         return $degrees;
@@ -215,20 +218,19 @@ class Parser
     /**
      * Match token and return value.
      */
-    private function match(int $token): string|float|int
+    private function match(int $token): string|int
     {
         // If the next token isn't type specified throw error
         if (!$this->lexer->isNextToken($token)) {
-            throw $this->syntaxError($this->lexer->getLiteral($token));
+            throw $this->syntaxError((string) $this->lexer->getLiteral($token));
         }
 
         // Move lexer to the next token
         $this->lexer->moveNext();
 
-        /** @var Token<int, string|int|float> $nextToken nextToken cannot be null, because of the above test. */
+        /** @var Token<int, string|int> $nextToken nextToken cannot be null, because of the above test. */
         $nextToken = $this->lexer->token;
 
-        // FIXME We currently return string|int|float and this is not good. We should return only string|int.
         return $nextToken->value;
     }
 
@@ -237,7 +239,7 @@ class Parser
      *
      * @throws RangeException
      */
-    private function minutes(): float|int
+    private function minutes(): string|int
     {
         // If using colon or minutes is an integer parse value
         if (Lexer::T_COLON === $this->nextSymbol || $this->lexer->isNextToken(Lexer::T_INTEGER)) {
@@ -254,22 +256,18 @@ class Parser
 
             // If using colon and one doesn't follow value is done
             if (Lexer::T_COLON === $this->nextSymbol && !$this->lexer->isNextToken(Lexer::T_COLON)) {
-                return $minutes;
+                return (string) $minutes;
             }
 
             // Match minutes symbol
             $this->symbol();
 
-            // Add seconds to value
-            $minutes += $this->seconds();
-
-            // Return value
-            return $minutes;
+            // Add seconds to value, then return the result.
+            return (string) ((float) $minutes + (float) $this->seconds());
         }
 
         // If minutes is a float there will be no seconds
         if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
-            /** @var float $minutes */
             $minutes = $this->match(Lexer::T_FLOAT);
 
             // Throw exception if minutes are greater than 60
@@ -278,7 +276,7 @@ class Parser
             }
 
             // Get fractional minutes
-            $minutes /= 60;
+            $minutes = (string) ((float) $minutes / 60);
 
             // Match minutes symbol
             $this->symbol();
@@ -296,7 +294,7 @@ class Parser
      *
      * @throws UnexpectedValueException
      */
-    private function number(): int|float
+    private function number(): int|string
     {
         // If the next token is a float match, then return it
         if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
@@ -314,6 +312,8 @@ class Parser
 
     /**
      * Match and return single value or pair.
+     *
+     * @return float|int|array<int|float>
      *
      * @throws UnexpectedValueException
      */
@@ -360,7 +360,7 @@ class Parser
      *
      * @throws RangeException
      */
-    private function seconds(): int|float
+    private function seconds(): int|string
     {
         // Seconds value can be an integer or float
         if ($this->lexer->isNextTokenAny([Lexer::T_INTEGER, Lexer::T_FLOAT])) {
@@ -372,7 +372,7 @@ class Parser
             }
 
             // Get fractional seconds
-            $seconds /= 3600;
+            $seconds = (string) ((float) $seconds / 3600);
 
             // Match seconds symbol if requirement not colon
             if (Lexer::T_COLON !== $this->nextSymbol) {
