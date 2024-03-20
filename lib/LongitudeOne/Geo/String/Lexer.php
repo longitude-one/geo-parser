@@ -17,7 +17,7 @@ use Doctrine\Common\Lexer\AbstractLexer;
 /**
  * Tokenize geographic coordinates.
  *
- * @extends AbstractLexer<int, int|float|string>
+ * @extends AbstractLexer<int, int|string>
  */
 class Lexer extends AbstractLexer
 {
@@ -35,19 +35,10 @@ class Lexer extends AbstractLexer
     public const T_PLUS = 8;
     public const T_QUOTE = 13;
 
-    /**
-     * @param string|null $input
-     */
-    public function __construct($input = null)
+    public function __construct(?string $input = null)
     {
-        if (!is_null($input) && !is_string($input)) {
-            trigger_error(sprintf(
-                'Passing a non-string "%s" value in LongitudeOne\Geo\String\Lexer::__construct() is deprecated',
-                $input), E_USER_DEPRECATED);
-        }
-
         if (null !== $input) {
-            $this->setInput((string) $input);
+            $this->setInput($input);
         }
     }
 
