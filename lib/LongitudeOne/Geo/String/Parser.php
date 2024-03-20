@@ -18,28 +18,32 @@ use LongitudeOne\Geo\String\Exception\UnexpectedValueException;
 
 /**
  * Parser for geographic coordinate strings.
- *
- * @author  Derek J. Lambert <dlambert@dereklambert.com>
- * @license http://dlambert.mit-license.org MIT
  */
 class Parser
 {
     /**
-     * Original input string.
+     * @var string original input string
      */
     private string $input;
 
+    /**
+     * @var Lexer lexer doctrine instance
+     */
     private Lexer $lexer;
 
     /**
-     * @var int|null
+     * Cardinal direction can be Lexer::CARDINAL_LAT or Lexer::CARDINAL_LON.
+     *
+     * @var int|null next cardinal direction token type when present
      */
-    private $nextCardinal;
+    private ?int $nextCardinal;
 
     /**
-     * @var int|false|null
+     * Symbol can be Lexer::T_APOSTROPHE, Lexer::T_QUOTE, or Lexer::T_DEGREE.
+     *
+     * @var int|false|null next symbol token type when present
      */
-    private $nextSymbol;
+    private int|false|null $nextSymbol;
 
     /**
      * Constructor.
@@ -165,7 +169,7 @@ class Parser
         // Remember there was no cardinal direction on first coordinate
         $this->nextCardinal = -1;
 
-        // Return value with sign if set
+        // Return value with sign if it's set
         return (false === $sign ? 1 : $sign) * $coordinate;
     }
 
@@ -397,6 +401,8 @@ class Parser
 
     /**
      * Match plus or minus sign and return coefficient.
+     *
+     * @return int 1 for plus, -1 for minus
      */
     private function sign(): int
     {
@@ -418,7 +424,7 @@ class Parser
      */
     private function symbol(): bool|int|null
     {
-        // If symbol requirement not set match colon if present
+        // If the symbol requirement is not set and the next token is a colon, then match this colon
         if (null === $this->nextSymbol && $this->lexer->isNextToken(Lexer::T_COLON)) {
             $this->match(Lexer::T_COLON);
 
@@ -426,7 +432,7 @@ class Parser
             return $this->nextSymbol = Lexer::T_COLON;
         }
 
-        // If symbol requirement not set match degree if present
+        // If the symbol requirement is not set and the next token is a degree symbol, then match this degree symbol
         if (null === $this->nextSymbol && $this->lexer->isNextToken(Lexer::T_DEGREE)) {
             $this->match(Lexer::T_DEGREE);
 
@@ -443,12 +449,12 @@ class Parser
             case Lexer::T_DEGREE:
                 $this->match(Lexer::T_DEGREE);
 
-                // Next symbol will be minutes
+                // The next symbol will be minutes
                 return $this->nextSymbol = Lexer::T_APOSTROPHE;
             case Lexer::T_APOSTROPHE:
                 $this->match(Lexer::T_APOSTROPHE);
 
-                // Next symbol will be seconds
+                // The next symbol will be seconds
                 return $this->nextSymbol = Lexer::T_QUOTE;
             case Lexer::T_QUOTE:
                 $this->match(Lexer::T_QUOTE);
