@@ -1,10 +1,15 @@
 # Geographic parser: longitude-one/geo-parser
 
+![longitude-one/geo-parser](https://img.shields.io/badge/longitude--one-geo--parser-blue)
+![Stable release](https://img.shields.io/github/v/release/longitude-one/geo-parser)
+![Packagist License](https://img.shields.io/packagist/l/longitude-one/geo-parser)
+
 Lexer and parser library for geographic point string values.
 
 [![PHP CI](https://github.com/longitude-one/geo-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/longitude-one/geo-parser/actions/workflows/ci.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/395f661509f03ebed0ee/maintainability)](https://codeclimate.com/github/longitude-one/geo-parser/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/395f661509f03ebed0ee/test_coverage)](https://codeclimate.com/github/longitude-one/geo-parser/test_coverage)
+[![Downloads](https://img.shields.io/packagist/dm/longitude-one/geo-parser.svg)](https://packagist.org/packages/longitude-one/geo-parser)
 
 ## Usage
 
