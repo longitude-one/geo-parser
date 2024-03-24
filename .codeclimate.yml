@@ -45,3 +45,5 @@ plugins:
     enabled: true
   phpmd:
     enabled: true
+    config:
+      rulesets:  "quality/php-mess-detector/codeclimate-ruleset.xml"
