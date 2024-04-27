@@ -3,7 +3,7 @@
 /**
  * This file is part of the LongitudeOne GeoParser project.
  *
- * PHP 7.4
+ * PHP 8.1 | 8.2 | 8.3
  *
  * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
  * Copyright 2024.
