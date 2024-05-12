@@ -36,9 +36,9 @@ jobs:
               uses: actions/cache@v4
               with:
                   path: vendor
-                  key: ${{ format('{0}-php-lexer-stable-{1}', runner.os, hashFiles('**/composer.lock')) }}
+                  key: ${{ runner.os}}_php_lexer_stable_${{ hashFiles('**/composer.lock') }}
                   restore-keys: |
-                      ${{ format('{0}-php-lexer-stable-', runner.os) }}
+                      ${{ runner.os}}_php_lexer_stable_
 
             - name: Set up PHP 8.3
               uses: shivammathur/setup-php@v2
