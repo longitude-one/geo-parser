@@ -9,6 +9,7 @@ Lexer and parser library for geographic point string values.
 [![PHP CI](https://github.com/longitude-one/geo-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/longitude-one/geo-parser/actions/workflows/ci.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/395f661509f03ebed0ee/maintainability)](https://codeclimate.com/github/longitude-one/geo-parser/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/395f661509f03ebed0ee/test_coverage)](https://codeclimate.com/github/longitude-one/geo-parser/test_coverage)
+[![Coverage Status](https://coveralls.io/repos/github/longitude-one/geo-parser/badge.svg)](https://coveralls.io/github/longitude-one/geo-parser)
 ![Minimum PHP Version](https://img.shields.io/packagist/php-v/longitude-one/geo-parser.svg?maxAge=3600)
 [![Tested on PHP 8.1 to 8.3](https://img.shields.io/badge/tested%20on-PHP%20%208.1%20|%208.2%20|%208.3-brightgreen.svg?maxAge=2419200)](https://github.com/longitude-one/geo-parser/actions)
 
