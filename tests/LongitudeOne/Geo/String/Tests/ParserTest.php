@@ -16,6 +16,7 @@ use LongitudeOne\Geo\String\Exception\ExceptionInterface;
 use LongitudeOne\Geo\String\Exception\RangeException;
 use LongitudeOne\Geo\String\Exception\UnexpectedValueException;
 use LongitudeOne\Geo\String\Parser;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 class ParserTest extends TestCase
 {
     /**
-     * @return \Generator<array{string, class-string<ExceptionInterface>, string}>
+     * @return \Generator<int, array{string, class-string<ExceptionInterface>, string}, null, void>
      */
     public static function dataSourceBad(): \Generator
     {
@@ -58,7 +59,55 @@ class ParserTest extends TestCase
     }
 
     /**
-     * @return \Generator<array{int|string, int|string|float|int[]|float[]}>
+     * @return \Generator<int, array{0: (int|float|string)[], 1:(int|float|string)[]}, null ,void>
+     */
+    public static function dataSourceFromDocumentation(): \Generator
+    {
+        // Simple single-signed values
+        yield [[40, 45], [40, 45]];
+        yield [[-40, -45], [-40, -45]];
+        yield [[-8.543, -45.543], [-8.543, -45.543]];
+        yield [['+132', '+45'], ['+132', '+45']];
+        yield [['+77.2', '+45'], ['+77.2', '+45']];
+
+        // Simple single-signed values with degree symbol
+        yield [['40°', '45°'], [40, 45]];
+        yield [['-40°', '-45°'], [-40, -45]];
+        yield [['-5.234°', '-45.543°'], [-5.234, -45.543]];
+        yield [['+43°', '+45°'], [43, 45]];
+        yield [['+38.43°', '+45.543°'], [38.43, 45.543]];
+
+        // Single unsigned values with or without degree symbol, and cardinal direction
+        yield [['40°N', '45°W'], [40, -45]];
+        yield [['40 S', '45 E'], [-40, 45]];
+        yield [['56.242 S', '45.543 W'], [-56.242, -45.543]];
+
+        // Single values of signed integer degrees with degree symbol, and decimal minutes with apostrophe
+        yield [['40° 26.222\'', '-45° 32.22\''], [40.43703333333333, -45.537]];
+        yield [['-65° 32.22\'', '+45° 32.22\''], [-65.537, 45.537]];
+        yield [['+165° 52.22\'', '-45° 32.22\''], [165.87033333333332, -45.537]];
+
+        // Single values of unsigned integer degrees with degree symbol, decimal minutes with apostrophe, and cardinal direction
+        yield [['40° 26.222\' N', '45° 32.22\' W'], [40.43703333333333, -45.537]];
+        yield [['65° 32.22\' S', '45° 32.22\' E'], [-65.537, 45.537]];
+
+        // Single values of signed integer degrees with degree symbol, integer minutes with apostrophe, and optional integer or decimal seconds with quote
+        yield [['40° 26\' 46"', '-45° 32\' 22"'], [40.44611111111111, -45.53944444444444]];
+        yield [['-79° 58\' 56"', '+45° 32\' 22"'], [-79.98222222222222, 45.53944444444444]];
+        yield [['+93° 19\' 25.8"', '-45° 32\' 22"'], [93.32383333333333, -45.53944444444444]];
+
+        // Single values of unsigned integer degrees with degree symbol, integer minutes with apostrophe, optional integer or decimal seconds with quote, and cardinal direction
+        yield [['40° 26\' 46" S', '45° 32\' 22" W'], [-40.44611111111111, -45.53944444444444]];
+        yield [['89° 58\' 56" N', '99° 32\' 22" E'], [89.98222222222222, 99.53944444444444]];
+        yield [['44° 58\' 53.9" N', '44° 58\' 53.9" E'], [44.98163888888888888, 44.98163888888888888]];
+
+        // Single values of unsigned integer degrees with colon symbol, integer minutes with, optional colon and integer or decimal seconds, and cardinal direction
+        yield [['40:26:46 N', '45:32:22 W'], [40.44611111111111, -45.53944444444444]];
+        yield [['44:58:53.9 N', '99:58:56 W'], [44.98163888888889, -99.98222222222222]];
+    }
+
+    /**
+     * @return \Generator<int, array{int|string, int|string|float|int[]|float[]}, null, void>
      */
     public static function dataSourceGood(): \Generator
     {
@@ -117,6 +166,45 @@ class ParserTest extends TestCase
         yield ['79:56:55 W, 40:26:46 N', [-79.94861111111111, 40.44611111111111]];
         yield ['79°56′55″W, 40°26′46″N', [-79.94861111111111, 40.44611111111111]];
         yield ['1e-5°N 1e-5°W', [0.00001, -0.00001]];
+
+        // Documentation tests
+
+        // Simple single-signed values
+        yield ['40', 40];
+        yield [40, 40];
+        yield [-40, -40];
+        yield ['-40', -40];
+        yield ['-8.543', -8.543];
+        yield ['+132', 132];
+        yield ['+77.2', 77.2];
+
+        // Simple single-signed values with degree symbol
+        yield ['40°', 40];
+        yield ['-40°', -40];
+        yield ['-5.234°', -5.234];
+        yield ['+43°', 43];
+        yield ['+38.43°', 38.43];
+
+        // Single unsigned values with or without degree symbol, and cardinal direction
+        yield ['40°N', 40];
+        yield ['40 S', -40];
+        yield ['56.242 E', 56.242];
+        yield ['56.242 W', -56.242];
+
+        // Single values of signed integer degrees with degree symbol, and decimal minutes with apostrophe
+        yield ["40° 26.222'", 40.43703333333333];
+        yield ["-65° 32.22'", -65.537];
+        yield ["+165° 52.22'", 165.87033333333332];
+
+        // Single values of unsigned integer degrees with degree symbol, decimal minutes with apostrophe, and cardinal direction
+        yield ["40° 26.222' E", 40.43703333333333];
+        yield ["65° 32.22' W", -65.537];
+
+        // Single values of signed integer degrees with degree symbol, integer minutes with apostrophe, and optional integer or decimal seconds with quote
+        yield ['40° 26\' 46"', 40.44611111111111];
+        yield ['-79° 58\' 56"', -79.98222222222222];
+        yield ['+93° 19\' 25.8"', 93.32383333333333];
+        yield ['+120° 19\' 25.8"', 120.32383333333333];
     }
 
     /**
@@ -158,6 +246,24 @@ class ParserTest extends TestCase
 
             $value = $parser->parse($input);
 
+            self::assertEquals($expected, $value);
+        }
+    }
+
+    /**
+     * Test parser with multiple values from the documentation.
+     *
+     * @param array{0: (float|string|int), 1: (float|string|int)} $coordinates
+     * @param array{0: float|int, 1: float|int}                   $expected
+     */
+    #[DataProvider('dataSourceFromDocumentation')]
+    public function testParserWithMultipleValues(array $coordinates, array $expected): void
+    {
+        $separators = [' ', ',', ' ,', ', ', ' , '];
+        foreach ($separators as $separator) {
+            $input = implode($separator, $coordinates);
+            $parser = new Parser($input);
+            $value = $parser->parse();
             self::assertEquals($expected, $value);
         }
     }
