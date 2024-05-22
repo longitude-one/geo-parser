@@ -4,10 +4,19 @@ on:
     schedule:
         - cron: '0 17 * * 5'
     push:
+        branches:
+            - main
+            - dev
+        paths-ignore:
+            - '**.md'
+            - 'LICENSE'
     pull_request:
         branches:
             - main
             - dev
+        paths-ignore:
+            - '**.md'
+            - 'LICENSE'
 
 permissions:
     contents: read
