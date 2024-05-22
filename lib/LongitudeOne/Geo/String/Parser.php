@@ -127,7 +127,12 @@ class Parser
 
         // Throw exception if value is out of range
         if ($value > $range) {
-            throw $this->rangeError('Degrees', $range, -1 * $range);
+            $code = RangeException::LATITUDE_OUT_OF_RANGE;
+            if (180 === $range) {
+                $code = RangeException::LONGITUDE_OUT_OF_RANGE;
+            }
+
+            throw new RangeException($this->input, $code);
         }
 
         // Return value with sign
@@ -248,7 +253,7 @@ class Parser
 
             // Throw exception if minutes are greater than 60
             if ($readMinutes > 60) {
-                throw $this->rangeError('Minutes', 60);
+                throw new RangeException($this->input, RangeException::MINUTES_OUT_OF_RANGE);
             }
 
             // Get fractional minutes
@@ -266,13 +271,13 @@ class Parser
             return (string) ((float) $minutes + (float) $this->seconds());
         }
 
-        // If minutes is a float there will be no seconds
+        // If minutes is a float, there will be no seconds
         if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
             $minutes = $this->match(Lexer::T_FLOAT);
 
             // Throw exception if minutes are greater than 60
             if ($minutes > 60) {
-                throw $this->rangeError('Minutes', 60);
+                throw new RangeException($this->input, RangeException::MINUTES_OUT_OF_RANGE);
             }
 
             // Get fractional minutes
@@ -345,17 +350,6 @@ class Parser
     }
 
     /**
-     * Create out of range exception.
-     */
-    private function rangeError(string $type, int $high, ?int $low = null): RangeException
-    {
-        $range = null === $low ? sprintf('greater than %d', $high) : sprintf('out of range %d to %d', $low, $high);
-        $message = sprintf('[Range Error] Error: %s %s in value "%s"', $type, $range, $this->input);
-
-        return new RangeException($message);
-    }
-
-    /**
      * Match and return seconds value.
      *
      * @throws RangeException
@@ -368,7 +362,7 @@ class Parser
 
             // Throw exception if seconds are greater than 60
             if ($seconds > 60) {
-                throw $this->rangeError('Seconds', 60);
+                throw new RangeException($this->input, RangeException::SECONDS_OUT_OF_RANGE);
             }
 
             // Get fractional seconds

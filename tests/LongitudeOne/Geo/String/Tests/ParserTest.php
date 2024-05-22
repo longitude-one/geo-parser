@@ -52,10 +52,11 @@ class ParserTest extends TestCase
         yield ['55:34:22°', UnexpectedValueException::class, '[Syntax Error] line 0, col 8: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "°" in value "55:34:22°"'];
         yield ['55:34.22', UnexpectedValueException::class, '[Syntax Error] line 0, col 3: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER, got "34.22" in value "55:34.22"'];
         yield ['55#34.22', UnexpectedValueException::class, '[Syntax Error] line 0, col 2: Error: Expected LongitudeOne\Geo\String\Lexer::T_INTEGER or LongitudeOne\Geo\String\Lexer::T_FLOAT, got "#" in value "55#34.22"'];
-        yield ['200N', RangeException::class, '[Range Error] Error: Degrees out of range -90 to 90 in value "200N"'];
-        yield ['55:200:32', RangeException::class, '[Range Error] Error: Minutes greater than 60 in value "55:200:32"'];
-        yield ['55:20:99', RangeException::class, '[Range Error] Error: Seconds greater than 60 in value "55:20:99"'];
-        yield ['55°70.99\'', RangeException::class, '[Range Error] Error: Minutes greater than 60 in value "55°70.99\'"'];
+        yield ['100N', RangeException::class, '[RangeException] Latitude must be between -90 and 90, got "100N".'];
+        yield ['190W', RangeException::class, '[RangeException] Longitude must be between -180 and 180, got "190W".'];
+        yield ['55:200:32', RangeException::class, '[RangeException] Minutes must be between 0 and 59, got "55:200:32".'];
+        yield ['55:20:99', RangeException::class, '[RangeException] Seconds must be between 0 and 59, got "55:20:99".'];
+        yield ['55°70.99\'', RangeException::class, '[RangeException] Minutes must be between 0 and 59, got "55°70.99\'".'];
     }
 
     /**
