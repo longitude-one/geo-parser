@@ -57,6 +57,14 @@ class ParserTest extends TestCase
         yield ['55:200:32', RangeException::class, '[RangeException] Minutes must be between 0 and 59, got "55:200:32".'];
         yield ['55:20:99', RangeException::class, '[RangeException] Seconds must be between 0 and 59, got "55:20:99".'];
         yield ['55°70.99\'', RangeException::class, '[RangeException] Minutes must be between 0 and 59, got "55°70.99\'".'];
+        // Issue #21
+        yield ['55°60.17\'', RangeException::class, '[RangeException] Minutes must be between 0 and 59, got "55°60.17\'".'];
+        yield ['55:60:32', RangeException::class, '[RangeException] Minutes must be between 0 and 59, got "55:60:32".'];
+        yield ['55:20:60', RangeException::class, '[RangeException] Seconds must be between 0 and 59, got "55:20:60".'];
+        yield ['180°20\'20"W', RangeException::class, '[RangeException] Longitude must be between -180 and 180, got "180°20\'20"W".'];
+        yield ['180°20\'20"E', RangeException::class, '[RangeException] Longitude must be between -180 and 180, got "180°20\'20"E".'];
+        yield ['90°20\'20"S', RangeException::class, '[RangeException] Latitude must be between -90 and 90, got "90°20\'20"S".'];
+        yield ['90°20\'20"N', RangeException::class, '[RangeException] Latitude must be between -90 and 90, got "90°20\'20"N".'];
     }
 
     /**
@@ -167,6 +175,17 @@ class ParserTest extends TestCase
         yield ['79:56:55 W, 40:26:46 N', [-79.94861111111111, 40.44611111111111]];
         yield ['79°56′55″W, 40°26′46″N', [-79.94861111111111, 40.44611111111111]];
         yield ['1e-5°N 1e-5°W', [0.00001, -0.00001]];
+
+        // Issue #21
+        yield ['180°00\'00"W, 90°00\'00"S', [-180, -90]];
+        yield ['180°00\'00"E, 90°00\'00"N', [180, 90]];
+        yield ['180:00:00E, 90:00:00N', [180, 90]];
+        yield ['180:00:00W, 90:00:00S', [-180, -90]];
+        yield ['55°17.60\'', 55.29333333333333];
+        yield [180, 180];
+        yield ['180.0', 180.0];
+        yield [-180, -180];
+        yield ['-180.0', -180.0];
 
         // Documentation tests
 

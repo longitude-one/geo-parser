@@ -252,7 +252,7 @@ class Parser
             $readMinutes = $this->match(Lexer::T_INTEGER);
 
             // Throw exception if minutes are greater than 60
-            if ($readMinutes > 60) {
+            if ($readMinutes >= 60) {
                 throw new RangeException($this->input, RangeException::MINUTES_OUT_OF_RANGE);
             }
 
@@ -276,7 +276,7 @@ class Parser
             $minutes = $this->match(Lexer::T_FLOAT);
 
             // Throw exception if minutes are greater than 60
-            if ($minutes > 60) {
+            if ($minutes >= 60) {
                 throw new RangeException($this->input, RangeException::MINUTES_OUT_OF_RANGE);
             }
 
@@ -361,7 +361,7 @@ class Parser
             $seconds = $this->number();
 
             // Throw exception if seconds are greater than 60
-            if ($seconds > 60) {
+            if ($seconds >= 60) {
                 throw new RangeException($this->input, RangeException::SECONDS_OUT_OF_RANGE);
             }
 
