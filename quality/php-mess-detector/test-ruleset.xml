@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="My first PHPMD rule set"
+<ruleset name="LongitudeOne GeoParser rule set"
          xmlns="http://pmd.sf.net/ruleset/1.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
@@ -9,13 +9,14 @@
     </description>
     <!-- Import the entire unused code rule set, but UnusedPrivateMethod -->
     <rule ref="rulesets/unusedcode.xml" />
-    <!-- Import the entire codeside rule -->
+    <!-- Import the entire code size rule, but excessive method length -->
     <rule ref="rulesets/codesize.xml">
         <exclude name="ExcessiveMethodLength"/>
     </rule>
+    <!-- Set a minimum for excessive method length -->
     <rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
         <properties>
-            <property name="minimum" value="116"/>
+            <property name="minimum" value="120"/>
         </properties>
     </rule>
     <!-- Import the entire naming rule set -->
