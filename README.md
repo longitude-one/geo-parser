@@ -131,17 +131,16 @@ The `Lexer` and `Parser` will throw exceptions implementing interface `Longitude
 
 [!NOTE] A major release may increase the minimum supported PHP version **without introducing any other breaking changes**.
 
+| Version | PHP compatibility           | Tested on       | Doctrine Lexer | Released     | Active Support   | Security fix     |
+|---------|-----------------------------|-----------------|----------------|--------------|------------------|------------------|
+| 3       | 8.1 - 8.2 - 8.3 - 8.4 - 8.5 | 8.1 - 8.2 - 8.3 | ^2.1 - ^3.0    | 04 May 2024  | 31 August 2026   | 31 December 2026 |
+| 4       | 8.3 - 8.4 - 8.5             | 8.3 - 8.4 - 8.5 | ^3.0.1         | August 2026  | 31 December 2026 | 31 December 2027 |
+| 5       | 8.4 - 8.5                   | 8.4 - 8.5       |                | January 2027 | 31 December 2028 | 31 December 2030 |
+| 6       | 8.5                         | 8.5             |                | January 2028 | 31 December 2028 | 31 December 2030 |
 
-| Version | PHP compatibility           | Tested on       | Released     | Active Support   | Security fix     |
-|---------|-----------------------------|-----------------|--------------|------------------|------------------|
-| 3       | 8.1 - 8.2 - 8.3 - 8.4 - 8.5 | 8.1 - 8.2 - 8.3 | 04 May 2024  | 31 August 2026   | 31 December 2026 |
-| 4       | 8.3 - 8.4 - 8.5             | 8.3 - 8.4 - 8.5 | August 2026  | 31 December 2026 | 31 December 2027 |
-| 5       | 8.4 - 8.5                   | 8.4 - 8.5       | January 2027 | 31 December 2028 | 31 December 2030 |
-| 6       | 8.5                         | 8.5             | January 2028 | 31 December 2028 | 31 December 2030 |
+Version 4 is intended as a transitional release. The only backward compatibility break is the supported PHP versions and the `doctrine/lexer` versions.
 
-Version 4 is intended as a transitional release. The only backward compatibility break is the supported PHP versions.
-
-PHP versions marked as "tested" are part of the continuous integration matrix.
+PHP versions marked as "tested" and each doctrine lexer version are part of the continuous integration matrix.
 
 ### Support Policy
 
