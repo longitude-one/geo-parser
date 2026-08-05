@@ -72,12 +72,12 @@ class Lexer extends AbstractLexer
     protected function getType(&$value): int
     {
         if (is_numeric($value)) {
-            $value += 0;
+            $numeric = $value + 0;
 
-            if (is_int($value)) {
+            if (is_int($numeric)) {
+
                 return self::T_INTEGER;
             }
-            $value = (string) $value;
 
             return self::T_FLOAT;
         }

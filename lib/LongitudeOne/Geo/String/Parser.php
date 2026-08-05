@@ -181,8 +181,7 @@ class Parser
         // If degrees is a float, there will be no minutes or seconds
         if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
             // Get degree value
-            /** @var float $degrees */
-            $degrees = $this->match(Lexer::T_FLOAT);
+            $degrees = (float) $this->match(Lexer::T_FLOAT);
 
             // Degree symbol may follow degree float values
             if ($this->lexer->isNextToken(Lexer::T_DEGREE)) {
@@ -192,7 +191,6 @@ class Parser
                 $this->nextSymbol = Lexer::T_DEGREE;
             }
 
-            // Return the float value
             return $degrees;
         }
 
@@ -341,6 +339,7 @@ class Parser
         $y = $this->coordinate();
 
         // There should be no additional tokens
+        // @phpstan-ignore-next-line
         if (null !== $this->lexer->lookahead) {
             throw $this->syntaxError('end of string');
         }
