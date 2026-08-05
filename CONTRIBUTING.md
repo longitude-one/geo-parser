@@ -89,7 +89,7 @@ Allowed types include:
 - `perf` : Performance Improvements
 - `refactor` : Refactoring
 - `docs` : Documentation
-- `build` : Build system (docker)
+- `eco` : Ecological impact
 - `ci` : CI/CD
 - `chore` : Maintenance
 - `quality` : Quality tools

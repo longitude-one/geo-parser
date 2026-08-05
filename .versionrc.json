@@ -14,7 +14,7 @@
     {"type": "perf", "section": "⚡ Performance Improvements"},
     {"type": "refactor", "section": "♻️ Refactoring"},
     {"type": "docs", "section": "📚 Documentation"},
-    {"type": "build", "section": "🏗️ Build System"},
+    {"type": "eco", "section": "🌳 Environmental Impact"},
     {"type": "ci", "section": "👷 CI/CD"},
     {"type": "chore", "section": "🔧 Maintenance"},
     {"type": "quality", "section": "Quality tools"},

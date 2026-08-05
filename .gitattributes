@@ -1,0 +1,18 @@
+# CI / GitHub
+/.github/**            export-ignore
+
+# Development
+/docker/**             export-ignore
+/quality/**            export-ignore
+/tests/**              export-ignore
+
+# Configuration files
+/.dockerignore         export-ignore
+/.gitignore            export-ignore
+/.versionrc.json       export-ignore
+/compose.yaml          export-ignore
+/phpunit.xml.dist      export-ignore
+
+# Developer documentation
+/CHANGELOG.md       export-ignore
+/CONTRIBUTING.md       export-ignore
