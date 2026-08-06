@@ -64,7 +64,7 @@ jobs:
             - name: List libraries
               run: composer show
 
-            - name: Run test suite and with coverage for PHP 8.4
+            - name: Run test suite and with coverage for PHP 8.5
               run: |
                 composer run-script test
                 cat .phpunit.cache/coverage-results.txt
@@ -124,14 +124,14 @@ jobs:
               run: composer update --working-dir=quality/php-stan
             - name: Run PHP-STAN
               run: ./quality/php-stan/vendor/bin/phpstan analyse --configuration=quality/php-stan/php-stan.neon lib tests --error-format=table --no-progress --no-interaction --no-ansi --level=9 --memory-limit=256M -v
-    old-version-build:
+    next-version-build:
         needs: stable-build
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
             matrix:
-                php: [ '8.1', '8.2', '8.3' ]
-                lexer: [ '2.1', '3.0']
+                php: [ '8.4', '8.5' ]
+                lexer: [ '3.0' ] # Preserve the matrix because 3.1 is incoming
                 exclude:
                     # Already tested
                     - php: '8.3'
@@ -169,14 +169,10 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php: [ '8.1', '8.2', '8.3', '8.4', '8.5']
+                php: [ '8.3', '8.4', '8.5']
                 lexer: ['3.1.x-dev', '4.0.x-dev']
                 exclude:
                     # No compatibilities
-                    - php: '8.1'
-                      lexer: '4.0.x-dev'
-                    - php: '8.2'
-                      lexer: '4.0.x-dev'
                     - php: '8.3'
                       lexer: '4.0.x-dev'
         name: PHP ${{ matrix.php }} - Doctrine Lexer ${{ matrix.lexer }}

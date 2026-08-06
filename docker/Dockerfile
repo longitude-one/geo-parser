@@ -1,6 +1,6 @@
 # The container is intentionally run as root because it is used
 # as a local/CI CLI utility container and does not expose services.
-FROM php:8.1-cli-alpine
+FROM php:8.3-cli-alpine
 
 #These packages are need to configure and compile pcov
 RUN apk add --no-cache $PHPIZE_DEPS git
