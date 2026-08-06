@@ -15,6 +15,7 @@ namespace LongitudeOne\Geo\String\Tests;
 use Doctrine\Common\Lexer\Token;
 use Generator;
 use LongitudeOne\Geo\String\Lexer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -148,11 +149,8 @@ class LexerTest extends TestCase
         ]];
     }
 
-    /**
-     * @dataProvider dataProvider
-     *
-     * @param Token<int, string|int>[] $expectedTokens
-     */
+    /** @param Token<int, string|int>[] $expectedTokens */
+    #[DataProvider('dataProvider')]
     public function testLexer(string $input, array $expectedTokens): void
     {
         $lexer = new Lexer($input);
