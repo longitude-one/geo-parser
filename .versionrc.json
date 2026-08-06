@@ -1,5 +1,4 @@
 {
-  "header": "# 📝 Changelog\n\nToutes les modifications notables de ce projet seront documentées ici.\n",
   "releaseCommitMessageFormat": "chore(release): v{{currentTag}} 🎉",
   "packageFiles": [],
   "bumpFiles": [
@@ -17,8 +16,8 @@
     {"type": "eco", "section": "🌳 Environmental Impact"},
     {"type": "ci", "section": "👷 CI/CD"},
     {"type": "chore", "section": "🔧 Maintenance"},
-    {"type": "quality", "section": "Quality tools"},
-    {"type": "test", "section": "PHPUnit tests"}
+    {"type": "quality", "section": "📊​ Quality tools"},
+    {"type": "test", "section": "📗​ PHPUnit tests"}
   ],
   "tagPrefix": ""
 }
