@@ -20,7 +20,8 @@
 
     <coverage cacheDirectory=".phpunit.cache/code-coverage">
         <report>
-            <clover outputFile=".phpunit.cache/clover.xml"/>
+            <clover outputFile=".phpunit.cache/coverage.xml"/>
+            <text outputFile=".phpunit.cache/coverage-results.txt" showOnlySummary="true"/>
         </report>
     </coverage>
 </phpunit>

@@ -1,38 +1,57 @@
-# Change Log
+# Change Log : LongitudeOne - Geo Parser: [longitude-one/geo-parser](https://github.com/longitude-one/geo-parser/)"
 
-# LongitudeOne - Geo Parser: [longitude-one/geo-parser](https://github.com/longitude-one/geo-parser/)"
 All notable changes to this project will be documented in this file.
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+<!-- markdownlint-disable MD024 -->
+
+## Version 3.0.1
+
+### Fix
+
+- Fix "geo-parser miss some out-of-ranges" [#22](https://github.com/longitude-one/geo-parser/issues/22)
+
+## Version 3.0.0
+
 ### Added
+
 - Docker support for development and testing.
+
 ### Changed
+
 - Namespaces are now PSR-4 compliant.
 - Namespaces are now `LongitudeOne\Geo\Parser` and `LongitudeOne\Geo\Parser\Exception`.
 - Updated README.md to reflect new namespaces.
 
 ### Removed
+
 - Support for PHP 5.*, 7.1, 7.2, 7.3.
 
 ## Abandoned and initial project history: "[creof/geo-parser](https://github.com/creof/geo-parser/)"
+
 ### [2.2.1] - 2019-08-07
+
 #### Changed
+
 - Fix compatibility with doctrine/lexer 1.1.0. PR [#18](https://github.com/creof/geo-parser/pull/18) by [bcremer](https://github.com/bcremer).
 
 ### [2.2.0] - 2019-08-06
+
 #### Added
+
 - Support for PHP 7.1 thru 7.3
 
 #### Removed
-- Support for PHP earlier than 7.1 
+
+- Support for PHP earlier than 7.1
 
 ### [2.1.0] - 2016-05-03
+
 #### Added
+
 - Support for numbers in scientific notation.
 
 #### Changed
+
 - Parser constructor no longer requires a value, enabling instance reuse.
 - Lexer constructor no longer requires a value, enabling instance reuse.
 - Tests now use Composer autoload.
@@ -42,21 +61,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Test case and test data cleanup.
 
 #### Removed
+
 - TestInit no longer needed
 
 ### [2.0.0] - 2015-11-18
+
 #### Added
+
 - Change base namespace to CrEOF\Geo\String to avoid class collision with other CrEOF packages.
 
 ### [1.0.1] - 2015-11-17
+
 #### Added
+
 - Exclude fingerprint for Code Climate fixme engine to ignore "Stub TODO.md file." in changelog.
+
 #### Changed
+
 - Removed code for unused conditions in Parser error methods.
 - Removed case for token T_PERIOD in getType method of Lexer, it's not used in Parser.
 
 ### [1.0.0] - 2015-11-11
+
 #### Added
+
 - Change log file to chronicle changes.
 - Dependency on SPL extension to composer.json since the package exceptions extend them.
 - Stub TODO.md file.
@@ -65,7 +93,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Code Climate config
 - Add support for unicode prime and double prime.
 - Tests for uncovered parser branches.
+
 #### Changed
+
 - Use string compare instead of regex for cardinal direction.
 - Remove unneeded deps for phpmd and phpcs - Code Climate with handle this.
 - Match seconds symbol with symbol().

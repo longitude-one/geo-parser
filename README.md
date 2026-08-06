@@ -7,11 +7,9 @@
 Lexer and parser library for geographic point string values.
 
 [![PHP CI](https://github.com/longitude-one/geo-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/longitude-one/geo-parser/actions/workflows/ci.yml)
-[![Maintainability](https://api.codeclimate.com/v1/badges/395f661509f03ebed0ee/maintainability)](https://codeclimate.com/github/longitude-one/geo-parser/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/395f661509f03ebed0ee/test_coverage)](https://codeclimate.com/github/longitude-one/geo-parser/test_coverage)
-[![Coverage Status](https://coveralls.io/repos/github/longitude-one/geo-parser/badge.svg)](https://coveralls.io/github/longitude-one/geo-parser)
+[![Coverage Status](https://codecov.io/gh/longitude-one/geo-parser/graph/badge.svg?token=0YC8GNTY8L)](https://codecov.io/gh/longitude-one/geo-parser)
 ![Minimum PHP Version](https://img.shields.io/packagist/php-v/longitude-one/geo-parser.svg?maxAge=3600)
-[![Tested on PHP 8.1 to 8.3](https://img.shields.io/badge/tested%20on-PHP%20%208.1%20|%208.2%20|%208.3-brightgreen.svg?maxAge=2419200)](https://github.com/longitude-one/geo-parser/actions)
+[![Tested on PHP 8.1 to 8.5](https://img.shields.io/badge/tested%20on-PHP%20%208.1%20|%208.2%20|%208.3-brightgreen.svg?maxAge=2419200)](https://github.com/longitude-one/geo-parser/actions)
 
 [![Downloads](https://img.shields.io/packagist/dm/longitude-one/geo-parser.svg)](https://packagist.org/packages/longitude-one/geo-parser)
 
@@ -22,6 +20,12 @@ Lexer and parser library for geographic point string values.
 
 ```bash
 composer require longitude-one/geo-parser
+```
+
+Current version:
+
+```bash
+composer require longitude-one/geo-parser:3.0.1
 ```
 
 ## Usage
@@ -54,57 +58,66 @@ $value2 = $parser->parse($input2); //-40.446111111111
 Both single values and pairs are supported. Some samples of supported formats are below, though not every possible iteration may be explicitly specified:
 
 1. Simple single-signed values
- * 40
- * -40
- * -8.543
- * +132
- * +77.2
+
+   - 40
+   - -40
+   - -8.543
+   - +132
+   - +77.2
 
 2. Simple single signed values with degree symbol
- * 40°
- * -40°
- * -5.234°
- * +43°
- * +38.43°
+
+   - 40°
+   - -40°
+   - -5.234°
+   - +43°
+   - +38.43°
 
 3. Single unsigned values with or without degree symbol, and cardinal direction
- * 40° N
- * 40 S
- * 56.242 E
+
+   - 40° N
+   - 40 S
+   - 56.242 E
 
 4. Single values of signed integer degrees with degree symbol, and decimal minutes with apostrophe
- * 40° 26.222'
- * -65° 32.22'
- * +165° 52.22'
+
+   - 40° 26.222'
+   - -65° 32.22'
+   - +165° 52.22'
 
 5. Single values of unsigned integer degrees with degree symbol, decimal minutes with apostrophe, and cardinal direction
- * 40° 26.222' E
- * 65° 32.22' S
+
+   - 40° 26.222' E
+   - 65° 32.22' S
 
 6. Single values of signed integer degrees with degree symbol, integer minutes with apostrophe, and optional integer or decimal seconds with quote
- * 40° 26' 46"
- * -79° 58' 56"
- * 93° 19' 25.8"
- * +120° 19' 25.8"
 
-6. Single values of signed integer degrees with colon symbol, integer minutes, and optional colon and integer or decimal seconds
- * +40:26:46
- * -79:58:56
- * 93:19:25.8
+   - 40° 26' 46"
+   - -79° 58' 56"
+   - 93° 19' 25.8"
+   - +120° 19' 25.8"
 
-7. Single values of unsigned integer degrees with degree symbol, integer minutes with apostrophe, optional integer or decimal seconds with quote, and cardinal direction
- * 40° 26' 46" S
- * 99° 58' 56" W
- * 44° 58' 53.9" N
+7. Single values of signed integer degrees with colon symbol, integer minutes, and optional colon and integer or decimal seconds
 
-7. Single values of unsigned integer degrees with colon symbol, integer minutes with, optional colon and integer or decimal seconds, and cardinal direction
- * 40:26:46 S
- * 99:58:56 W
- * 44:58:53.9 N
+   - +40:26:46
+   - -79:58:56
+   - 93:19:25.8
 
-8. Two of any one format separated by whitespace
+8. Single values of unsigned integer degrees with degree symbol, integer minutes with apostrophe, optional integer or decimal seconds with quote, and cardinal direction
 
-9. Two of any one format separated by a comma
+   - 40° 26' 46" S
+   - 99° 58' 56" W
+   - 44° 58' 53.9" N
+
+9. Single values of unsigned integer degrees with colon symbol, integer minutes with, optional colon and integer or decimal seconds, and cardinal direction
+
+   - 40:26:46 S
+   - 99:58:56 W
+   - 44:58:53.9 N
+
+10. Two of any one format separated by whitespace
+
+11. Two of any one format separated by a comma
 
 ## Return
 
@@ -112,4 +125,25 @@ The parser will return an integer/float or an array containing a pair of these v
 
 ## Exceptions
 
-The ```Lexer``` and ```Parser``` will throw exceptions implementing interface ```LongitudeOne\Geo\String\Exception\ExceptionInterface```.
+The `Lexer` and `Parser` will throw exceptions implementing interface `LongitudeOne\Geo\String\Exception\ExceptionInterface`.
+
+## Roadmap
+
+[!NOTE] A major release may increase the minimum supported PHP version **without introducing any other breaking changes**.
+
+| Version | PHP compatibility           | Tested on       | Doctrine Lexer | Tested with Lexer         | Released     | Active Support   | Security fix     |
+|---------|-----------------------------|-----------------|----------------|---------------------------|--------------|------------------|------------------|
+| 3       | 8.1 - 8.2 - 8.3 - 8.4 - 8.5 | From 8.1 to 8.5 | ^2.1 - ^3.0    | 2.1 3.0 3.1-xdev 4.0-xdev | 04 May 2024  | 31 August 2026   | 31 December 2026 |
+| 4       | 8.3 - 8.4 - 8.5             | 8.3 - 8.4 - 8.5 | ^3.0.1         | 3.0 3.1-xdev 4.0-xdev     | August 2026  | 31 December 2026 | 31 December 2027 |
+| 5       | 8.4 - 8.5                   | 8.4 - 8.5       |                | 3.0 3.1-xdev 4.0-xdev     | January 2027 | 31 December 2028 | 31 December 2030 |
+| 6       | 8.5                         | 8.5             |                | 3.0 3.1-xdev 4.0-xdev.    | January 2028 | 31 December 2028 | 31 December 2030 |
+
+Version 4 is intended as a transitional release. The only backward compatibility break is the supported PHP versions and the `doctrine/lexer` versions.
+
+PHP versions marked as "tested" and each doctrine lexer version are part of the continuous integration matrix.
+
+### Support Policy
+
+Only the latest major version receives feature and bug fixes. Non-security issues will not be addressed during the security-fixes period.
+
+Previous major versions may receive security fixes only, according to the roadmap above.
