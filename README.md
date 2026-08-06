@@ -9,7 +9,7 @@ Lexer and parser library for geographic point string values.
 [![PHP CI](https://github.com/longitude-one/geo-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/longitude-one/geo-parser/actions/workflows/ci.yml)
 [![Coverage Status](https://codecov.io/gh/longitude-one/geo-parser/graph/badge.svg?token=0YC8GNTY8L)](https://codecov.io/gh/longitude-one/geo-parser)
 ![Minimum PHP Version](https://img.shields.io/packagist/php-v/longitude-one/geo-parser.svg?maxAge=3600)
-[![Tested on PHP 8.1 to 8.3](https://img.shields.io/badge/tested%20on-PHP%20%208.1%20|%208.2%20|%208.3-brightgreen.svg?maxAge=2419200)](https://github.com/longitude-one/geo-parser/actions)
+[![Tested on PHP 8.1 to 8.5](https://img.shields.io/badge/tested%20on-PHP%20%208.1%20|%208.2%20|%208.3-brightgreen.svg?maxAge=2419200)](https://github.com/longitude-one/geo-parser/actions)
 
 [![Downloads](https://img.shields.io/packagist/dm/longitude-one/geo-parser.svg)](https://packagist.org/packages/longitude-one/geo-parser)
 
@@ -131,12 +131,12 @@ The `Lexer` and `Parser` will throw exceptions implementing interface `Longitude
 
 [!NOTE] A major release may increase the minimum supported PHP version **without introducing any other breaking changes**.
 
-| Version | PHP compatibility           | Tested on       | Doctrine Lexer | Released     | Active Support   | Security fix     |
-|---------|-----------------------------|-----------------|----------------|--------------|------------------|------------------|
-| 3       | 8.1 - 8.2 - 8.3 - 8.4 - 8.5 | 8.1 - 8.2 - 8.3 | ^2.1 - ^3.0    | 04 May 2024  | 31 August 2026   | 31 December 2026 |
-| 4       | 8.3 - 8.4 - 8.5             | 8.3 - 8.4 - 8.5 | ^3.0.1         | August 2026  | 31 December 2026 | 31 December 2027 |
-| 5       | 8.4 - 8.5                   | 8.4 - 8.5       |                | January 2027 | 31 December 2028 | 31 December 2030 |
-| 6       | 8.5                         | 8.5             |                | January 2028 | 31 December 2028 | 31 December 2030 |
+| Version | PHP compatibility           | Tested on       | Doctrine Lexer | Tested with Lexer         | Released     | Active Support   | Security fix     |
+|---------|-----------------------------|-----------------|----------------|---------------------------|--------------|------------------|------------------|
+| 3       | 8.1 - 8.2 - 8.3 - 8.4 - 8.5 | From 8.1 to 8.5 | ^2.1 - ^3.0    | 2.1 3.0 3.1-xdev 4.0-xdev | 04 May 2024  | 31 August 2026   | 31 December 2026 |
+| 4       | 8.3 - 8.4 - 8.5             | 8.3 - 8.4 - 8.5 | ^3.0.1         | 3.0 3.1-xdev 4.0-xdev     | August 2026  | 31 December 2026 | 31 December 2027 |
+| 5       | 8.4 - 8.5                   | 8.4 - 8.5       |                | 3.0 3.1-xdev 4.0-xdev     | January 2027 | 31 December 2028 | 31 December 2030 |
+| 6       | 8.5                         | 8.5             |                | 3.0 3.1-xdev 4.0-xdev.    | January 2028 | 31 December 2028 | 31 December 2030 |
 
 Version 4 is intended as a transitional release. The only backward compatibility break is the supported PHP versions and the `doctrine/lexer` versions.
 
