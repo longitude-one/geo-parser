@@ -41,6 +41,31 @@ All notable changes to this project will be documented in this file. See [commit
 ### 📗​ PHPUnit tests
 
 * Security test added ([95fe6e8](https://github.com/longitude-one/geo-parser/commit/95fe6e827f256c343ffa98cc63323c2737ec51eb))
+
+<!-- markdownlint-disable MD024 -->
+
+## Version 3.0.1
+
+### Fix
+
+- Fix "geo-parser miss some out-of-ranges" [#22](https://github.com/longitude-one/geo-parser/issues/22)
+
+## Version 3.0.0
+
+### Added
+
+- Docker support for development and testing.
+
+### Changed
+
+- Namespaces are now PSR-4 compliant.
+- Namespaces are now `LongitudeOne\Geo\Parser` and `LongitudeOne\Geo\Parser\Exception`.
+- Updated README.md to reflect new namespaces.
+
+### Removed
+
+- Support for PHP 5.*, 7.1, 7.2, 7.3.
+
 ### [2.2.1] - 2019-08-07
 
 #### Changed
