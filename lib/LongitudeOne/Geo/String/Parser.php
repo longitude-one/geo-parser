@@ -22,6 +22,11 @@ use LongitudeOne\Geo\String\Exception\UnexpectedValueException;
 class Parser
 {
     /**
+     * Maximum length of a value embedded in an exception message.
+     */
+    private const MAX_ERROR_VALUE_LENGTH = 100;
+
+    /**
      * @var string original input string
      */
     private string $input;
@@ -349,6 +354,23 @@ class Parser
     }
 
     /**
+     * Strip control characters (CR, LF, ...) and truncate a value before it is embedded in an exception message.
+     *
+     * Prevents a large or crafted input from inflating the exception message size or forging fake log lines
+     * when that message is logged as-is.
+     */
+    private function sanitizeForError(string $value): string
+    {
+        $value = (string) preg_replace('/[\x00-\x1F\x7F]/', ' ', $value);
+
+        if (strlen($value) > self::MAX_ERROR_VALUE_LENGTH) {
+            return substr($value, 0, self::MAX_ERROR_VALUE_LENGTH).'...';
+        }
+
+        return $value;
+    }
+
+    /**
      * Match and return seconds value.
      *
      * @throws RangeException
@@ -454,14 +476,14 @@ class Parser
     {
         $expected = sprintf('Expected %s, got', $expected);
         $token = $this->lexer->lookahead;
-        $found = null === $token ? 'end of string.' : sprintf('"%s"', $token->value);
+        $found = null === $token ? 'end of string.' : sprintf('"%s"', $this->sanitizeForError((string) $token->value));
 
         $message = sprintf(
             '[Syntax Error] line 0, col %d: Error: %s %s in value "%s"',
             $token->position ?? -1,
             $expected,
             $found,
-            $this->input
+            $this->sanitizeForError($this->input)
         );
 
         return new UnexpectedValueException($message);
