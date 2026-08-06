@@ -16,45 +16,6 @@ Lexer and parser library for geographic point string values.
 > This package is the continuation of the now abandoned [creof/geo-parser](https://github.com/creof/geo-parser) package.
 
 ## Installation
-## [3.0.2](https://github.com/longitude-one/geo-parser/compare/3.0.1...3.0.2) (2026-08-06)
-
-### 🐛 Bug Fixes
-
-* quality errors found by upgraded PHP-Stan ([088841e](https://github.com/longitude-one/geo-parser/commit/088841e8c8936745bd882a10d81de31716fd9d82))
-* sanitize exception message values to prevent inflated messages injection ([f97a790](https://github.com/longitude-one/geo-parser/commit/f97a790908e13f0255df8253e36d0b2eef140b84))
-
-### 📚 Documentation
-
-* Lexer compatibilities and test reported ([4706459](https://github.com/longitude-one/geo-parser/commit/47064594c8a744ccf042761718faff026c47f4c2))
-* Lexer version mentioned ([c28e46c](https://github.com/longitude-one/geo-parser/commit/c28e46c4a8d2d6bdc4f69ce024cd067760bc66ca))
-* markdown linting ([94deaea](https://github.com/longitude-one/geo-parser/commit/94deaead9e5fe0dde280937adfdaca5c80ec0ff0))
-* Roadmap added ([6ab4aab](https://github.com/longitude-one/geo-parser/commit/6ab4aaba892240d96f4e04464fbc1c8ee7bc14bc))
-
-### 🌳 Environmental Impact
-
-* Decrease the package size ([a2e912b](https://github.com/longitude-one/geo-parser/commit/a2e912b8e566e3ad38b4dac4255ed83494664f09))
-
-### 👷 CI/CD
-
-* add test with next lexer major version ([c9a8678](https://github.com/longitude-one/geo-parser/commit/c9a86783421d6523d1b403e6bdcf56fc7f20efbb))
-* migration from coveralls to codecov ([1a3923a](https://github.com/longitude-one/geo-parser/commit/1a3923abe4b71aed12b9db0508b17c61e31e7adf))
-
-### 🔧 Maintenance
-
-* add missing emoji ([52b899e](https://github.com/longitude-one/geo-parser/commit/52b899e8e13d76db61eb11d748e8014114f7c595))
-* create script-shorcuts for composer ([5e25b49](https://github.com/longitude-one/geo-parser/commit/5e25b493510c1d2151c3c17e91f63767f9fa47b7))
-* Dockerfile optimze installations of quality tools ([e5e9ef1](https://github.com/longitude-one/geo-parser/commit/e5e9ef1576a9a5a1f4716b8a1d38062550c7a406))
-* headers updated ([e18454a](https://github.com/longitude-one/geo-parser/commit/e18454a9ac8611b96b55710f6671c1714e4ebf3f))
-
-### 📊​ Quality tools
-
-* new tool : commit-and-tag-version ([e48e43b](https://github.com/longitude-one/geo-parser/commit/e48e43b5f0cf3b793dfb74ed520af0a8594d041c))
-* PHP-STAN upgraded ([83cf636](https://github.com/longitude-one/geo-parser/commit/83cf6367ff466bac2cfb08164c2b821fc495931c))
-* update PHPMD ruleset name and adjust maximum method length allowed ([85accad](https://github.com/longitude-one/geo-parser/commit/85accadd750b529dd709d5eacadb7240f1b2c773))
-
-### 📗​ PHPUnit tests
-
-* Security test added ([95fe6e8](https://github.com/longitude-one/geo-parser/commit/95fe6e827f256c343ffa98cc63323c2737ec51eb))
 
 ```bash
 composer require longitude-one/geo-parser
