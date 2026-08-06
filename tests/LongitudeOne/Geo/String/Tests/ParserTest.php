@@ -227,11 +227,8 @@ class ParserTest extends TestCase
         yield ['+120° 19\' 25.8"', 120.32383333333333];
     }
 
-    /**
-     * @dataProvider dataSourceBad
-     *
-     * @param class-string<ExceptionInterface> $exception
-     */
+    /** @param class-string<ExceptionInterface> $exception */
+    #[DataProvider('dataSourceBad')]
     public function testBadValues(string $input, string $exception, string $message): void
     {
         self::expectException($exception);
@@ -242,11 +239,8 @@ class ParserTest extends TestCase
         $parser->parse();
     }
 
-    /**
-     * @param int|float|array<int|float> $expected
-     *
-     * @dataProvider dataSourceGood
-     */
+    /** @param int|float|array<int|float> $expected */
+    #[DataProvider('dataSourceGood')]
     public function testGoodValues(string|int $input, int|float|array $expected): void
     {
         $parser = new Parser($input);

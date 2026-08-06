@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.5/phpunit.xsd"
          displayDetailsOnTestsThatTriggerDeprecations="true"
-         colors="true" bootstrap="./vendor/autoload.php" cacheDirectory=".phpunit.cache">
-    <testsuites>
-        <testsuite name="Tests">
-            <directory>./tests/LongitudeOne/Geo/String/Tests</directory>
-        </testsuite>
-    </testsuites>
-    <source>
-        <include>
-            <directory suffix=".php">lib</directory>
-        </include>
-        <exclude>
-            <directory>tests</directory>
-            <directory>vendor</directory>
-        </exclude>
-    </source>
-
-    <coverage cacheDirectory=".phpunit.cache/code-coverage">
-        <report>
-            <clover outputFile=".phpunit.cache/coverage.xml"/>
-            <text outputFile=".phpunit.cache/coverage-results.txt" showOnlySummary="true"/>
-        </report>
-    </coverage>
+         colors="true" bootstrap="./vendor/autoload.php"
+         cacheDirectory=".phpunit.cache">
+  <testsuites>
+    <testsuite name="Tests">
+      <directory>./tests/LongitudeOne/Geo/String/Tests</directory>
+    </testsuite>
+  </testsuites>
+  <source>
+    <include>
+      <directory suffix=".php">lib</directory>
+    </include>
+    <exclude>
+      <directory>tests</directory>
+      <directory>vendor</directory>
+    </exclude>
+  </source>
+  <coverage>
+    <report>
+      <clover outputFile=".phpunit.cache/coverage.xml"/>
+      <text outputFile=".phpunit.cache/coverage-results.txt" showOnlySummary="true"/>
+    </report>
+  </coverage>
 </phpunit>
