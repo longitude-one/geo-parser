@@ -12,6 +12,7 @@
 
 namespace LongitudeOne\Geo\String\Tests;
 
+use LongitudeOne\Geo\String\Exception\InvalidArgumentException;
 use LongitudeOne\Geo\String\Exception\RangeException;
 use LongitudeOne\Geo\String\Exception\UnexpectedValueException;
 use LongitudeOne\Geo\String\Parser;
@@ -127,6 +128,18 @@ class SecurityTest extends TestCase
         $this->expectException(UnexpectedValueException::class);
 
         (new Parser("40\0N"))->parse();
+    }
+
+    /**
+     * A parser created without input must fail with the library exception,
+     * rather than an error caused by an uninitialized property.
+     */
+    public function testParseWithoutInputThrowsInvalidArgumentException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('An input value must be provided to either the constructor or the parse method.');
+
+        (new Parser())->parse();
     }
 
     /**

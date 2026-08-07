@@ -13,6 +13,7 @@
 namespace LongitudeOne\Geo\String;
 
 use Doctrine\Common\Lexer\Token;
+use LongitudeOne\Geo\String\Exception\InvalidArgumentException;
 use LongitudeOne\Geo\String\Exception\RangeException;
 use LongitudeOne\Geo\String\Exception\UnexpectedValueException;
 
@@ -83,6 +84,10 @@ class Parser
     {
         if (null !== $input) {
             $this->input = (string) $input;
+        }
+
+        if (!isset($this->input)) {
+            throw new InvalidArgumentException('An input value must be provided to either the constructor or the parse method.');
         }
 
         $this->nextCardinal = null;
