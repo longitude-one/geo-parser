@@ -4,18 +4,10 @@ on:
     schedule:
         - cron: '0 17 * * 5'
     push:
-        branches:
-            - main
-            - dev
-            - 4-x-dev
         paths-ignore:
             - '**.md'
             - 'LICENSE'
     pull_request:
-        branches:
-            - main
-            - dev
-            - 4-x-dev
         paths-ignore:
             - '**.md'
             - 'LICENSE'
@@ -25,7 +17,43 @@ permissions:
     pull-requests: read
 
 jobs:
+    ci_decision:
+        name: Decide whether to run the full CI
+        runs-on: ubuntu-latest
+        outputs:
+            run_full_ci: ${{ steps.decision.outputs.run_full_ci }}
+        steps:
+            - id: decision
+              uses: actions/github-script@v8
+              with:
+                  script: |
+                      if (context.eventName !== 'push') {
+                          core.setOutput('run_full_ci', 'true');
+                          return;
+                      }
+
+                      const branch = context.ref.replace(/^refs\/heads\//, '');
+                      const pullRequests = await github.paginate(
+                          github.rest.pulls.list,
+                          {
+                              ...context.repo,
+                              head: `${context.repo.owner}:${branch}`,
+                              state: 'open',
+                              per_page: 100,
+                          },
+                      );
+                      const hasOpenPullRequest = pullRequests.length > 0;
+
+                      core.info(
+                          hasOpenPullRequest
+                              ? `Skipping this push: ${branch} already has an open pull request.`
+                              : `Running CI for the push to ${branch}.`,
+                      );
+                      core.setOutput('run_full_ci', hasOpenPullRequest ? 'false' : 'true');
+
     stable-build:
+        needs: ci_decision
+        if: needs.ci_decision.outputs.run_full_ci == 'true'
         runs-on: ubuntu-latest
         name: PHP 8.3 - Doctrine Lexer 3.0
         env:
