@@ -7,7 +7,6 @@
  *
  * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
  * Copyright 2024-2026.
- *
  */
 
 // Replace the value of this variable with the project's launch year.
