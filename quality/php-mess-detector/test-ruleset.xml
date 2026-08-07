@@ -12,6 +12,7 @@
     <!-- Import the entire code size rule, but excessive method length -->
     <rule ref="rulesets/codesize.xml">
         <exclude name="ExcessiveMethodLength"/>
+        <exclude name="TooManyPublicMethods"/>
     </rule>
     <!-- Set a minimum for excessive method length -->
     <rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
