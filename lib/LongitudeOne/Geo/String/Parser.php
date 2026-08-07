@@ -425,7 +425,7 @@ class Parser
     /**
      * Match value component symbol if required or present.
      */
-    private function symbol(): bool|int|null
+    private function symbol(): bool|int
     {
         // If the symbol requirement is not set and the next token is a colon, then match this colon
         if (null === $this->nextSymbol && $this->lexer->isNextToken(Lexer::T_COLON)) {
@@ -444,29 +444,19 @@ class Parser
         }
 
         // Match symbol if requirement set and update requirement for next symbol
-        switch ($this->nextSymbol) {
-            case Lexer::T_COLON:
-                $this->match(Lexer::T_COLON);
+        $nextSymbol = match ($this->nextSymbol) {
+            Lexer::T_COLON => Lexer::T_COLON,
+            Lexer::T_DEGREE => Lexer::T_APOSTROPHE, // The next symbol will be minute
+            Lexer::T_APOSTROPHE => Lexer::T_QUOTE, // The next symbol will be second
+            Lexer::T_QUOTE => Lexer::T_QUOTE,
+            default => false,
+        };
 
-                return $this->nextSymbol;
-            case Lexer::T_DEGREE:
-                $this->match(Lexer::T_DEGREE);
-
-                // The next symbol will be minutes
-                return $this->nextSymbol = Lexer::T_APOSTROPHE;
-            case Lexer::T_APOSTROPHE:
-                $this->match(Lexer::T_APOSTROPHE);
-
-                // The next symbol will be seconds
-                return $this->nextSymbol = Lexer::T_QUOTE;
-            case Lexer::T_QUOTE:
-                $this->match(Lexer::T_QUOTE);
-
-                return $this->nextSymbol;
+        if (false !== $nextSymbol) {
+            $this->match($this->nextSymbol);
         }
 
-        // Set requirement for any remaining value
-        return $this->nextSymbol = false;
+        return $this->nextSymbol = $nextSymbol;
     }
 
     /**
