@@ -34,7 +34,8 @@
             "sed -i.bak 's|/var/www/|./|g' .phpunit.cache/coverage.xml",
             "rm .phpunit.cache/coverage.xml.bak",
             "cat .phpunit.cache/coverage-results.txt"
-        ]
+        ],
+        "fix": "quality/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=quality/php-cs-fixer/.php-cs-fixer.php --allow-risky=yes"
     },
     "autoload": {
         "psr-0": {
