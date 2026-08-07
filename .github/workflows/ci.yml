@@ -65,9 +65,10 @@ jobs:
             - name: Validate composer.json
               run: composer validate --strict
 
-            - name: Get Composer cache directory
+            - name: Get composer cache directory
               id: composer-cache
-              run: echo "dir=$(composer config cache-dir)" >> $GITHUB_OUTPUT
+              run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
             - name: Cache Composer packages
               uses: actions/cache@v6
               with:
@@ -84,7 +85,7 @@ jobs:
                   tools: composer:v2
 
             - name: Install dependencies
-              run: composer update -vvv
+              run: composer update -vvv --prefer-dist
 
             - name: List libraries
               run: composer show
@@ -142,9 +143,9 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v7
 
-            - name: Get Composer cache directory
+            - name: Get composer cache directory
               id: composer-cache
-              run: echo "dir=$(composer config cache-dir)" >> $GITHUB_OUTPUT
+              run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
             - name: Cache Composer packages
               id: composer-cache-old
@@ -160,7 +161,7 @@ jobs:
                   tools: composer:v2
 
             - name: Install dependencies and force lexer ${{ matrix.lexer }}
-              run: composer --prefer-source require doctrine/lexer:^${{ matrix.lexer }}
+              run: composer --prefer-dist require doctrine/lexer:^${{ matrix.lexer }}
 
             - name: Show libraries
               run: composer show
@@ -184,9 +185,9 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v7
 
-            - name: Get Composer cache directory
+            - name: Get composer cache directory
               id: composer-cache
-              run: echo "dir=$(composer config cache-dir)" >> $GITHUB_OUTPUT
+              run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
             - name: Cache Composer packages
               id: composer-cache-x-dev
@@ -202,7 +203,7 @@ jobs:
                   tools: composer:v2
 
             - name: Install dependencies and force lexer ${{ matrix.lexer }}
-              run: composer --prefer-source require doctrine/lexer:${{ matrix.lexer }}
+              run: composer --prefer-dist require doctrine/lexer:${{ matrix.lexer }}
 
             - name: Show libraries
               run: composer show
