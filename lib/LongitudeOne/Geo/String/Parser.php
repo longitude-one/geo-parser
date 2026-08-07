@@ -27,9 +27,19 @@ class Parser
     private const MAX_ERROR_VALUE_LENGTH = 100;
 
     /**
+     * Whether an optional colon or degree symbol can still be matched.
+     */
+    private bool $canMatchSymbol;
+
+    /**
      * @var string original input string
      */
     private string $input;
+
+    /**
+     * Whether the parser is reading the first coordinate in a pair.
+     */
+    private bool $isFirstCoordinate;
 
     /**
      * @var Lexer lexer doctrine instance
@@ -46,9 +56,9 @@ class Parser
     /**
      * Symbol can be Lexer::T_APOSTROPHE, Lexer::T_QUOTE, or Lexer::T_DEGREE.
      *
-     * @var int|false|null next symbol token type when present
+     * @var int|null next symbol token type when present
      */
-    private int|false|null $nextSymbol;
+    private ?int $nextSymbol;
 
     /**
      * Constructor.
@@ -77,6 +87,8 @@ class Parser
 
         $this->nextCardinal = null;
         $this->nextSymbol = null;
+        $this->isFirstCoordinate = true;
+        $this->canMatchSymbol = true;
 
         $this->lexer->setInput($this->input);
 
@@ -131,10 +143,10 @@ class Parser
     private function coordinate(): float|int
     {
         // By default, don't change sign
-        $sign = false;
+        $sign = null;
 
         // Match sign if the cardinal direction has not been seen
-        if (!($this->nextCardinal > 0) && $this->lexer->isNextTokenAny([Lexer::T_PLUS, Lexer::T_MINUS])) {
+        if (null === $this->nextCardinal && $this->lexer->isNextTokenAny([Lexer::T_PLUS, Lexer::T_MINUS])) {
             $sign = $this->sign();
         }
 
@@ -143,15 +155,19 @@ class Parser
 
         // If sign not matched determine sign from cardinal direction when required
         // or if a cardinal direction is present and this is first coordinate in a pair
-        if (false === $sign && ($this->nextCardinal > 0 || (null === $this->nextCardinal && $this->lexer->isNextTokenAny([Lexer::T_CARDINAL_LAT, Lexer::T_CARDINAL_LON])))) {
+        $hasCardinal = null === $sign
+            && (null !== $this->nextCardinal || ($this->isFirstCoordinate && $this->lexer->isNextTokenAny([Lexer::T_CARDINAL_LAT, Lexer::T_CARDINAL_LON])));
+        $this->isFirstCoordinate = false;
+
+        if ($hasCardinal) {
             return $this->cardinal($coordinate);
         }
 
-        // Remember there was no cardinal direction on first coordinate
-        $this->nextCardinal = -1;
+        // There is no cardinal direction requirement for the next coordinate.
+        $this->nextCardinal = null;
 
         // Return value with sign if it's set
-        return (false === $sign ? 1 : $sign) * $coordinate;
+        return ($sign ?? 1) * $coordinate;
     }
 
     /**
@@ -185,7 +201,7 @@ class Parser
         $degrees = $this->number();
 
         // If a symbol does not follow integer, this value is complete
-        if (!$this->symbol()) {
+        if (null === $this->symbol()) {
             return $degrees;
         }
 
@@ -426,10 +442,10 @@ class Parser
     /**
      * Match value component symbol if required or present.
      */
-    private function symbol(): bool|int
+    private function symbol(): ?int
     {
         // If the symbol requirement is not set and the next token is a colon, then match this colon
-        if (null === $this->nextSymbol && $this->lexer->isNextToken(Lexer::T_COLON)) {
+        if ($this->canMatchSymbol && null === $this->nextSymbol && $this->lexer->isNextToken(Lexer::T_COLON)) {
             $this->match(Lexer::T_COLON);
 
             // Set symbol requirement for any remaining value
@@ -437,7 +453,7 @@ class Parser
         }
 
         // If the symbol requirement is not set and the next token is a degree symbol, then match this degree symbol
-        if (null === $this->nextSymbol && $this->lexer->isNextToken(Lexer::T_DEGREE)) {
+        if ($this->canMatchSymbol && null === $this->nextSymbol && $this->lexer->isNextToken(Lexer::T_DEGREE)) {
             $this->match(Lexer::T_DEGREE);
 
             // Set requirement for any remaining value
@@ -445,19 +461,25 @@ class Parser
         }
 
         // Match symbol if requirement set and update requirement for next symbol
-        $nextSymbol = match ($this->nextSymbol) {
+        $symbol = $this->nextSymbol;
+        $nextSymbol = match ($symbol) {
             Lexer::T_COLON => Lexer::T_COLON,
             Lexer::T_DEGREE => Lexer::T_APOSTROPHE, // The next symbol will be minute
             Lexer::T_APOSTROPHE => Lexer::T_QUOTE, // The next symbol will be second
             Lexer::T_QUOTE => Lexer::T_QUOTE,
-            default => false,
+            default => null,
         };
 
-        if (false !== $nextSymbol) {
-            $this->match($this->nextSymbol);
+        if (null !== $nextSymbol) {
+            /* @var int $symbol */
+            $this->match($symbol);
+
+            return $this->nextSymbol = $nextSymbol;
         }
 
-        return $this->nextSymbol = $nextSymbol;
+        $this->canMatchSymbol = false;
+
+        return $this->nextSymbol = null;
     }
 
     /**
