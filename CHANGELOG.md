@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.0.0-RC.0](https://github.com/longitude-one/geo-parser/compare/3.0.3...4.0.0-RC.0) (2026-08-07)
+
+### ⚠ BREAKING CHANGES
+
+* PHP8.1 and 8.2 no more supported
+
+### 🐛 Bug Fixes
+
+* add input validation in Parser constructor and corresponding test ([8e7b08d](https://github.com/longitude-one/geo-parser/commit/8e7b08d8623d2ef79e0392e87a6700464121ea4a))
+
+### ♻️ Refactoring
+
+* enhance symbol matching logic and coordinate handling in Parser class ([97a9d2a](https://github.com/longitude-one/geo-parser/commit/97a9d2a7504aa5e43c1a604abb662421a8413a12))
+* improve handling of space-separated coordinate pairs in Parser class ([854d1a3](https://github.com/longitude-one/geo-parser/commit/854d1a39a1ad128ba8c98242cb05c20d7122617e))
+* simplify symbol matching logic in Parser class ([e462dbf](https://github.com/longitude-one/geo-parser/commit/e462dbf2ce15d46875962bb933bea34be50c10a2))
+* streamline cardinal direction handling in Parser class ([6bf081f](https://github.com/longitude-one/geo-parser/commit/6bf081fc9ffcbb44b4f2f00fda86606bab0c19f2))
+* update minutes and seconds methods to return float values and normalize fractions ([e324539](https://github.com/longitude-one/geo-parser/commit/e324539e24bdee12a708923a3d83857abc10d137))
+
+### 🌳 Environmental Impact
+
+* **ci:** reduce cache storage ([cc0beeb](https://github.com/longitude-one/geo-parser/commit/cc0beeb0ead79dc12e7c6f63ea6febd2ebdde4a9))
+
+### 👷 CI/CD
+
+* correct composer cache directory command in CI workflow ([cf8e898](https://github.com/longitude-one/geo-parser/commit/cf8e8983b31a34d837fb8d42523c1f1972a27781))
+* update CI workflow to conditionally run full CI based on open pull requests ([689d8ff](https://github.com/longitude-one/geo-parser/commit/689d8ff7a35ec6dd4a2306ca5f7ceedfa6b6187a))
+* update composer require command to use caret versioning for lexer dependency ([926c401](https://github.com/longitude-one/geo-parser/commit/926c401c3c08b8c747de1f09f8d03f8c60cbf533))
+* update output setting for Composer cache directory in CI workflow ([ff61117](https://github.com/longitude-one/geo-parser/commit/ff611174c96bff738cc1c0c440a3a0639e00f26e))
+
+### 🔧 Maintenance
+
+* add a script to use php-xs-fixer ([c7414cb](https://github.com/longitude-one/geo-parser/commit/c7414cbf0490532bca87be5b791897c427045d61))
+* update headers ([67c68c4](https://github.com/longitude-one/geo-parser/commit/67c68c46230cca0cff5d73423a12fd3faf00f19f))
+* Update PHP version requirement to ^8.3 and adjust doctrine/lexer dependency ([86be558](https://github.com/longitude-one/geo-parser/commit/86be558dfe6de2ac2eecc3f112562101aaeaaeec))
+
+### 📊​ Quality tools
+
+* exclude TooManyPublicMethods rule in code size checks for tests ([8b03143](https://github.com/longitude-one/geo-parser/commit/8b031433ed6b566618127f897a92e7f0163f162d))
+* update project metadata in php-cs-fixer configuration file ([190e316](https://github.com/longitude-one/geo-parser/commit/190e3167b0e17c49af9d33fe73ef3bfcb1e40b3b))
+
+### 📗​ PHPUnit tests
+
+* add regression tests for fractional coordinate components in FloatTest ([499eba9](https://github.com/longitude-one/geo-parser/commit/499eba91f978243d787c6ab060f7f0d7d556da43))
+* PHPUnit version upgraded ([ffa9cf1](https://github.com/longitude-one/geo-parser/commit/ffa9cf185002548404d27e833bbe6fc7fdaa8d64))
 ## [3.0.3](https://github.com/longitude-one/geo-parser/compare/3.0.2...3.0.3) (2026-08-07)
 
 ### 📚 Documentation
