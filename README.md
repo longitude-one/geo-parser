@@ -4,7 +4,7 @@
 ![Stable release](https://img.shields.io/github/v/release/longitude-one/geo-parser)
 [![Packagist License](https://img.shields.io/packagist/l/longitude-one/geo-parser)](https://github.com/longitude-one/geo-parser/blob/main/LICENSE)
 
-Lexer and parser library for geographic point string values.
+Lexer and parser library for geographic coordinate strings.
 
 [![PHP CI](https://github.com/longitude-one/geo-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/longitude-one/geo-parser/actions/workflows/ci.yml)
 [![Coverage Status](https://codecov.io/gh/longitude-one/geo-parser/graph/badge.svg?token=0YC8GNTY8L)](https://codecov.io/gh/longitude-one/geo-parser)
@@ -29,8 +29,8 @@ composer require longitude-one/geo-parser:3.0.2
 
 ## Usage
 
-There are two use patterns for the parser. The value to be parsed can be passed into the constructor, then parse()
-called on the returned ```Parser``` object:
+The parser supports two usage patterns. Pass the value to parse to the constructor, then call `parse()` on the
+resulting `Parser` object:
 
 ```php
 $input  = '79°56′55″W, 40°26′46″N';
@@ -40,7 +40,7 @@ $parser = new Parser($input);
 $value = $parser->parse(); // [-79.948611111111, 40.446111111111]
 ```
 
-If many values need to be parsed, a single ```Parser``` instance can be used:
+When parsing many values, reuse a single `Parser` instance:
 
 ```php
 $input1 = '56.242 E';
@@ -54,7 +54,8 @@ $value2 = $parser->parse($input2); //-40.446111111111
 
 ## Supported Formats
 
-Both single values and pairs are supported. Some samples of supported formats are below, though not every possible iteration may be explicitly specified:
+Both single values and coordinate pairs are supported. The following examples illustrate the supported formats; they
+are not exhaustive.
 
 1. Simple single-signed values
 
@@ -108,7 +109,7 @@ Both single values and pairs are supported. Some samples of supported formats ar
    - 99° 58' 56" W
    - 44° 58' 53.9" N
 
-9. Single values of unsigned integer degrees with colon symbol, integer minutes with, optional colon and integer or decimal seconds, and cardinal direction
+9. Single values of unsigned integer degrees with a colon, integer minutes, optional integer or decimal seconds, and a cardinal direction
 
    - 40:26:46 S
    - 99:58:56 W
@@ -120,26 +121,27 @@ Both single values and pairs are supported. Some samples of supported formats ar
 
 ## Return
 
-The parser will return an integer/float or an array containing a pair of these values.
+The parser returns an integer or float for a single value, or an array containing a coordinate pair.
 
 ## Exceptions
 
-The `Lexer` and `Parser` will throw exceptions implementing interface `LongitudeOne\Geo\String\Exception\ExceptionInterface`.
+The `Lexer` and `Parser` throw exceptions implementing the `LongitudeOne\Geo\String\Exception\ExceptionInterface` interface.
 
 ## Roadmap
 
-[!NOTE] A major release may increase the minimum supported PHP version **without introducing any other breaking changes**.
+> [!NOTE]
+> A major release may increase the minimum supported PHP version **without introducing any other breaking changes**.
 
 | Version | PHP compatibility           | Tested on       | Doctrine Lexer | Tested with Lexer         | Released     | Active Support   | Security fix     |
 |---------|-----------------------------|-----------------|----------------|---------------------------|--------------|------------------|------------------|
 | 3       | 8.1 - 8.2 - 8.3 - 8.4 - 8.5 | From 8.1 to 8.5 | ^2.1 - ^3.0    | 2.1 3.0 3.1-xdev 4.0-xdev | 04 May 2024  | 31 August 2026   | 31 December 2026 |
 | 4       | 8.3 - 8.4 - 8.5             | 8.3 - 8.4 - 8.5 | ^3.0.1         | 3.0 3.1-xdev 4.0-xdev     | August 2026  | 31 December 2026 | 31 December 2027 |
-| 5       | 8.4 - 8.5                   | 8.4 - 8.5       |                | 3.0 3.1-xdev 4.0-xdev     | January 2027 | 31 December 2028 | 31 December 2030 |
-| 6       | 8.5                         | 8.5             |                | 3.0 3.1-xdev 4.0-xdev.    | January 2028 | 31 December 2028 | 31 December 2030 |
+| 5       | 8.4 - 8.5                   | 8.4 - 8.5       |                | 3.0 3.1-xdev 4.0-xdev     | January 2027 | 31 December 2027 | 31 December 2028 |
+| 6       | 8.5                         | 8.5             |                | 3.0 3.1-xdev 4.0-xdev.    | January 2028 | 31 December 2028 | 31 December 2029 |
 
 Version 4 is intended as a transitional release. The only backward compatibility break is the supported PHP versions and the `doctrine/lexer` versions.
 
-PHP versions marked as "tested" and each doctrine lexer version are part of the continuous integration matrix.
+PHP versions marked as “tested”, along with every listed Doctrine Lexer version, are part of the continuous integration matrix.
 
 ### Support Policy
 
