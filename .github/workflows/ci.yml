@@ -160,7 +160,7 @@ jobs:
                   tools: composer:v2
 
             - name: Install dependencies and force lexer ${{ matrix.lexer }}
-              run: composer --prefer-source require doctrine/lexer:${{ matrix.lexer }}
+              run: composer --prefer-source require doctrine/lexer:^${{ matrix.lexer }}
 
             - name: Show libraries
               run: composer show
