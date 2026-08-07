@@ -195,7 +195,7 @@ class Parser
         }
 
         // Add minutes to value
-        $degrees += (float) $this->minutes();
+        $degrees += $this->minutes();
 
         // Return value
         return $degrees;
@@ -240,7 +240,7 @@ class Parser
      *
      * @throws RangeException
      */
-    private function minutes(): string|int
+    private function minutes(): float
     {
         // If using colon or minutes is an integer parse value
         if (Lexer::T_COLON === $this->nextSymbol || $this->lexer->isNextToken(Lexer::T_INTEGER)) {
@@ -257,19 +257,19 @@ class Parser
 
             // If using colon and one doesn't follow value is done
             if (Lexer::T_COLON === $this->nextSymbol && !$this->lexer->isNextToken(Lexer::T_COLON)) {
-                return (string) $minutes;
+                return $this->normalizeFraction($minutes);
             }
 
             // Match minutes symbol
             $this->symbol();
 
             // Add seconds to value, then return the result.
-            return (string) ((float) $minutes + (float) $this->seconds());
+            return $this->normalizeFraction($minutes + $this->seconds());
         }
 
         // If minutes is a float, there will be no seconds
         if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
-            $minutes = $this->match(Lexer::T_FLOAT);
+            $minutes = (float) $this->match(Lexer::T_FLOAT);
 
             // Throw exception if minutes are greater than 60
             if ($minutes >= 60) {
@@ -277,17 +277,25 @@ class Parser
             }
 
             // Get fractional minutes
-            $minutes = (string) ((float) $minutes / 60);
+            $minutes /= 60;
 
             // Match minutes symbol
             $this->symbol();
 
             // return value
-            return $minutes;
+            return $this->normalizeFraction($minutes);
         }
 
         // No minutes were present so return 0
-        return 0;
+        return 0.0;
+    }
+
+    /**
+     * Normalize a fractional component while preserving the parser's historical precision.
+     */
+    private function normalizeFraction(float $value): float
+    {
+        return (float) (string) $value;
     }
 
     /**
@@ -368,11 +376,11 @@ class Parser
      *
      * @throws RangeException
      */
-    private function seconds(): int|string
+    private function seconds(): float
     {
         // Seconds value can be an integer or float
         if ($this->lexer->isNextTokenAny([Lexer::T_INTEGER, Lexer::T_FLOAT])) {
-            $seconds = $this->number();
+            $seconds = (float) $this->number();
 
             // Throw exception if seconds are greater than 60
             if ($seconds >= 60) {
@@ -380,7 +388,7 @@ class Parser
             }
 
             // Get fractional seconds
-            $seconds = (string) ((float) $seconds / 3600);
+            $seconds /= 3600;
 
             // Match seconds symbol if requirement not colon
             if (Lexer::T_COLON !== $this->nextSymbol) {
@@ -388,11 +396,11 @@ class Parser
             }
 
             // Return value
-            return $seconds;
+            return $this->normalizeFraction($seconds);
         }
 
         // No seconds were present so return 0
-        return 0;
+        return 0.0;
     }
 
     /**
