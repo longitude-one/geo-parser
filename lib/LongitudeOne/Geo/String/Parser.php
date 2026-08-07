@@ -189,11 +189,8 @@ class Parser
             return $degrees;
         }
 
-        // Grab peek of next token since we can't array dereference result in PHP 5.3
-        $glimpse = $this->lexer->glimpse();
-
-        // If a colon hasn't been matched, and next token is a number followed by degree symbol, when tuple separator is space instead of comma, this value is complete
-        if (Lexer::T_COLON !== $this->nextSymbol && $this->lexer->isNextTokenAny([Lexer::T_INTEGER, Lexer::T_FLOAT]) && isset($glimpse->type) && Lexer::T_DEGREE === $glimpse->type) {
+        // A degree symbol after the next number marks a space-separated coordinate pair.
+        if ($this->isSpaceSeparatedCoordinateStarting()) {
             return $degrees;
         }
 
@@ -202,6 +199,21 @@ class Parser
 
         // Return value
         return $degrees;
+    }
+
+    /**
+     * Whether the next tokens start a coordinate separated by a space.
+     *
+     * Does the next element look like a coordinate in degrees, separated by a space?
+     */
+    private function isSpaceSeparatedCoordinateStarting(): bool
+    {
+        $glimpse = $this->lexer->glimpse();
+
+        return Lexer::T_COLON !== $this->nextSymbol
+            && $this->lexer->isNextTokenAny([Lexer::T_INTEGER, Lexer::T_FLOAT])
+            && isset($glimpse->type)
+            && Lexer::T_DEGREE === $glimpse->type;
     }
 
     /**
