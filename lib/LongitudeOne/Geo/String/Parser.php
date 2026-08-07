@@ -102,33 +102,14 @@ class Parser
         // Match the cardinal direction
         /** @var string $cardinal N, W, S, E, or n, w, s, e */
         $cardinal = $this->match($this->nextCardinal);
-        // By default, don't change sign
-        $sign = 1;
-        // Define value range
-        $range = 0;
-
-        switch (strtolower($cardinal)) {
-            case 's':
-                // Southern latitudes are negative
-                $sign = -1;
-                // no break
-            case 'n':
-                // Set requirement for second coordinate
-                $this->nextCardinal = Lexer::T_CARDINAL_LON;
-                // Latitude values are +/- 90
-                $range = 90;
-                break;
-            case 'w':
-                // Western longitudes are negative
-                $sign = -1;
-                // no break
-            case 'e':
-                // Set requirement for second coordinate
-                $this->nextCardinal = Lexer::T_CARDINAL_LAT;
-                // Longitude values are +/- 180
-                $range = 180;
-                break;
-        }
+        [$sign, $nextCardinal, $range] = match (strtolower($cardinal)) {
+            's' => [-1, Lexer::T_CARDINAL_LON, 90],
+            'n' => [1, Lexer::T_CARDINAL_LON, 90],
+            'w' => [-1, Lexer::T_CARDINAL_LAT, 180],
+            'e' => [1, Lexer::T_CARDINAL_LAT, 180],
+            default => [1, $this->nextCardinal, 0],
+        };
+        $this->nextCardinal = $nextCardinal;
 
         // Throw exception if value is out of range
         if ($value > $range) {
