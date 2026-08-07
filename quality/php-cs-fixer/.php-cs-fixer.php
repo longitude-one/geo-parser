@@ -1,16 +1,16 @@
 <?php
 
 /**
- * This file is part of the BB-One Project
+ * This file is part of the LongitudeOne GeoParser project.
  *
- * PHP 8.2 | Symfony 6.3.*
+ * PHP 8.3 | 8.4 | 8.5
  *
- * Copyright LongitudeOne - Alexandre Tranchant
- * Copyright 2023
+ * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
+ * Copyright 2024-2026.
  *
  */
 
-//Replace the value of this variable with the project's launch year.
+// Replace the value of this variable with the project's launch year.
 $firstYear = 2024;
 
 function __copyright(int $launchYear): string
@@ -24,14 +24,16 @@ function __copyright(int $launchYear): string
 }
 
 $header = file_get_contents(__DIR__.'/headers.txt');
-$header = str_replace("%year%", __copyright($firstYear), $header);
+$header = str_replace('%year%', __copyright($firstYear), $header);
 
 $finder = PhpCsFixer\Finder::create()
     ->in([
-        __DIR__ . '/../../lib/',
-        __DIR__ . '/../../tests/',
+        __DIR__.'/../../lib/',
+        __DIR__.'/../../tests/',
     ])
-;
+    ->append([
+        __FILE__,
+    ]);
 
 $config = new PhpCsFixer\Config();
 
@@ -54,7 +56,7 @@ return $config->setRules([
         ],
         'sort_algorithm' => 'alpha',
     ],
-    ])
+])
     ->setFinder($finder)
     ->setCacheFile(__DIR__.'/.php_cs.cache')
 ;
