@@ -32,9 +32,9 @@ class Parser
     private bool $canMatchSymbol;
 
     /**
-     * @var string original input string
+     * Original input string when lexing is required.
      */
-    private string $input;
+    private ?string $input = null;
 
     /**
      * Whether the parser is reading the first coordinate in a pair.
@@ -61,16 +61,21 @@ class Parser
     private ?int $nextSymbol;
 
     /**
+     * Native numeric input that does not require lexing.
+     */
+    private int|float|null $numericInput = null;
+
+    /**
      * Constructor.
      *
      * Setup up instance properties
      */
-    public function __construct(string|int|null $input = null)
+    public function __construct(string|int|float|null $input = null)
     {
         $this->lexer = new Lexer();
 
         if (null !== $input) {
-            $this->input = (string) $input;
+            $this->setInput($input);
         }
     }
 
@@ -79,10 +84,14 @@ class Parser
      *
      * @return float|int|array<int|float>
      */
-    public function parse(string|int|null $input = null): float|int|array
+    public function parse(string|int|float|null $input = null): float|int|array
     {
         if (null !== $input) {
-            $this->input = (string) $input;
+            $this->setInput($input);
+        }
+
+        if (null !== $this->numericInput) {
+            return $this->numericInput;
         }
 
         if (!isset($this->input)) {
@@ -134,7 +143,7 @@ class Parser
                 $code = RangeException::LONGITUDE_OUT_OF_RANGE;
             }
 
-            throw new RangeException($this->input, $code);
+            throw new RangeException($this->inputValue(), $code);
         }
 
         // Return value with sign
@@ -222,6 +231,21 @@ class Parser
     }
 
     /**
+     * Return the current text input when lexing or reporting an error.
+     */
+    private function inputValue(): string
+    {
+        if (null === $this->input) {
+            // This guard cannot be reached after parse() validates the input.
+            // @codeCoverageIgnoreStart
+            throw new \LogicException('Text input is required for lexing.');
+            // @codeCoverageIgnoreEnd
+        }
+
+        return $this->input;
+    }
+
+    /**
      * Whether the next tokens start a coordinate separated by a space.
      *
      * Does the next element look like a coordinate in degrees, separated by a space?
@@ -269,7 +293,7 @@ class Parser
 
             // Throw exception if minutes are greater than 60
             if ($readMinutes >= 60) {
-                throw new RangeException($this->input, RangeException::MINUTES_OUT_OF_RANGE);
+                throw new RangeException($this->inputValue(), RangeException::MINUTES_OUT_OF_RANGE);
             }
 
             // Get fractional minutes
@@ -293,7 +317,7 @@ class Parser
 
             // Throw exception if minutes are greater than 60
             if ($minutes >= 60) {
-                throw new RangeException($this->input, RangeException::MINUTES_OUT_OF_RANGE);
+                throw new RangeException($this->inputValue(), RangeException::MINUTES_OUT_OF_RANGE);
             }
 
             // Get fractional minutes
@@ -404,7 +428,7 @@ class Parser
 
             // Throw exception if seconds are greater than 60
             if ($seconds >= 60) {
-                throw new RangeException($this->input, RangeException::SECONDS_OUT_OF_RANGE);
+                throw new RangeException($this->inputValue(), RangeException::SECONDS_OUT_OF_RANGE);
             }
 
             // Get fractional seconds
@@ -421,6 +445,23 @@ class Parser
 
         // No seconds were present so return 0
         return 0.0;
+    }
+
+    /**
+     * Store a native numeric value directly or retain a string for lexing.
+     */
+    private function setInput(string|int|float $input): void
+    {
+        $this->input = null;
+        $this->numericInput = null;
+
+        if (is_int($input) || is_float($input)) {
+            $this->numericInput = $input;
+
+            return;
+        }
+
+        $this->input = $input;
     }
 
     /**
@@ -500,7 +541,7 @@ class Parser
             $token->position ?? -1,
             $expected,
             $found,
-            $this->sanitizeForError($this->input)
+            $this->sanitizeForError($this->inputValue())
         );
 
         return new UnexpectedValueException($message);
