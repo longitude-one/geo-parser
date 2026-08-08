@@ -1,65 +1,5 @@
 # Contributing
 
-## Docker
-
-To get started, install Docker on your machine. If you do not already have it, you can [download Docker Desktop](https://www.docker.com/products/docker-desktop).
-
-Building and starting the container installs the project dependencies.
-
-```bash
-docker compose build
-docker compose up -d
-```
-
-Run the test suite with:
-
-```bash
-docker compose exec app vendor/bin/phpunit
-```
-
-You can also use the Composer script:
-
-```bash
-docker compose exec app composer test
-```
-
-This shortcut creates the local coverage file `.phpunit.cache/coverage.xml` and displays a code-coverage summary:
-
-```bash
-docker compose exec app composer test-local
-```
-
-```log
-PHPUnit 10.5.64 by Sebastian Bergmann and contributors.
-
-Runtime:       PHP 8.1.34 with PCOV 1.0.13-dev
-Configuration: /var/www/phpunit.xml.dist
-
-...............................................................  63 / 166 ( 37%)
-............................................................... 126 / 166 ( 75%)
-........................................                        166 / 166 (100%)
-
-Time: 00:00.151, Memory: 10.00 MB
-
-OK (166 tests, 558 assertions)
-
-Generating code coverage report in Clover XML format ... done [00:00.005]
-
-
-Code Coverage Report Summary:
-  Classes: 100.00% (3/3)
-  Methods: 100.00% (19/19)
-  Lines:   100.00% (168/168)
-```
-
-## PHP linters: PHP-CS-Fixer, PHPMD, and PHPStan
-
-This project uses PHP-CS-Fixer, PHPMD, and PHPStan to ensure code quality.
-These tools are set up in the `quality` directory.
-Before committing,
-you should run some commands to ensure that your code is properly formatted and free of errors.
-Read the [quality tools guide](./quality/README.md) for more information.
-
 ## Development
 
 - Code formatting MUST follow the project's PHP-CS-Fixer configuration.
@@ -93,3 +33,61 @@ Allowed types include:
 - `chore`: Maintenance
 - `quality`: Quality tools
 - `test`: PHPUnit tests
+
+## Quality tools
+
+> [!NOTE]
+> We assume that PHP, PCOV, and Composer are installed locally. If you do not want to install them, refer to the Docker section.
+
+### Installation
+
+The following command updates Composer dependencies for the project and all quality tools. Run it intentionally and review the resulting lock-file changes:
+
+```bash
+composer update-quality-tools
+```
+
+### Run the quality checks
+
+Run the quality checks from the project root before committing.
+
+```bash
+composer quality
+```
+
+The following command applies PHP-CS-Fixer changes:
+
+```bash
+composer fix
+```
+
+### Run the tests
+
+The following command runs the tests and shows the code-coverage status.
+
+```bash
+composer test
+```
+
+## Docker (optional)
+
+Docker is an optional aid that provides the supported PHP 8.3 environment and PCOV. Install [Docker Desktop](https://www.docker.com/products/docker-desktop), then build and start the container:
+
+```bash
+docker compose build
+docker compose up -d
+```
+
+Prefix any Composer command above with `docker compose exec app`. For example:
+
+```bash
+docker compose exec app composer quality
+docker compose exec app composer fix
+docker compose exec app composer test-with-docker
+```
+
+When running tests in Docker, use `test-with-docker` to generate a local code-coverage report with paths rewritten from `/var/www`:
+
+```bash
+docker compose exec app composer test-with-docker
+```

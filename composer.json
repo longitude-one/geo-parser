@@ -28,8 +28,17 @@
             "quality/php-mess-detector/vendor/bin/phpmd lib text quality/php-mess-detector/ruleset.xml",
             "quality/php-mess-detector/vendor/bin/phpmd tests text quality/php-mess-detector/test-ruleset.xml"
         ],
-        "test": "phpunit",
-        "test-local": [
+        "update-quality-tools": [
+            "composer update",
+            "composer update --working-dir quality/php-cs-fixer",
+            "composer update --working-dir quality/php-stan",
+            "composer update --working-dir quality/php-mess-detector"
+        ],
+        "test": [
+            "phpunit",
+            "cat .phpunit.cache/coverage-results.txt"
+        ],
+        "test-with-docker": [
             "phpunit",
             "sed -i.bak 's|/var/www/|./|g' .phpunit.cache/coverage.xml",
             "rm .phpunit.cache/coverage.xml.bak",
