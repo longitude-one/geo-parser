@@ -12,9 +12,6 @@ Lexer and parser library for geographic coordinate strings.
 
 [![Downloads](https://img.shields.io/packagist/dm/longitude-one/geo-parser.svg)](https://packagist.org/packages/longitude-one/geo-parser)
 
-> [!NOTE]
-> This package is the continuation of the now abandoned [creof/geo-parser](https://github.com/creof/geo-parser) package.
-
 ## Installation
 
 ```bash
@@ -24,7 +21,7 @@ composer require longitude-one/geo-parser
 Current version:
 
 ```bash
-composer require longitude-one/geo-parser:4.0.0-RC.0
+composer require longitude-one/geo-parser:3.0.3
 ```
 
 ## Usage
@@ -33,6 +30,8 @@ The parser supports two usage patterns. Pass the value to parse to the construct
 resulting `Parser` object:
 
 ```php
+use LongitudeOne\Geo\String\Parser;
+
 $input  = '79°56′55″W, 40°26′46″N';
 
 $parser = new Parser($input);
@@ -43,6 +42,8 @@ $value = $parser->parse(); // [-79.948611111111, 40.446111111111]
 When parsing many values, reuse a single `Parser` instance:
 
 ```php
+use LongitudeOne\Geo\String\Parser;
+
 $input1 = '56.242 E';
 $input2 = '40:26:46 S';
 
@@ -123,14 +124,29 @@ are not exhaustive.
 
 The parser returns an integer or float for a single value, or an array containing a coordinate pair.
 
+String inputs are tokenized and parsed as geographic coordinates. Native integer and float inputs are returned unchanged,
+including their type, without passing through the lexer or geographic range validation.
+
 ## Exceptions
 
-The `Lexer` and `Parser` throw exceptions implementing the `LongitudeOne\Geo\String\Exception\ExceptionInterface` interface.
+Library exceptions thrown by the `Lexer` and `Parser` implement the
+`LongitudeOne\Geo\String\Exception\ExceptionInterface` interface:
+
+```php
+use LongitudeOne\Geo\String\Exception\ExceptionInterface;
+use LongitudeOne\Geo\String\Parser;
+
+try {
+    $value = (new Parser('100N'))->parse();
+} catch (ExceptionInterface $exception) {
+    // Handle a library parsing exception.
+}
+```
 
 ## Roadmap
 
 > [!NOTE]
-> A major release may increase the minimum supported PHP version **without introducing any other breaking changes**.
+> A major release may increase the minimum supported PHP version. Other breaking changes are documented in the changelog.
 
 | Version | PHP compatibility           | Tested on       | Doctrine Lexer | Tested with Lexer         | Released     | Active Support   | Security fix     |
 |---------|-----------------------------|-----------------|----------------|---------------------------|--------------|------------------|------------------|
@@ -138,8 +154,6 @@ The `Lexer` and `Parser` throw exceptions implementing the `LongitudeOne\Geo\Str
 | 4       | 8.3 - 8.4 - 8.5             | 8.3 - 8.4 - 8.5 | ^3.0.1         | 3.0 3.1-xdev 4.0-xdev     | August 2026  | 31 December 2026 | 31 December 2027 |
 | 5       | 8.4 - 8.5                   | 8.4 - 8.5       |                | 3.0 3.1-xdev 4.0-xdev     | January 2027 | 31 December 2027 | 31 December 2028 |
 | 6       | 8.5                         | 8.5             |                | 3.0 3.1-xdev 4.0-xdev.    | January 2028 | 31 December 2028 | 31 December 2029 |
-
-Version 4 is intended as a transitional release. The only backward compatibility break is the supported PHP versions and the `doctrine/lexer` versions.
 
 PHP versions marked as “tested”, along with every listed Doctrine Lexer version, are part of the continuous integration matrix.
 
