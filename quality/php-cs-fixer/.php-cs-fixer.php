@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of the LongitudeOne GeoParser project.
  *
@@ -38,6 +40,7 @@ $config = new PhpCsFixer\Config();
 
 return $config->setRules([
     '@Symfony' => true,
+    'declare_strict_types' => true,
     'header_comment' => [
         'header' => $header,
         'comment_type' => 'PHPDoc',

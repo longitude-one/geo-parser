@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of the LongitudeOne GeoParser project.
  *
@@ -210,8 +212,7 @@ class Parser
         }
 
         // If degrees isn't a float, it must be an integer
-        /** @var int $degrees */
-        $degrees = $this->number();
+        $degrees = (int) $this->number();
 
         // If a symbol does not follow integer, this value is complete
         if (null === $this->symbol()) {
