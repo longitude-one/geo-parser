@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Geo\String\Internal;
 
-use LongitudeOne\Geo\String\Axis;
+use LongitudeOne\Geo\String\AxisEnum;
 use LongitudeOne\Geo\String\Exception\LogicException;
 
 /**
@@ -45,11 +45,11 @@ enum Cardinal: string
     /**
      * Return the axis constrained by this cardinal direction.
      */
-    public function axis(): Axis
+    public function axis(): AxisEnum
     {
         return match ($this) {
-            self::NORTH, self::SOUTH => Axis::LATITUDE,
-            self::EAST, self::WEST => Axis::LONGITUDE,
+            self::NORTH, self::SOUTH => AxisEnum::LATITUDE,
+            self::EAST, self::WEST => AxisEnum::LONGITUDE,
         };
     }
 

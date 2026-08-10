@@ -19,7 +19,7 @@ use LongitudeOne\Geo\String\Exception\RangeException;
 /**
  * Geographic coordinate axis and its cardinal constraints.
  */
-enum Axis
+enum AxisEnum
 {
     case LATITUDE;
     case LONGITUDE;
@@ -34,14 +34,6 @@ enum Axis
             Lexer::T_CARDINAL_LON => self::LONGITUDE,
             default => throw new LogicException(sprintf('Token type %d is not a cardinal direction.', $tokenType)),
         };
-    }
-
-    /**
-     * Whether a token type represents either coordinate axis.
-     */
-    public static function hasCardinalTokenType(int $tokenType): bool
-    {
-        return Lexer::T_CARDINAL_LAT === $tokenType || Lexer::T_CARDINAL_LON === $tokenType;
     }
 
     /**

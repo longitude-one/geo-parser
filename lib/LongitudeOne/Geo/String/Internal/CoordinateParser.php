@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Geo\String\Internal;
 
-use LongitudeOne\Geo\String\Axis;
+use LongitudeOne\Geo\String\AxisEnum;
 use LongitudeOne\Geo\String\Exception\RangeException;
 use LongitudeOne\Geo\String\Exception\UnexpectedValueException;
 use LongitudeOne\Geo\String\Lexer;
@@ -48,7 +48,7 @@ final class CoordinateParser
     /**
      * Axis required for the next coordinate when the previous one has a cardinal direction.
      */
-    private ?Axis $nextAxis;
+    private ?AxisEnum $nextAxis;
 
     /**
      * Expected symbol token for the next angle component.
@@ -89,7 +89,7 @@ final class CoordinateParser
      */
     private function cardinal(int|float $value): int|float
     {
-        $axis = $this->nextAxis ?? Axis::fromCardinalTokenType($this->tokens->current()?->type);
+        $axis = $this->nextAxis ?? AxisEnum::fromCardinalTokenType($this->tokens->current()?->type);
         $cardinal = Cardinal::fromToken((string) $this->match($axis->cardinalTokenType()));
         $this->nextAxis = $cardinal->axis()->other();
 

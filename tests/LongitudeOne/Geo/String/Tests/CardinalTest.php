@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Geo\String\Tests;
 
-use LongitudeOne\Geo\String\Axis;
+use LongitudeOne\Geo\String\AxisEnum;
 use LongitudeOne\Geo\String\Exception\LogicException;
 use LongitudeOne\Geo\String\Exception\RangeException;
 use LongitudeOne\Geo\String\Internal\Cardinal;
@@ -29,14 +29,14 @@ class CardinalTest extends TestCase
     /**
      * Provide cardinal tokens with their axis and numeric sign.
      *
-     * @return \Generator<string, array{string, Axis, int}, null, void>
+     * @return \Generator<string, array{string, AxisEnum, int}, null, void>
      */
     public static function dataSourceCardinals(): \Generator
     {
-        yield 'north' => ['N', Axis::LATITUDE, 1];
-        yield 'south' => ['s', Axis::LATITUDE, -1];
-        yield 'east' => ['E', Axis::LONGITUDE, 1];
-        yield 'west' => ['w', Axis::LONGITUDE, -1];
+        yield 'north' => ['N', AxisEnum::LATITUDE, 1];
+        yield 'south' => ['s', AxisEnum::LATITUDE, -1];
+        yield 'east' => ['E', AxisEnum::LONGITUDE, 1];
+        yield 'west' => ['w', AxisEnum::LONGITUDE, -1];
     }
 
     /**
@@ -44,41 +44,31 @@ class CardinalTest extends TestCase
      */
     public function testAxisProvidesCoordinateConstraints(): void
     {
-        self::assertSame(Lexer::T_CARDINAL_LAT, Axis::LATITUDE->cardinalTokenType());
-        self::assertSame(90, Axis::LATITUDE->rangeLimit());
-        self::assertSame(RangeException::LATITUDE_OUT_OF_RANGE, Axis::LATITUDE->rangeExceptionCode());
-        self::assertSame(Axis::LONGITUDE, Axis::LATITUDE->other());
+        self::assertSame(Lexer::T_CARDINAL_LAT, AxisEnum::LATITUDE->cardinalTokenType());
+        self::assertSame(90, AxisEnum::LATITUDE->rangeLimit());
+        self::assertSame(RangeException::LATITUDE_OUT_OF_RANGE, AxisEnum::LATITUDE->rangeExceptionCode());
+        self::assertSame(AxisEnum::LONGITUDE, AxisEnum::LATITUDE->other());
 
-        self::assertSame(Lexer::T_CARDINAL_LON, Axis::LONGITUDE->cardinalTokenType());
-        self::assertSame(180, Axis::LONGITUDE->rangeLimit());
-        self::assertSame(RangeException::LONGITUDE_OUT_OF_RANGE, Axis::LONGITUDE->rangeExceptionCode());
-        self::assertSame(Axis::LATITUDE, Axis::LONGITUDE->other());
+        self::assertSame(Lexer::T_CARDINAL_LON, AxisEnum::LONGITUDE->cardinalTokenType());
+        self::assertSame(180, AxisEnum::LONGITUDE->rangeLimit());
+        self::assertSame(RangeException::LONGITUDE_OUT_OF_RANGE, AxisEnum::LONGITUDE->rangeExceptionCode());
+        self::assertSame(AxisEnum::LATITUDE, AxisEnum::LONGITUDE->other());
     }
 
     /**
      * Cardinal directions must expose their axis and sign independently of parsing.
      *
-     * @param string $token cardinal token
-     * @param Axis   $axis  expected geographic axis
-     * @param int    $sign  expected numeric sign
+     * @param string   $token cardinal token
+     * @param AxisEnum $axis  expected geographic axis
+     * @param int      $sign  expected numeric sign
      */
     #[DataProvider('dataSourceCardinals')]
-    public function testCardinalMapsToAxisAndSign(string $token, Axis $axis, int $sign): void
+    public function testCardinalMapsToAxisAndSign(string $token, AxisEnum $axis, int $sign): void
     {
         $cardinal = Cardinal::fromToken($token);
 
         self::assertSame($axis, $cardinal->axis());
         self::assertSame($sign, $cardinal->sign());
-    }
-
-    /**
-     * Only latitude and longitude cardinal token types must be recognized.
-     */
-    public function testRecognizesCardinalTokenTypes(): void
-    {
-        self::assertTrue(Axis::hasCardinalTokenType(Lexer::T_CARDINAL_LAT));
-        self::assertTrue(Axis::hasCardinalTokenType(Lexer::T_CARDINAL_LON));
-        self::assertFalse(Axis::hasCardinalTokenType(Lexer::T_INTEGER));
     }
 
     /**
