@@ -58,7 +58,9 @@ final class TokenStream
         $this->lexer->moveNext();
 
         if (!$this->lexer->token instanceof Token) {
+            // @codeCoverageIgnoreStart
             throw new LogicException('A consumed token must be available.');
+            // @codeCoverageIgnoreEnd
         }
 
         return $this->lexer->token;

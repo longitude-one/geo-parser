@@ -20,7 +20,7 @@ use Doctrine\Common\Lexer\AbstractLexer;
  *
  * @extends AbstractLexer<int, int|string>
  */
-class Lexer extends AbstractLexer
+final class Lexer extends AbstractLexer
 {
     public const T_APOSTROPHE = 12;
     public const T_CARDINAL_LAT = 5;

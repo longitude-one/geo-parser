@@ -18,7 +18,7 @@ use LongitudeOne\Geo\String\Exception\InvalidArgumentException;
 /**
  * Parse geographic coordinate input.
  */
-class Parser
+final class Parser
 {
     /**
      * Input retained for parsing when no value is passed to parse().
