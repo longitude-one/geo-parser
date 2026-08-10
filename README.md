@@ -159,6 +159,8 @@ PHP versions marked as “tested”, along with every listed Doctrine Lexer vers
 
 ### Support Policy
 
+The non-breaking-change guarantee applies only to the `Lexer`, `Parser`, and `Axis` classes. All other classes are internal implementation details and may change or be removed in any release.
+
 Only the latest major version receives feature and bug fixes. Non-security issues will not be addressed during the security-fixes period.
 
 Previous major versions may receive security fixes only, according to the roadmap above.

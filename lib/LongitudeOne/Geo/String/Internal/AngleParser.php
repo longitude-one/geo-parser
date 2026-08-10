@@ -11,10 +11,11 @@ declare(strict_types=1);
  * Copyright 2024-2026.
  */
 
-namespace LongitudeOne\Geo\String;
+namespace LongitudeOne\Geo\String\Internal;
 
 use LongitudeOne\Geo\String\Exception\RangeException;
 use LongitudeOne\Geo\String\Exception\UnexpectedValueException;
+use LongitudeOne\Geo\String\Lexer;
 
 /**
  * Parse a coordinate angle in decimal, DDM, or DMS notation.

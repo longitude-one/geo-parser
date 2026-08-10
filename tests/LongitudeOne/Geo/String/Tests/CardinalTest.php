@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace LongitudeOne\Geo\String\Tests;
 
 use LongitudeOne\Geo\String\Axis;
-use LongitudeOne\Geo\String\Cardinal;
 use LongitudeOne\Geo\String\Exception\LogicException;
 use LongitudeOne\Geo\String\Exception\RangeException;
+use LongitudeOne\Geo\String\Internal\Cardinal;
 use LongitudeOne\Geo\String\Lexer;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;

@@ -18,8 +18,6 @@ use LongitudeOne\Geo\String\Exception\RangeException;
 
 /**
  * Geographic coordinate axis and its cardinal constraints.
- *
- * @internal this enum supports the public Parser implementation
  */
 enum Axis
 {

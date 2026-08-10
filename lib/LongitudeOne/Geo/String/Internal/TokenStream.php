@@ -11,10 +11,11 @@ declare(strict_types=1);
  * Copyright 2024-2026.
  */
 
-namespace LongitudeOne\Geo\String;
+namespace LongitudeOne\Geo\String\Internal;
 
 use Doctrine\Common\Lexer\Token;
 use LongitudeOne\Geo\String\Exception\LogicException;
+use LongitudeOne\Geo\String\Lexer;
 
 /**
  * Cursor over a tokenized coordinate input.

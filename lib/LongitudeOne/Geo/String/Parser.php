@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace LongitudeOne\Geo\String;
 
 use LongitudeOne\Geo\String\Exception\InvalidArgumentException;
+use LongitudeOne\Geo\String\Internal\CoordinateParser;
 
 /**
  * Parse geographic coordinate input.

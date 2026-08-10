@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace LongitudeOne\Geo\String\Tests;
 
 use LongitudeOne\Geo\String\Exception\LogicException;
+use LongitudeOne\Geo\String\Internal\TokenStream;
 use LongitudeOne\Geo\String\Lexer;
-use LongitudeOne\Geo\String\TokenStream;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -83,5 +83,4 @@ class TokenStreamTest extends TestCase
 
         $stream->consume(Lexer::T_FLOAT);
     }
-
 }

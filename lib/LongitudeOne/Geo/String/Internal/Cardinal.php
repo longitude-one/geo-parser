@@ -11,8 +11,9 @@ declare(strict_types=1);
  * Copyright 2024-2026.
  */
 
-namespace LongitudeOne\Geo\String;
+namespace LongitudeOne\Geo\String\Internal;
 
+use LongitudeOne\Geo\String\Axis;
 use LongitudeOne\Geo\String\Exception\LogicException;
 
 /**
