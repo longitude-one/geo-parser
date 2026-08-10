@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Geo\String;
 
-use LongitudeOne\Geo\String\Exception\LogicException;
 use LongitudeOne\Geo\String\Exception\RangeException;
 
 /**
@@ -23,29 +22,6 @@ enum AxisEnum
 {
     case LATITUDE;
     case LONGITUDE;
-
-    /**
-     * Return the axis represented by a cardinal token type.
-     */
-    public static function fromCardinalTokenType(?int $tokenType): self
-    {
-        return match ($tokenType) {
-            Lexer::T_CARDINAL_LAT => self::LATITUDE,
-            Lexer::T_CARDINAL_LON => self::LONGITUDE,
-            default => throw new LogicException(sprintf('Token type %d is not a cardinal direction.', $tokenType)),
-        };
-    }
-
-    /**
-     * Return the token type that matches cardinals for this axis.
-     */
-    public function cardinalTokenType(): int
-    {
-        return match ($this) {
-            self::LATITUDE => Lexer::T_CARDINAL_LAT,
-            self::LONGITUDE => Lexer::T_CARDINAL_LON,
-        };
-    }
 
     /**
      * Return the other axis in a coordinate pair.

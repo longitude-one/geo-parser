@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace LongitudeOne\Geo\String\Internal;
 
 use LongitudeOne\Geo\String\AxisEnum;
+use LongitudeOne\Geo\String\Exception\LogicException;
 use LongitudeOne\Geo\String\Exception\RangeException;
 use LongitudeOne\Geo\String\Exception\UnexpectedValueException;
 use LongitudeOne\Geo\String\Lexer;
@@ -89,8 +90,12 @@ final class CoordinateParser
      */
     private function cardinal(int|float $value): int|float
     {
-        $axis = $this->nextAxis ?? AxisEnum::fromCardinalTokenType($this->tokens->current()?->type);
-        $cardinal = Cardinal::fromToken((string) $this->match($axis->cardinalTokenType()));
+        $axis = $this->nextAxis ?? match ($this->tokens->current()?->type) {
+            Lexer::T_CARDINAL_LAT => AxisEnum::LATITUDE,
+            Lexer::T_CARDINAL_LON => AxisEnum::LONGITUDE,
+            default => throw new LogicException(sprintf('Token type %d is not a cardinal direction.', $this->tokens->current()?->type)),
+        };
+        $cardinal = Cardinal::fromToken((string) $this->match($this->cardinalTokenType($axis)));
         $this->nextAxis = $cardinal->axis()->other();
 
         if ($value > $axis->rangeLimit()) {
@@ -98,6 +103,17 @@ final class CoordinateParser
         }
 
         return $value * $cardinal->sign();
+    }
+
+    /**
+     * Return the cardinal token type expected for an axis.
+     */
+    private function cardinalTokenType(AxisEnum $axis): int
+    {
+        return match ($axis) {
+            AxisEnum::LATITUDE => Lexer::T_CARDINAL_LAT,
+            AxisEnum::LONGITUDE => Lexer::T_CARDINAL_LON,
+        };
     }
 
     /**
