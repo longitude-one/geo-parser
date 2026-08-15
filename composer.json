@@ -36,14 +36,17 @@
         ],
         "test": [
             "phpunit",
+            "@coverage-check",
             "cat .phpunit.cache/coverage-results.txt"
         ],
         "test-with-docker": [
             "phpunit",
             "sed -i.bak 's|/var/www/|./|g' .phpunit.cache/coverage.xml",
             "rm .phpunit.cache/coverage.xml.bak",
+            "@coverage-check",
             "cat .phpunit.cache/coverage-results.txt"
         ],
+        "coverage-check": "php quality/coverage-check.php .phpunit.cache/coverage.xml",
         "fix": "quality/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=quality/php-cs-fixer/.php-cs-fixer.php --allow-risky=yes"
     },
     "autoload": {

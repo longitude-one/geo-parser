@@ -53,6 +53,32 @@ $value1 = $parser->parse($input1); //56.242
 $value2 = $parser->parse($input2); //-40.446111111111
 ```
 
+### Typed coordinates (since 4.0.0)
+
+Since version 4.0.0, use `parseAsCoordinates()` when the parsed value should retain its coordinate structure. It returns a `Coordinate` for a single value and a `Point` for a pair. An axis is set only when the input contains a cardinal direction; otherwise `getAxis()` returns `null`.
+
+```php
+use LongitudeOne\Geo\String\AxisEnum;
+use LongitudeOne\Geo\String\Coordinate;
+use LongitudeOne\Geo\String\Parser;
+use LongitudeOne\Geo\String\Point;
+
+$coordinate = (new Parser('40°26\'46"N'))->parseAsCoordinates();
+
+assert($coordinate instanceof Coordinate);
+assert(40.44611111111111 === $coordinate->getValue());
+assert(AxisEnum::LATITUDE === $coordinate->getAxis());
+
+$point = (new Parser('79°56\'55"W, 40°26\'46"N'))->parseAsCoordinates();
+
+assert($point instanceof Point);
+assert(-79.94861111111111 === $point->getFirst()->getValue());
+assert(AxisEnum::LONGITUDE === $point->getFirst()->getAxis());
+assert(AxisEnum::LATITUDE === $point->getSecond()->getAxis());
+```
+
+For example, `(new Parser('40, 79'))->parseAsCoordinates()` returns a `Point` whose two coordinates both have a `null` axis.
+
 ## Supported Formats
 
 Both single values and coordinate pairs are supported. The following examples illustrate the supported formats; they
@@ -158,6 +184,8 @@ try {
 PHP versions marked as “tested”, along with every listed Doctrine Lexer version, are part of the continuous integration matrix.
 
 ### Support Policy
+
+The non-breaking-change guarantee applies only to the `Lexer`, `Parser`, and `AxisEnum` classes. All other classes are internal implementation details and may change or be removed in any release.
 
 Only the latest major version receives feature and bug fixes. Non-security issues will not be addressed during the security-fixes period.
 

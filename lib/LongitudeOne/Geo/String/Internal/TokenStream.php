@@ -11,10 +11,11 @@ declare(strict_types=1);
  * Copyright 2024-2026.
  */
 
-namespace LongitudeOne\Geo\String;
+namespace LongitudeOne\Geo\String\Internal;
 
 use Doctrine\Common\Lexer\Token;
 use LongitudeOne\Geo\String\Exception\LogicException;
+use LongitudeOne\Geo\String\Lexer;
 
 /**
  * Cursor over a tokenized coordinate input.
@@ -58,10 +59,20 @@ final class TokenStream
         $this->lexer->moveNext();
 
         if (!$this->lexer->token instanceof Token) {
+            // @codeCoverageIgnoreStart
             throw new LogicException('A consumed token must be available.');
+            // @codeCoverageIgnoreEnd
         }
 
         return $this->lexer->token;
+    }
+
+    /**
+     * Consume a cardinal token and return its direction details.
+     */
+    public function consumeCardinal(int $type): Cardinal
+    {
+        return Cardinal::fromToken((string) $this->consume($type)->value);
     }
 
     /**

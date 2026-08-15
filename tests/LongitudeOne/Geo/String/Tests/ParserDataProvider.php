@@ -13,20 +13,22 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Geo\String\Tests;
 
+use LongitudeOne\Geo\String\AxisEnum;
+use LongitudeOne\Geo\String\Coordinate;
 use LongitudeOne\Geo\String\Exception\ExceptionInterface;
 use LongitudeOne\Geo\String\Exception\RangeException;
 use LongitudeOne\Geo\String\Exception\UnexpectedValueException;
-use LongitudeOne\Geo\String\Parser;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
+use LongitudeOne\Geo\String\Point;
 
 /**
- * Parser tests.
+ * Shared parser examples for the focused parser test suites.
  *
- * @author  Derek J. Lambert <dlambert@dereklambert.com>
- * @license http://dlambert.mit-license.org MIT
+ * Keeping the accepted values, invalid inputs, and documentation examples in
+ * one place prevents the legacy numeric API and the structured-coordinate API
+ * from silently testing different grammars. This class deliberately contains
+ * no test methods; PHPUnit test cases consume its data providers.
  */
-class ParserTest extends TestCase
+final class ParserDataProvider
 {
     /**
      * @return \Generator<int, array{string, class-string<ExceptionInterface>, string}, null, void>
@@ -117,169 +119,111 @@ class ParserTest extends TestCase
     }
 
     /**
-     * @return \Generator<int, array{int|string, int|string|float|int[]|float[]}, null, void>
+     * @return \Generator<int, array{int|string, int|float|array<int, int|float>, Coordinate|Point}, null, void>
      */
     public static function dataSourceGood(): \Generator
     {
-        yield [40, 40];
-        yield ['40', 40];
-        yield ['-40', -40];
-        yield ['1E5', 100000];
-        yield ['1e5', 100000];
-        yield ['1e5°', 100000];
-        yield ['40°', 40];
-        yield ['-40°', -40];
-        yield ['40° N', 40];
-        yield ['40° S', -40];
-        yield ['40°N', 40];
-        yield ['40°S', -40];
-        yield ['45.24', 45.24];
-        yield ['45.24°', 45.24];
-        yield ['+45.24°', 45.24];
-        yield ['45.24° S', -45.24];
-        yield ['45.83°N', 45.83];
-        yield ['45.24°S', -45.24];
-        yield ['40° 26\' 46" N', 40.44611111111111];
-        yield ['40° 26\' 46"N', 40.44611111111111];
-        yield ['40° 26\' 46" S', -40.44611111111111];
-        yield ['40° 26\' 46"S', -40.44611111111111];
-        yield ['40° 26′ 46″ N', 40.44611111111111];
-        yield ['40° 26′ 46″N', 40.44611111111111];
-        yield ['40° 26′ 46″ S', -40.44611111111111];
-        yield ['40° 26′ 46″S', -40.44611111111111];
-        yield ["40° 26\xe2\x80\xb2 46\xe2\x80\xb3 N", 40.44611111111111];
-        yield ["40° 26\xe2\x80\xb2 46\xe2\x80\xb3N", 40.44611111111111];
-        yield ["40° 26\xe2\x80\xb2 46\xe2\x80\xb3 S", -40.44611111111111];
-        yield ["40° 26\xe2\x80\xb2 46\xe2\x80\xb3S", -40.44611111111111];
-        yield ['40:26', 40.4333333333333333];
-        yield ['40:26:46', 40.44611111111111];
-        yield ['79:56:55W', -79.94861111111111];
-        yield ['79:56:55 W', -79.94861111111111];
-        yield ['40:26:46N', 40.44611111111111];
-        yield ['40° N 79° W', [40, -79]];
-        yield ['40 79', [40, 79]];
-        yield ['40° 79°', [40, 79]];
-        yield ['40, 79', [40, 79]];
-        yield ['40°, 79°', [40, 79]];
-        yield ['40° 26\' 46" N 79° 58\' 56" W', [40.44611111111111, -79.98222222222222]];
-        yield ['40° 26\' N, 79° 58\' W', [40.4333333333333333, -79.96666666666666669]];
-        yield ['40.4738° N, 79.553° W', [40.4738, -79.553]];
-        yield ['40.4738° S, 79.553° W', [-40.4738, -79.553]];
-        yield ['40° 26.222\' N 79° 58.52\' E', [40.43703333333333, 79.97533333333332]];
-        yield ['40°26.222\'N 79°58.52\'E', [40.43703333333333, 79.97533333333332]];
-        yield ['40°26.222\' 79°58.52\'', [40.43703333333333, 79.97533333333332]];
-        yield ['40.222° -79.5852°', [40.222, -79.5852]];
-        yield ['40.222°, -79.5852°', [40.222, -79.5852]];
-        yield ['44°58\'53.9"N 93°19\'25.7"W', [44.98163888888888888, -93.32380555555557]];
-        yield ['44°58\'53.9"N, 93°19\'25.7"W', [44.98163888888888888, -93.32380555555557]];
-        yield ['79:56:55W 40:26:46N', [-79.94861111111111, 40.44611111111111]];
-        yield ['79:56:55 W, 40:26:46 N', [-79.94861111111111, 40.44611111111111]];
-        yield ['79°56′55″W, 40°26′46″N', [-79.94861111111111, 40.44611111111111]];
-        yield ['1e-5°N 1e-5°W', [0.00001, -0.00001]];
+        yield [40, 40, new Coordinate(40)];
+        yield ['40', 40, new Coordinate(40)];
+        yield ['-40', -40, new Coordinate(-40)];
+        yield ['1E5', 100000, new Coordinate(100000)];
+        yield ['1e5', 100000, new Coordinate(100000)];
+        yield ['1e5°', 100000, new Coordinate(100000)];
+        yield ['40°', 40, new Coordinate(40)];
+        yield ['-40°', -40, new Coordinate(-40)];
+        yield ['40° N', 40, new Coordinate(40, AxisEnum::LATITUDE)];
+        yield ['40° S', -40, new Coordinate(-40, AxisEnum::LATITUDE)];
+        yield ['40°N', 40, new Coordinate(40, AxisEnum::LATITUDE)];
+        yield ['40°S', -40, new Coordinate(-40, AxisEnum::LATITUDE)];
+        yield ['45.24', 45.24, new Coordinate(45.24)];
+        yield ['45.24°', 45.24, new Coordinate(45.24)];
+        yield ['+45.24°', 45.24, new Coordinate(45.24)];
+        yield ['45.24° S', -45.24, new Coordinate(-45.24, AxisEnum::LATITUDE)];
+        yield ['45.83°N', 45.83, new Coordinate(45.83, AxisEnum::LATITUDE)];
+        yield ['45.24°S', -45.24, new Coordinate(-45.24, AxisEnum::LATITUDE)];
+        yield ['40° 26\' 46" N', 40.44611111111111, new Coordinate(40.44611111111111, AxisEnum::LATITUDE)];
+        yield ['40° 26\' 46"N', 40.44611111111111, new Coordinate(40.44611111111111, AxisEnum::LATITUDE)];
+        yield ['40° 26\' 46" S', -40.44611111111111, new Coordinate(-40.44611111111111, AxisEnum::LATITUDE)];
+        yield ['40° 26\' 46"S', -40.44611111111111, new Coordinate(-40.44611111111111, AxisEnum::LATITUDE)];
+        yield ['40° 26′ 46″ N', 40.44611111111111, new Coordinate(40.44611111111111, AxisEnum::LATITUDE)];
+        yield ['40° 26′ 46″N', 40.44611111111111, new Coordinate(40.44611111111111, AxisEnum::LATITUDE)];
+        yield ['40° 26′ 46″ S', -40.44611111111111, new Coordinate(-40.44611111111111, AxisEnum::LATITUDE)];
+        yield ['40° 26′ 46″S', -40.44611111111111, new Coordinate(-40.44611111111111, AxisEnum::LATITUDE)];
+        yield ["40° 26\xe2\x80\xb2 46\xe2\x80\xb3 N", 40.44611111111111, new Coordinate(40.44611111111111, AxisEnum::LATITUDE)];
+        yield ["40° 26\xe2\x80\xb2 46\xe2\x80\xb3N", 40.44611111111111, new Coordinate(40.44611111111111, AxisEnum::LATITUDE)];
+        yield ["40° 26\xe2\x80\xb2 46\xe2\x80\xb3 S", -40.44611111111111, new Coordinate(-40.44611111111111, AxisEnum::LATITUDE)];
+        yield ["40° 26\xe2\x80\xb2 46\xe2\x80\xb3S", -40.44611111111111, new Coordinate(-40.44611111111111, AxisEnum::LATITUDE)];
+        yield ['79:56:55W', -79.94861111111111, new Coordinate(-79.94861111111111, AxisEnum::LONGITUDE)];
+        yield ['79:56:55 W', -79.94861111111111, new Coordinate(-79.94861111111111, AxisEnum::LONGITUDE)];
+        yield ['40:26:46N', 40.44611111111111, new Coordinate(40.44611111111111, AxisEnum::LATITUDE)];
+        yield ['40° N 79° W', [40, -79], new Point(new Coordinate(40, AxisEnum::LATITUDE), new Coordinate(-79, AxisEnum::LONGITUDE))];
+        yield ['40 79', [40, 79], new Point(new Coordinate(40, null), new Coordinate(79, null))];
+        yield ['40° 79°', [40, 79], new Point(new Coordinate(40, null), new Coordinate(79, null))];
+        yield ['40, 79', [40, 79], new Point(new Coordinate(40, null), new Coordinate(79, null))];
+        yield ['40°, 79°', [40, 79], new Point(new Coordinate(40, null), new Coordinate(79, null))];
+        yield ['40° 26\' 46" N 79° 58\' 56" W', [40.44611111111111, -79.98222222222222], new Point(new Coordinate(40.44611111111111, AxisEnum::LATITUDE), new Coordinate(-79.98222222222222, AxisEnum::LONGITUDE))];
+        yield ['40° 26\' N, 79° 58\' W', [40.4333333333333333, -79.96666666666666669], new Point(new Coordinate(40.4333333333333333, AxisEnum::LATITUDE), new Coordinate(-79.96666666666666669, AxisEnum::LONGITUDE))];
+        yield ['40.4738° N, 79.553° W', [40.4738, -79.553], new Point(new Coordinate(40.4738, AxisEnum::LATITUDE), new Coordinate(-79.553, AxisEnum::LONGITUDE))];
+        yield ['40.4738° S, 79.553° W', [-40.4738, -79.553], new Point(new Coordinate(-40.4738, AxisEnum::LATITUDE), new Coordinate(-79.553, AxisEnum::LONGITUDE))];
+        yield ['40° 26.222\' N 79° 58.52\' E', [40.43703333333333, 79.97533333333332], new Point(new Coordinate(40.43703333333333, AxisEnum::LATITUDE), new Coordinate(79.97533333333332, AxisEnum::LONGITUDE))];
+        yield ['40°26.222\' 79°58.52\'', [40.43703333333333, 79.97533333333332], new Point(new Coordinate(40.43703333333333, null), new Coordinate(79.97533333333332, null))];
+        yield ['40.222° -79.5852°', [40.222, -79.5852], new Point(new Coordinate(40.222), new Coordinate(-79.5852))];
+        yield ['40.222°, -79.5852°', [40.222, -79.5852], new Point(new Coordinate(40.222), new Coordinate(-79.5852))];
+        yield ['44°58\'53.9"N 93°19\'25.7"W', [44.98163888888888888, -93.32380555555557], new Point(new Coordinate(44.98163888888888888, AxisEnum::LATITUDE), new Coordinate(-93.32380555555557, AxisEnum::LONGITUDE))];
+        yield ['44°58\'53.9"N, 93°19\'25.7"W', [44.98163888888888888, -93.32380555555557], new Point(new Coordinate(44.9816388888888888, AxisEnum::LATITUDE), new Coordinate(-93.32380555555557, AxisEnum::LONGITUDE))];
+        yield ['79:56:55W 40:26:46N', [-79.94861111111111, 40.44611111111111], new Point(new Coordinate(-79.94861111111111, AxisEnum::LONGITUDE), new Coordinate(40.44611111111111, AxisEnum::LATITUDE))];
+        yield ['79:56:55 W, 40:26:46 N', [-79.94861111111111, 40.44611111111111], new Point(new Coordinate(-79.94861111111111, AxisEnum::LONGITUDE), new Coordinate(40.44611111111111, AxisEnum::LATITUDE))];
+        yield ['79°56′55″W, 40°26′46″N', [-79.94861111111111, 40.44611111111111], new Point(new Coordinate(-79.94861111111111, AxisEnum::LONGITUDE), new Coordinate(40.44611111111111, AxisEnum::LATITUDE))];
+        yield ['1e-5°N 1e-5°W', [0.00001, -0.00001], new Point(new Coordinate(0.00001, AxisEnum::LATITUDE), new Coordinate(-0.00001, AxisEnum::LONGITUDE))];
 
         // Issue #21
-        yield ['180°00\'00"W, 90°00\'00"S', [-180, -90]];
-        yield ['180°00\'00"E, 90°00\'00"N', [180, 90]];
-        yield ['180:00:00E, 90:00:00N', [180, 90]];
-        yield ['180:00:00W, 90:00:00S', [-180, -90]];
-        yield ['55°17.60\'', 55.29333333333333];
-        yield [180, 180];
-        yield ['180.0', 180.0];
-        yield [-180, -180];
-        yield ['-180.0', -180.0];
+        yield ['180°00\'00"W, 90°00\'00"S', [-180, -90], new Point(new Coordinate(-180, AxisEnum::LONGITUDE), new Coordinate(-90, AxisEnum::LATITUDE))];
+        yield ['180°00\'00"E, 90°00\'00"N', [180, 90], new Point(new Coordinate(180, AxisEnum::LONGITUDE), new Coordinate(90, AxisEnum::LATITUDE))];
+        yield ['180:00:00E, 90:00:00N', [180, 90], new Point(new Coordinate(180, AxisEnum::LONGITUDE), new Coordinate(90, AxisEnum::LATITUDE))];
+        yield ['180:00:00W, 90:00:00S', [-180, -90], new Point(new Coordinate(-180, AxisEnum::LONGITUDE), new Coordinate(-90, AxisEnum::LATITUDE))];
+        yield ['55°17.60\'', 55.29333333333333, new Coordinate(55.29333333333333)];
+        yield [180, 180, new Coordinate(180)];
+        yield ['180.0', 180.0, new Coordinate(180.0)];
+        yield [-180, -180, new Coordinate(-180)];
+        yield ['-180.0', -180.0, new Coordinate(-180.0)];
 
         // Documentation tests
 
         // Simple single-signed values
-        yield ['40', 40];
-        yield [40, 40];
-        yield [-40, -40];
-        yield ['-40', -40];
-        yield ['-8.543', -8.543];
-        yield ['+132', 132];
-        yield ['+77.2', 77.2];
+        yield ['40', 40, new Coordinate(40)];
+        yield [40, 40, new Coordinate(40)];
+        yield [-40, -40, new Coordinate(-40)];
+        yield ['-40', -40, new Coordinate(-40)];
+        yield ['-8.543', -8.543, new Coordinate(-8.543)];
+        yield ['+132', 132, new Coordinate(132)];
+        yield ['+77.2', 77.2, new Coordinate(77.2)];
 
         // Simple single-signed values with degree symbol
-        yield ['40°', 40];
-        yield ['-40°', -40];
-        yield ['-5.234°', -5.234];
-        yield ['+43°', 43];
-        yield ['+38.43°', 38.43];
+        yield ['40°', 40, new Coordinate(40)];
+        yield ['-40°', -40, new Coordinate(-40)];
+        yield ['-5.234°', -5.234, new Coordinate(-5.234)];
+        yield ['+43°', 43, new Coordinate(43)];
+        yield ['+38.43°', 38.43, new Coordinate(38.43)];
 
         // Single unsigned values with or without degree symbol, and cardinal direction
-        yield ['40°N', 40];
-        yield ['40 S', -40];
-        yield ['56.242 E', 56.242];
-        yield ['56.242 W', -56.242];
+        yield ['40°N', 40, new Coordinate(40, AxisEnum::LATITUDE)];
+        yield ['40 S', -40, new Coordinate(-40, AxisEnum::LATITUDE)];
+        yield ['56.242 E', 56.242, new Coordinate(56.242, AxisEnum::LONGITUDE)];
+        yield ['56.242 W', -56.242, new Coordinate(-56.242, AxisEnum::LONGITUDE)];
 
         // Single values of signed integer degrees with degree symbol, and decimal minutes with apostrophe
-        yield ["40° 26.222'", 40.43703333333333];
-        yield ["-65° 32.22'", -65.537];
-        yield ["+165° 52.22'", 165.87033333333332];
+        yield ["40° 26.222'", 40.43703333333333, new Coordinate(40.43703333333333)];
+        yield ["-65° 32.22'", -65.537, new Coordinate(-65.537)];
+        yield ["+165° 52.22'", 165.87033333333332, new Coordinate(165.87033333333332)];
 
         // Single values of unsigned integer degrees with degree symbol, decimal minutes with apostrophe, and cardinal direction
-        yield ["40° 26.222' E", 40.43703333333333];
-        yield ["65° 32.22' W", -65.537];
+        yield ["40° 26.222' E", 40.43703333333333, new Coordinate(40.43703333333333, AxisEnum::LONGITUDE)];
+        yield ["65° 32.22' W", -65.537, new Coordinate(-65.537, AxisEnum::LONGITUDE)];
 
         // Single values of signed integer degrees with degree symbol, integer minutes with apostrophe, and optional integer or decimal seconds with quote
-        yield ['40° 26\' 46"', 40.44611111111111];
-        yield ['-79° 58\' 56"', -79.98222222222222];
-        yield ['+93° 19\' 25.8"', 93.32383333333333];
-        yield ['+120° 19\' 25.8"', 120.32383333333333];
-    }
-
-    /** @param class-string<ExceptionInterface> $exception */
-    #[DataProvider('dataSourceBad')]
-    public function testBadValues(string $input, string $exception, string $message): void
-    {
-        self::expectException($exception);
-        self::expectExceptionMessage($message);
-
-        $parser = new Parser($input);
-
-        $parser->parse();
-    }
-
-    /** @param int|float|array<int|float> $expected */
-    #[DataProvider('dataSourceGood')]
-    public function testGoodValues(string|int $input, int|float|array $expected): void
-    {
-        $parser = new Parser($input);
-
-        $value = $parser->parse();
-
-        $this->assertEquals($expected, $value);
-    }
-
-    public function testParserReuse(): void
-    {
-        $parser = new Parser();
-
-        foreach (static::dataSourceGood() as $data) {
-            $input = $data[0];
-            $expected = $data[1];
-
-            $value = $parser->parse($input);
-
-            self::assertEquals($expected, $value);
-        }
-    }
-
-    /**
-     * Test parser with multiple values from the documentation.
-     *
-     * @param array{0: (float|string|int), 1: (float|string|int)} $coordinates
-     * @param array{0: float|int, 1: float|int}                   $expected
-     */
-    #[DataProvider('dataSourceFromDocumentation')]
-    public function testParserWithMultipleValues(array $coordinates, array $expected): void
-    {
-        $separators = [' ', ',', ' ,', ', ', ' , '];
-        foreach ($separators as $separator) {
-            $input = implode($separator, $coordinates);
-            $parser = new Parser($input);
-            $value = $parser->parse();
-            self::assertEquals($expected, $value);
-        }
+        yield ['40° 26\' 46"', 40.44611111111111, new Coordinate(40.44611111111111)];
+        yield ['-79° 58\' 56"', -79.98222222222222, new Coordinate(-79.98222222222222)];
+        yield ['+93° 19\' 25.8"', 93.32383333333333, new Coordinate(93.32383333333333)];
+        yield ['+120° 19\' 25.8"', 120.32383333333333, new Coordinate(120.32383333333333)];
     }
 }

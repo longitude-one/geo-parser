@@ -14,11 +14,12 @@ declare(strict_types=1);
 namespace LongitudeOne\Geo\String;
 
 use LongitudeOne\Geo\String\Exception\InvalidArgumentException;
+use LongitudeOne\Geo\String\Internal\CoordinateParser;
 
 /**
  * Parse geographic coordinate input.
  */
-class Parser
+final class Parser
 {
     /**
      * Input retained for parsing when no value is passed to parse().
@@ -53,5 +54,22 @@ class Parser
         }
 
         return (new CoordinateParser($this->input))->parse();
+    }
+
+    public function parseAsCoordinates(string|int|float|null $input = null): Coordinate|Point
+    {
+        if (null !== $input) {
+            $this->input = $input;
+        }
+
+        if (null === $this->input) {
+            throw new InvalidArgumentException('An input value must be provided to either the constructor or the parseAsCoordinates method.');
+        }
+
+        if (is_int($this->input) || is_float($this->input)) {
+            return new Coordinate($this->input);
+        }
+
+        return (new CoordinateParser($this->input))->parseAsCoordinates();
     }
 }

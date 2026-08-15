@@ -11,7 +11,7 @@ declare(strict_types=1);
  * Copyright 2024-2026.
  */
 
-namespace LongitudeOne\Geo\String;
+namespace LongitudeOne\Geo\String\Internal;
 
 /**
  * Coordinate angle expressed in degrees, optional minutes, and optional seconds.

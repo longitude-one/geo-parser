@@ -10,25 +10,11 @@
     <!-- Import the entire unused code rule set-->
     <rule ref="rulesets/unusedcode.xml"/>
     <!-- Import the entire codesize rule -->
-    <rule ref="rulesets/codesize.xml">
-        <exclude name="CyclomaticComplexity"/>
-        <exclude name="ExcessiveClassComplexity"/>
-    </rule>
-    <rule ref="rulesets/codesize.xml/CyclomaticComplexity">
-        <properties>
-            <!-- The report level was 17, because of historical code. Now 11 because of optimizations. -->
-            <property name="reportLevel" value="11" />
-        </properties>
-    </rule>
-    <rule ref="rulesets/codesize.xml/ExcessiveClassComplexity">
-        <properties>
-            <!-- Set the maximum complexity to 69, because of historical code -->
-            <property name="maximum" value="69" />
-        </properties>
-    </rule>
-    <!-- Import the entire naming rule set -->
+    <rule ref="rulesets/codesize.xml"/>
+    <!-- Import the entire naming rule set except short variables names -->
     <rule ref="rulesets/naming.xml">
-        <exclude name="ShortVariable" /> <!-- Short variable names are allowed because of $x, $y, $z, $t -->
+        <!-- Short variable names are not allowed, but $x, $y -->
+        <exclude name="ShortVariable" /> 
     </rule>
     <rule ref="rulesets/naming.xml/ShortVariable">
         <properties>

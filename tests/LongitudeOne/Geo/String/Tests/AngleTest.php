@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Geo\String\Tests;
 
-use LongitudeOne\Geo\String\Angle;
+use LongitudeOne\Geo\String\Internal\Angle;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

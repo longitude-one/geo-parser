@@ -63,7 +63,7 @@ composer fix
 
 ### Run the tests
 
-The following command runs the tests and shows the code-coverage status.
+The following command runs the tests, enforces a 99% minimum line-coverage threshold, and shows the coverage status.
 
 ```bash
 composer test

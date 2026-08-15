@@ -1,6 +1,13 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method LongitudeOne\\\\Geo\\\\String\\\\Tests\\\\LexerTest\\:\\:dataProvider\\(\\) return type with generic class Doctrine\\\\Common\\\\Lexer\\\\Token does not specify its types\\: T, V$#"
+			message: '#^Method LongitudeOne\\Geo\\String\\Lexer\:\:getType\(\) never assigns int to &\$value so it can be removed from the @param\-out type\.$#'
+			identifier: paramOut.unusedType
+			count: 1
+			path: ../../lib/LongitudeOne/Geo/String/Lexer.php
+
+		-
+			message: '#^Method LongitudeOne\\Geo\\String\\Tests\\LexerTest\:\:dataProvider\(\) return type with generic class Doctrine\\Common\\Lexer\\Token does not specify its types\: T, V$#'
+			identifier: missingType.generics
 			count: 1
 			path: ../../tests/LongitudeOne/Geo/String/Tests/LexerTest.php
