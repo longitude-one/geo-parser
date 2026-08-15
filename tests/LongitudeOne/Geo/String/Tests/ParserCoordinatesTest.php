@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Geo\String\Tests;
 
+use LongitudeOne\Geo\String\AxisEnum;
 use LongitudeOne\Geo\String\Coordinate;
 use LongitudeOne\Geo\String\Parser;
 use LongitudeOne\Geo\String\Point;
@@ -37,6 +38,34 @@ class ParserCoordinatesTest extends TestCase
         foreach (ParserDataProvider::dataSourceGood() as [$input, , $expectedCoordinates]) {
             yield [$input, $expectedCoordinates];
         }
+    }
+
+    /**
+     * Cardinal directions carry semantic axis information. Keep this named
+     * scenario separate from the broad format matrix because losing either
+     * axis would silently degrade the Version 4 structured API.
+     */
+    public function testKeepsAxesForCanonicalLongitudeLatitudePoint(): void
+    {
+        $result = (new Parser('79°56′55″W, 40°26′46″N'))->parseAsCoordinates();
+
+        self::assertInstanceOf(Point::class, $result);
+        self::assertSame(AxisEnum::LONGITUDE, $result->getFirst()->getAxis());
+        self::assertSame(AxisEnum::LATITUDE, $result->getSecond()->getAxis());
+    }
+
+    /**
+     * Numeric position alone never identifies a geographic axis. This guards
+     * against a tempting but incorrect inference of latitude then longitude
+     * when callers pass a plain coordinate pair.
+     */
+    public function testLeavesAxesNullForPointWithoutCardinals(): void
+    {
+        $result = (new Parser('40.222°, -79.5852°'))->parseAsCoordinates();
+
+        self::assertInstanceOf(Point::class, $result);
+        self::assertNull($result->getFirst()->getAxis());
+        self::assertNull($result->getSecond()->getAxis());
     }
 
     /**

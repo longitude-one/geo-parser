@@ -68,6 +68,18 @@ class ParserFormatsTest extends TestCase
     }
 
     /**
+     * This well-known longitude/latitude pair is a readable regression test
+     * for the documented DMS syntax, cardinal signs, and pair ordering.
+     */
+    public function testParsesCanonicalWestLongitudeAndNorthLatitudePair(): void
+    {
+        self::assertEquals(
+            [-79.94861111111111, 40.44611111111111],
+            (new Parser('79°56′55″W, 40°26′46″N'))->parse(),
+        );
+    }
+
+    /**
      * Reusing a Parser is documented behavior. Each new input must fully
      * replace the previous state, regardless of notation or return shape.
      */

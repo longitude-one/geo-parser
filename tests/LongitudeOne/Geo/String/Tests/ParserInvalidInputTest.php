@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace LongitudeOne\Geo\String\Tests;
 
 use LongitudeOne\Geo\String\Exception\ExceptionInterface;
+use LongitudeOne\Geo\String\Exception\RangeException;
+use LongitudeOne\Geo\String\Exception\UnexpectedValueException;
 use LongitudeOne\Geo\String\Parser;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
@@ -56,5 +58,30 @@ class ParserInvalidInputTest extends TestCase
         self::expectExceptionMessage($message);
 
         (new Parser($input))->parse();
+    }
+
+    /**
+     * Latitude has a stricter geographic bound than longitude. This named
+     * check keeps that user-facing rule visible outside the range matrix.
+     */
+    public function testRejectsLatitudeOutsideGeographicRange(): void
+    {
+        self::expectException(RangeException::class);
+        self::expectExceptionMessage('Latitude must be between -90 and 90');
+
+        (new Parser('100N'))->parseAsCoordinates();
+    }
+
+    /**
+     * A point whose second cardinal repeats the latitude axis is ambiguous.
+     * The parser must demand longitude rather than accepting a superficially
+     * valid pair of cardinal directions.
+     */
+    public function testRejectsPointWithTwoLatitudeCardinals(): void
+    {
+        self::expectException(UnexpectedValueException::class);
+        self::expectExceptionMessage('Expected LongitudeOne\\Geo\\String\\Lexer::T_CARDINAL_LON');
+
+        (new Parser('40°N 45°S'))->parse();
     }
 }
