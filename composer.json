@@ -51,12 +51,12 @@
     },
     "autoload": {
         "psr-0": {
-            "LongitudeOne\\Geo\\String": "lib/"
+            "LongitudeOne\\GeoParser": "lib/"
         }
     },
     "autoload-dev": {
         "psr-0": {
-            "LongitudeOne\\Geo\\String\\Tests": "tests/"
+            "LongitudeOne\\GeoParser\\Tests": "tests/"
         }
     }
 }

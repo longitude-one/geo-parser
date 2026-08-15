@@ -30,7 +30,7 @@ The parser supports two usage patterns. Pass the value to parse to the construct
 resulting `Parser` object:
 
 ```php
-use LongitudeOne\Geo\String\Parser;
+use LongitudeOne\GeoParser\Parser;
 
 $input  = '79°56′55″W, 40°26′46″N';
 
@@ -42,7 +42,7 @@ $value = $parser->parse(); // [-79.948611111111, 40.446111111111]
 When parsing many values, reuse a single `Parser` instance:
 
 ```php
-use LongitudeOne\Geo\String\Parser;
+use LongitudeOne\GeoParser\Parser;
 
 $input1 = '56.242 E';
 $input2 = '40:26:46 S';
@@ -58,10 +58,10 @@ $value2 = $parser->parse($input2); //-40.446111111111
 Since version 4.0.0, use `parseAsCoordinates()` when the parsed value should retain its coordinate structure. It returns a `Coordinate` for a single value and a `Point` for a pair. An axis is set only when the input contains a cardinal direction; otherwise `getAxis()` returns `null`.
 
 ```php
-use LongitudeOne\Geo\String\AxisEnum;
-use LongitudeOne\Geo\String\Coordinate;
-use LongitudeOne\Geo\String\Parser;
-use LongitudeOne\Geo\String\Point;
+use LongitudeOne\GeoParser\AxisEnum;
+use LongitudeOne\GeoParser\Coordinate;
+use LongitudeOne\GeoParser\Parser;
+use LongitudeOne\GeoParser\Point;
 
 $coordinate = (new Parser('40°26\'46"N'))->parseAsCoordinates();
 
@@ -156,11 +156,11 @@ including their type, without passing through the lexer or geographic range vali
 ## Exceptions
 
 Library exceptions thrown by the `Lexer` and `Parser` implement the
-`LongitudeOne\Geo\String\Exception\ExceptionInterface` interface:
+`LongitudeOne\GeoParser\Exception\ExceptionInterface` interface:
 
 ```php
-use LongitudeOne\Geo\String\Exception\ExceptionInterface;
-use LongitudeOne\Geo\String\Parser;
+use LongitudeOne\GeoParser\Exception\ExceptionInterface;
+use LongitudeOne\GeoParser\Parser;
 
 try {
     $value = (new Parser('100N'))->parse();
