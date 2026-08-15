@@ -18,18 +18,17 @@ use LongitudeOne\Geo\String\Coordinate;
 use LongitudeOne\Geo\String\Exception\ExceptionInterface;
 use LongitudeOne\Geo\String\Exception\RangeException;
 use LongitudeOne\Geo\String\Exception\UnexpectedValueException;
-use LongitudeOne\Geo\String\Parser;
 use LongitudeOne\Geo\String\Point;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 
 /**
- * Parser tests.
+ * Shared parser examples for the focused parser test suites.
  *
- * @author  Derek J. Lambert <dlambert@dereklambert.com>
- * @license http://dlambert.mit-license.org MIT
+ * Keeping the accepted values, invalid inputs, and documentation examples in
+ * one place prevents the legacy numeric API and the structured-coordinate API
+ * from silently testing different grammars. This class deliberately contains
+ * no test methods; PHPUnit test cases consume its data providers.
  */
-class ParserTest extends TestCase
+final class ParserDataProvider
 {
     /**
      * @return \Generator<int, array{string, class-string<ExceptionInterface>, string}, null, void>
@@ -120,7 +119,7 @@ class ParserTest extends TestCase
     }
 
     /**
-     * @return \Generator<int, array{int|string, int|string|float|int[]|float[], Coordinate|Point}, null, void>
+     * @return \Generator<int, array{int|string, int|float|array<int, int|float>, Coordinate|Point}, null, void>
      */
     public static function dataSourceGood(): \Generator
     {
@@ -226,64 +225,5 @@ class ParserTest extends TestCase
         yield ['-79° 58\' 56"', -79.98222222222222, new Coordinate(-79.98222222222222)];
         yield ['+93° 19\' 25.8"', 93.32383333333333, new Coordinate(93.32383333333333)];
         yield ['+120° 19\' 25.8"', 120.32383333333333, new Coordinate(120.32383333333333)];
-    }
-
-    /** @param class-string<ExceptionInterface> $exception */
-    #[DataProvider('dataSourceBad')]
-    public function testBadValues(string $input, string $exception, string $message): void
-    {
-        self::expectException($exception);
-        self::expectExceptionMessage($message);
-
-        $parser = new Parser($input);
-
-        $parser->parse();
-    }
-
-    /** @param int|float|array<int|float> $expected */
-    #[DataProvider('dataSourceGood')]
-    public function testGoodValues(string|int $input, int|float|array $expected, Coordinate|Point $expectedCoordinates): void
-    {
-        $parser = new Parser();
-
-        $value = $parser->parse($input);
-
-        $this->assertEquals($expected, $value);
-
-        $value = $parser->parseAsCoordinates($input);
-
-        $this->assertEquals($expectedCoordinates, $value);
-    }
-
-    public function testParserReuse(): void
-    {
-        $parser = new Parser();
-
-        foreach (static::dataSourceGood() as $data) {
-            $input = $data[0];
-            $expected = $data[1];
-
-            $value = $parser->parse($input);
-
-            self::assertEquals($expected, $value);
-        }
-    }
-
-    /**
-     * Test parser with multiple values from the documentation.
-     *
-     * @param array{0: (float|string|int), 1: (float|string|int)} $coordinates
-     * @param array{0: float|int, 1: float|int}                   $expected
-     */
-    #[DataProvider('dataSourceFromDocumentation')]
-    public function testParserWithMultipleValues(array $coordinates, array $expected): void
-    {
-        $separators = [' ', ',', ' ,', ', ', ' , '];
-        foreach ($separators as $separator) {
-            $input = implode($separator, $coordinates);
-            $parser = new Parser($input);
-            $value = $parser->parse();
-            self::assertEquals($expected, $value);
-        }
     }
 }
