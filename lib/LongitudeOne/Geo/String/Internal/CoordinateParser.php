@@ -14,10 +14,12 @@ declare(strict_types=1);
 namespace LongitudeOne\Geo\String\Internal;
 
 use LongitudeOne\Geo\String\AxisEnum;
+use LongitudeOne\Geo\String\Coordinate;
 use LongitudeOne\Geo\String\Exception\LogicException;
 use LongitudeOne\Geo\String\Exception\RangeException;
 use LongitudeOne\Geo\String\Exception\UnexpectedValueException;
 use LongitudeOne\Geo\String\Lexer;
+use LongitudeOne\Geo\String\Point;
 
 /**
  * Parse one or two coordinate values from text input.
@@ -86,23 +88,42 @@ final class CoordinateParser
     }
 
     /**
+     * Parse the text input as a single coordinate or coordinate pair.
+     */
+    public function parseAsCoordinates(): Coordinate|Point
+    {
+        $this->nextAxis = null;
+        $this->nextSymbol = null;
+        $this->isFirstCoordinate = true;
+        $this->canMatchSymbol = true;
+        $this->tokens = new TokenStream($this->input);
+
+        return $this->pointAsCoordinates();
+    }
+
+    /**
      * Match a cardinal direction, validate its axis range, and apply its sign.
      */
-    private function cardinal(int|float $value): int|float
+    private function cardinal(int|float $value): Coordinate
     {
         $axis = $this->nextAxis ?? match ($this->tokens->current()?->type) {
             Lexer::T_CARDINAL_LAT => AxisEnum::LATITUDE,
             Lexer::T_CARDINAL_LON => AxisEnum::LONGITUDE,
             default => throw new LogicException(sprintf('Token type %d is not a cardinal direction.', $this->tokens->current()?->type)),
         };
-        $cardinal = Cardinal::fromToken((string) $this->match($this->cardinalTokenType($axis)));
+        $tokenType = $this->cardinalTokenType($axis);
+        if (!$this->tokens->matches($tokenType)) {
+            throw $this->syntaxError($this->tokens->literal($tokenType));
+        }
+
+        $cardinal = $this->tokens->consumeCardinal($tokenType);
         $this->nextAxis = $cardinal->axis()->other();
 
         if ($value > $axis->rangeLimit()) {
             throw new RangeException($this->input, $axis->rangeExceptionCode());
         }
 
-        return $value * $cardinal->sign();
+        return new Coordinate($value * $cardinal->sign(), $axis);
     }
 
     /**
@@ -119,7 +140,7 @@ final class CoordinateParser
     /**
      * Match and return a single coordinate value.
      */
-    private function coordinate(): float|int
+    private function coordinate(): Coordinate
     {
         $sign = null;
 
@@ -138,7 +159,7 @@ final class CoordinateParser
 
         $this->nextAxis = null;
 
-        return ($sign ?? 1) * $coordinate;
+        return new Coordinate(($sign ?? 1) * $coordinate);
     }
 
     /**
@@ -186,14 +207,14 @@ final class CoordinateParser
     /**
      * Match and return a single value or a pair.
      *
-     * @return float|int|array<int|float>
+     * @return float|int|array<int, int|float>
      */
     private function point(): float|int|array
     {
         $x = $this->coordinate();
 
         if (null === $this->tokens->current()) {
-            return $x;
+            return $x->getValue();
         }
 
         if ($this->tokens->matches(Lexer::T_COMMA)) {
@@ -204,7 +225,29 @@ final class CoordinateParser
 
         $this->ensureEndOfInput();
 
-        return [$x, $y];
+        return [$x->getValue(), $y->getValue()];
+    }
+
+    /**
+     * Match and return a coordinate or point retaining explicit axes.
+     */
+    private function pointAsCoordinates(): Coordinate|Point
+    {
+        $first = $this->coordinate();
+
+        if (null === $this->tokens->current()) {
+            return $first;
+        }
+
+        if ($this->tokens->matches(Lexer::T_COMMA)) {
+            $this->match(Lexer::T_COMMA);
+        }
+
+        $second = $this->coordinate();
+
+        $this->ensureEndOfInput();
+
+        return new Point($first, $second);
     }
 
     /**

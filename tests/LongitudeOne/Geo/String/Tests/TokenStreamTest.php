@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Geo\String\Tests;
 
+use LongitudeOne\Geo\String\AxisEnum;
 use LongitudeOne\Geo\String\Exception\LogicException;
 use LongitudeOne\Geo\String\Internal\TokenStream;
 use LongitudeOne\Geo\String\Lexer;
@@ -66,7 +67,9 @@ class TokenStreamTest extends TestCase
         self::assertSame(Lexer::T_DEGREE, $stream->current()->type);
         self::assertSame('°', $stream->consume(Lexer::T_DEGREE)->value);
         self::assertSame(Lexer::T_CARDINAL_LAT, $stream->current()->type);
-        self::assertSame('N', $stream->consume(Lexer::T_CARDINAL_LAT)->value);
+        $cardinal = $stream->consumeCardinal(Lexer::T_CARDINAL_LAT);
+        self::assertSame(AxisEnum::LATITUDE, $cardinal->axis());
+        self::assertSame(1, $cardinal->sign());
         self::assertNull($stream->current());
     }
 

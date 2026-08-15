@@ -68,6 +68,14 @@ final class TokenStream
     }
 
     /**
+     * Consume a cardinal token and return its direction details.
+     */
+    public function consumeCardinal(int $type): Cardinal
+    {
+        return Cardinal::fromToken((string) $this->consume($type)->value);
+    }
+
+    /**
      * Return the current token without consuming it.
      *
      * @return Token<int, int|string>|null

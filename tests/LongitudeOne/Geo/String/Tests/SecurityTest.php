@@ -135,6 +135,18 @@ class SecurityTest extends TestCase
      * A parser created without input must fail with the library exception,
      * rather than an error caused by an uninitialized property.
      */
+    public function testParseWithoutInputAsCoordinateThrowsInvalidArgumentException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('An input value must be provided to either the constructor or the parseAsCoordinates method.');
+
+        (new Parser())->parseAsCoordinates();
+    }
+
+    /**
+     * A parser created without input must fail with the library exception,
+     * rather than an error caused by an uninitialized property.
+     */
     public function testParseWithoutInputThrowsInvalidArgumentException(): void
     {
         $this->expectException(InvalidArgumentException::class);
