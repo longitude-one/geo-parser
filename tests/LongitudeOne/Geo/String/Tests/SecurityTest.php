@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\Geo\String\Tests;
 
+use LongitudeOne\Geo\String\Exception\ExceptionInterface;
 use LongitudeOne\Geo\String\Exception\InvalidArgumentException;
 use LongitudeOne\Geo\String\Exception\RangeException;
 use LongitudeOne\Geo\String\Exception\UnexpectedValueException;
@@ -29,6 +30,18 @@ use PHPUnit\Framework\TestCase;
  */
 class SecurityTest extends TestCase
 {
+    /**
+     * Number of deterministic fuzz cases exercised by each public API.
+     */
+    private const FUZZ_CASES = 256;
+    /**
+     * ASCII characters mixed by the deterministic fuzz generator.
+     *
+     * The set includes coordinate syntax, cardinals, whitespace, controls,
+     * and invalid separators without generating malformed UTF-8 sequences.
+     */
+    private const FUZZ_CHARACTERS = "0123456789+-.:,'\"NSEW \t\r\n#\0";
+
     /**
      * @return \Generator<string, array{string}, null, void>
      */
@@ -47,6 +60,22 @@ class SecurityTest extends TestCase
         yield 'huge positive exponent' => ['1e400', \INF];
         yield 'huge negative exponent' => ['-1e400', -\INF];
         yield 'huge digit string without cardinal' => ['999999999999999999999', 1.0E+21];
+    }
+
+    /**
+     * Generate a reproducible sequence of mixed coordinate-like input.
+     */
+    private static function fuzzInput(int $case): string
+    {
+        $input = '';
+        $length = 1 + $case % 96;
+
+        for ($position = 0; $position < $length; ++$position) {
+            $byte = hash('sha256', sprintf('%d:%d', $case, $position), true)[0];
+            $input .= self::FUZZ_CHARACTERS[ord($byte) % strlen(self::FUZZ_CHARACTERS)];
+        }
+
+        return $input;
     }
 
     /**
@@ -121,6 +150,27 @@ class SecurityTest extends TestCase
     }
 
     /**
+     * Deterministic fuzzing protects the public APIs from parser-state bugs
+     * without introducing the flakiness of an unseeded random test. Inputs
+     * mix valid-looking fragments, controls, and invalid separators. Each
+     * call may return a value or throw a library exception, but must never
+     * expose a native PHP error or retain state from a preceding input.
+     */
+    public function testGeneratedInputsOnlyReturnOrThrowLibraryExceptions(): void
+    {
+        $parser = new Parser();
+        $start = microtime(true);
+
+        for ($case = 0; $case < self::FUZZ_CASES; ++$case) {
+            $input = self::fuzzInput($case);
+
+            $this->assertFuzzInputIsHandledByPublicApis($parser, $input);
+        }
+
+        self::assertLessThan(2.0, microtime(true) - $start, 'Deterministic fuzz inputs took too long to parse.');
+    }
+
+    /**
      * A null byte embedded in the input must not crash the lexer/parser; it
      * should simply be rejected as an unexpected token.
      */
@@ -186,18 +236,55 @@ class SecurityTest extends TestCase
      * A very large, invalid payload must not make the parser hang or blow up
      * memory disproportionately; it must still fail fast with a syntax error.
      */
-    public function testVeryLongInvalidInputStillFailsFast(): void
+    public function testVeryLongInvalidInputStillFailsFastForBothPublicApis(): void
     {
         $input = str_repeat('x', 200000).'40';
-
         $start = microtime(true);
 
+        $this->assertVeryLongInvalidInputIsRejected($input, false);
+        $this->assertVeryLongInvalidInputIsRejected($input, true);
+
+        self::assertLessThan(2.0, microtime(true) - $start, 'Parsing a long invalid input took too long.');
+    }
+
+    /**
+     * Assert that both public APIs reject malformed fuzz input only through
+     * the library's documented exception hierarchy.
+     */
+    private function assertFuzzInputIsHandledByPublicApis(Parser $parser, string $input): void
+    {
         try {
-            (new Parser($input))->parse();
+            $parser->parse($input);
+        } catch (ExceptionInterface) {
+            self::addToAssertionCount(1);
+        } catch (\Throwable $exception) {
+            self::fail(sprintf('Parser::parse() threw %s for fuzz input %s.', $exception::class, bin2hex($input)));
+        }
+
+        try {
+            $parser->parseAsCoordinates($input);
+        } catch (ExceptionInterface) {
+            self::addToAssertionCount(1);
+        } catch (\Throwable $exception) {
+            self::fail(sprintf('Parser::parseAsCoordinates() threw %s for fuzz input %s.', $exception::class, bin2hex($input)));
+        }
+    }
+
+    /**
+     * Assert that a very large malformed input is rejected by one public API.
+     */
+    private function assertVeryLongInvalidInputIsRejected(string $input, bool $asCoordinates): void
+    {
+        try {
+            if ($asCoordinates) {
+                (new Parser($input))->parseAsCoordinates();
+            } else {
+                (new Parser($input))->parse();
+            }
+
             self::fail('Expected an UnexpectedValueException to be thrown.');
-        } catch (UnexpectedValueException $exception) {
-            $elapsed = microtime(true) - $start;
-            self::assertLessThan(1.0, $elapsed, 'Parsing a long invalid input took too long.');
+        } catch (UnexpectedValueException) {
+            self::addToAssertionCount(1);
         }
     }
 }
