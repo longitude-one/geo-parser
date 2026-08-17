@@ -140,7 +140,7 @@ jobs:
         name: PHP ${{ matrix.php }} - Doctrine Lexer ${{ matrix.lexer }}
         steps:
             - name: Checkout code
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
 
             - name: Cache Composer packages
               id: composer-cache-old
