@@ -186,7 +186,7 @@ class Parser
         // If degrees is a float, there will be no minutes or seconds
         if ($this->lexer->isNextToken(Lexer::T_FLOAT)) {
             // Get degree value
-            $degrees = (float) $this->match(Lexer::T_FLOAT);
+            $degrees = $this->match(Lexer::T_FLOAT);
 
             // Degree symbol may follow degree float values
             if ($this->lexer->isNextToken(Lexer::T_DEGREE)) {
@@ -196,7 +196,7 @@ class Parser
                 $this->nextSymbol = Lexer::T_DEGREE;
             }
 
-            return $degrees;
+            return filter_var($degrees, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE) ?? (float) $degrees;
         }
 
         // If degrees isn't a float, it must be an integer

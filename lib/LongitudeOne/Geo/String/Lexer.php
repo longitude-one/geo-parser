@@ -78,6 +78,12 @@ class Lexer extends AbstractLexer
                 return self::T_INTEGER;
             }
 
+            $integer = (int) $numeric;
+
+            if ((string) $numeric === (string) $integer) {
+                $value = $integer;
+            }
+
             return self::T_FLOAT;
         }
 

@@ -242,6 +242,25 @@ class ParserTest extends TestCase
         $parser->parse();
     }
 
+    public function testDecimalValueWithoutFractionReturnsInteger(): void
+    {
+        $cases = [
+            '20.0' => 20,
+            '20.000' => 20,
+            '20.0N' => 20,
+            '20.0°N' => 20,
+            '1e5' => 100000,
+            '1E5' => 100000,
+            '1.5e5' => 150000,
+        ];
+
+        foreach ($cases as $input => $expected) {
+            $value = (new Parser($input))->parse();
+
+            self::assertSame($expected, $value);
+        }
+    }
+
     /**
      * @param int|float|array<int|float> $expected
      *
