@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.0.4](https://github.com/longitude-one/geo-parser/compare/3.0.3...3.0.4) (2026-08-23)
+
+### 🐛 Bug Fixes
+
+* **lexer:** restore integer conversion for normalized decimal values ([1f29090](https://github.com/longitude-one/geo-parser/commit/1f2909041443d40dd167ae4676e3aaee67199edd)), closes [#29](https://github.com/longitude-one/geo-parser/issues/29)
+
+### 👷 CI/CD
+
+* Remove deprecations on nodejs ([d3b9ab5](https://github.com/longitude-one/geo-parser/commit/d3b9ab53605e99a26e7d4221dd9ba6b8c569f426))
+* 
 ## [3.0.3](https://github.com/longitude-one/geo-parser/compare/3.0.2...3.0.3) (2026-08-07)
 
 ### 📚 Documentation
@@ -11,6 +21,7 @@ All notable changes to this project will be documented in this file. See [commit
 ### 👷 CI/CD
 
 * Add '4-x-dev' branch to CI workflow triggers ([303b3ca](https://github.com/longitude-one/geo-parser/commit/303b3ca79d6c8d70d5beb00eea944643f57300fc))
+
 ## [3.0.2](https://github.com/longitude-one/geo-parser/compare/3.0.1...3.0.2) (2026-08-06)
 
 ### 🐛 Bug Fixes
