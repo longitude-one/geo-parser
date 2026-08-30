@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser\Internal;
 
-use LongitudeOne\GeoParser\AxisEnum;
+use LongitudeOne\Core\Enum\AxisEnum;
 use LongitudeOne\GeoParser\Exception\LogicException;
 
 /**

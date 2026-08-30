@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser\Internal;
 
-use LongitudeOne\GeoParser\AxisEnum;
+use LongitudeOne\Core\Enum\AxisEnum;
 use LongitudeOne\GeoParser\Coordinate;
 use LongitudeOne\GeoParser\Exception\LogicException;
 use LongitudeOne\GeoParser\Exception\RangeException;
@@ -120,7 +120,9 @@ final class CoordinateParser
         $this->nextAxis = $cardinal->axis()->other();
 
         if ($value > $axis->rangeLimit()) {
-            throw new RangeException($this->input, $axis->rangeExceptionCode());
+            throw new RangeException($this->input, match ($axis) {
+                AxisEnum::LATITUDE => RangeException::LATITUDE_OUT_OF_RANGE, AxisEnum::LONGITUDE => RangeException::LONGITUDE_OUT_OF_RANGE,
+            });
         }
 
         return new Coordinate($value * $cardinal->sign(), $axis);

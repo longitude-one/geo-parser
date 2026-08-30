@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser\Tests;
 
-use LongitudeOne\GeoParser\AxisEnum;
+use LongitudeOne\Core\Enum\AxisEnum;
 use LongitudeOne\GeoParser\Exception\LogicException;
-use LongitudeOne\GeoParser\Exception\RangeException;
 use LongitudeOne\GeoParser\Internal\Cardinal;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -44,11 +43,9 @@ class CardinalTest extends TestCase
     public function testAxisProvidesCoordinateConstraints(): void
     {
         self::assertSame(90, AxisEnum::LATITUDE->rangeLimit());
-        self::assertSame(RangeException::LATITUDE_OUT_OF_RANGE, AxisEnum::LATITUDE->rangeExceptionCode());
         self::assertSame(AxisEnum::LONGITUDE, AxisEnum::LATITUDE->other());
 
         self::assertSame(180, AxisEnum::LONGITUDE->rangeLimit());
-        self::assertSame(RangeException::LONGITUDE_OUT_OF_RANGE, AxisEnum::LONGITUDE->rangeExceptionCode());
         self::assertSame(AxisEnum::LATITUDE, AxisEnum::LONGITUDE->other());
     }
 
