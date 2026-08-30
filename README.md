@@ -58,7 +58,7 @@ $value2 = $parser->parse($input2); //-40.446111111111
 Since version 4.0.0, use `parseAsCoordinates()` when the parsed value should retain its coordinate structure. It returns a `Coordinate` for a single value and a `Point` for a pair. An axis is set only when the input contains a cardinal direction; otherwise `getAxis()` returns `null`.
 
 ```php
-use LongitudeOne\GeoParser\AxisEnum;
+use LongitudeOne\Core\Enum\AxisEnum;
 use LongitudeOne\GeoParser\Coordinate;
 use LongitudeOne\GeoParser\Parser;
 use LongitudeOne\GeoParser\Point;
@@ -185,7 +185,7 @@ PHP versions marked as “tested”, along with every listed Doctrine Lexer vers
 
 ### Support Policy
 
-The non-breaking-change guarantee applies only to the `Lexer`, `Parser`, and `AxisEnum` classes. All other classes are internal implementation details and may change or be removed in any release.
+The non-breaking-change guarantee applies only to the `Lexer` and `Parser` classes. `AxisEnum` is provided by the `longitude-one/spatial-core` dependency. All other classes are internal implementation details and may change or be removed in any release.
 
 Only the latest major version receives feature and bug fixes. Non-security issues will not be addressed during the security-fixes period.
 

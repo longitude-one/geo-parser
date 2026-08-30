@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser;
 
+use LongitudeOne\Core\Enum\AxisEnum;
+
 /**
  * A coordinate value with its optional geographic axis.
  */
