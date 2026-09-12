@@ -1,7 +1,0 @@
-services:
-  app:
-    build:
-      context: ./docker
-    container_name: geo-parser
-    volumes:
-      - .:/var/www
