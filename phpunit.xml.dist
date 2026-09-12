@@ -6,7 +6,7 @@
          cacheDirectory=".phpunit.cache">
   <testsuites>
     <testsuite name="Tests">
-      <directory>./tests/LongitudeOne/GeoParser/Tests</directory>
+      <directory>tests/</directory>
     </testsuite>
   </testsuites>
   <source>
