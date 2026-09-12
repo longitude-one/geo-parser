@@ -84,6 +84,11 @@ For example, `(new Parser('40, 79'))->parseAsCoordinates()` returns a `Point` wh
 Both single values and coordinate pairs are supported. The following examples illustrate the supported formats; they
 are not exhaustive.
 
+A numeric sign may accompany a cardinal direction when both agree: `+40N`, `+75E`, `-40S`, and `-75W`
+are accepted. The direction is applied once (`-75W` returns `-75`); conflicting combinations such as `-40N`
+or `+75W` throw `UnexpectedValueException`. This also applies to DDM/DMS formats and coordinate pairs,
+for both parsing methods. Previously rejected signed cardinal inputs are now accepted when consistent (issue #31).
+
 1. Simple single-signed values
 
    - 40
