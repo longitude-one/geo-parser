@@ -21,7 +21,7 @@ composer require longitude-one/geo-parser
 Current version:
 
 ```bash
-composer require longitude-one/geo-parser:4.0.0
+composer require longitude-one/geo-parser:4.1.0
 ```
 
 ## Usage

@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.1.0](https://github.com/longitude-one/geo-parser/compare/4.0.0...4.1.0) (2026-09-12)
+
+### ✨ New Features
+
+* **parser:** Support numeric signs with cardinal directions and add tests for validation ([d157150](https://github.com/longitude-one/geo-parser/commit/d15715091475f9c5d44dcfbe40bad2dca914473c))
+
+### ♻️ Refactoring
+
+* Simplify token matching logic and enhance test coverage for malformed input ([8014cfb](https://github.com/longitude-one/geo-parser/commit/8014cfb265694059bc3abf2fe40811146114457b))
+
+### 🔧 Maintenance
+
+* Enhance exception handling with DiagnosticValueFormatter for untrusted values ([54b0d91](https://github.com/longitude-one/geo-parser/commit/54b0d912ef4bb6748821562901fe19bfb86f0a52))
+* Migration from deprecated psr-0 to psr-4 ([fb7d950](https://github.com/longitude-one/geo-parser/commit/fb7d95084abfc0d2825c38f22a07cf27b2bc4f84))
+* Remove docker files and configuration ([2451ab9](https://github.com/longitude-one/geo-parser/commit/2451ab94c6c630edbb4e930345b832ed3146bc20))
+* Update Ko-fi username in FUNDING.yml ([02942b0](https://github.com/longitude-one/geo-parser/commit/02942b05e9992ee6bb3f973ba4f69c57b0cb5744))
+
 ## [4.0.0](https://github.com/longitude-one/geo-parser/compare/3.0.4...4.0.0) (2026-08-30)
 
 ### ⚠ BREAKING CHANGES
@@ -21,16 +38,16 @@ All notable changes to this project will be documented in this file. See [commit
 
 ### 🐛 Bug Fixes
 
-* add input validation in Parser constructor and corresponding test ([8e7b08d](https://github.com/longitude-one/geo-parser/commit/8e7b08d8623d2ef79e0392e87a6700464121ea4a))
+* Add input validation in Parser constructor and corresponding test ([8e7b08d](https://github.com/longitude-one/geo-parser/commit/8e7b08d8623d2ef79e0392e87a6700464121ea4a))
 
 ### ♻️ Refactoring
 
-* enhance symbol matching logic and coordinate handling in Parser class ([97a9d2a](https://github.com/longitude-one/geo-parser/commit/97a9d2a7504aa5e43c1a604abb662421a8413a12))
-* improve handling of space-separated coordinate pairs in Parser class ([854d1a3](https://github.com/longitude-one/geo-parser/commit/854d1a39a1ad128ba8c98242cb05c20d7122617e))
+* Enhance symbol matching logic and coordinate handling in Parser class ([97a9d2a](https://github.com/longitude-one/geo-parser/commit/97a9d2a7504aa5e43c1a604abb662421a8413a12))
+* Improve handling of space-separated coordinate pairs in Parser class ([854d1a3](https://github.com/longitude-one/geo-parser/commit/854d1a39a1ad128ba8c98242cb05c20d7122617e))
 * Namespace renamed to LongitudeOne/GeoParser ([#28](https://github.com/longitude-one/geo-parser/issues/28)) ([d1437b7](https://github.com/longitude-one/geo-parser/commit/d1437b75638b9fec607791cdba41d064fc3c12f9))
-* simplify symbol matching logic in Parser class ([e462dbf](https://github.com/longitude-one/geo-parser/commit/e462dbf2ce15d46875962bb933bea34be50c10a2))
-* streamline cardinal direction handling in Parser class ([6bf081f](https://github.com/longitude-one/geo-parser/commit/6bf081fc9ffcbb44b4f2f00fda86606bab0c19f2))
-* update minutes and seconds methods to return float values and normalize fractions ([e324539](https://github.com/longitude-one/geo-parser/commit/e324539e24bdee12a708923a3d83857abc10d137))
+* Simplify symbol matching logic in Parser class ([e462dbf](https://github.com/longitude-one/geo-parser/commit/e462dbf2ce15d46875962bb933bea34be50c10a2))
+* Streamline cardinal direction handling in Parser class ([6bf081f](https://github.com/longitude-one/geo-parser/commit/6bf081fc9ffcbb44b4f2f00fda86606bab0c19f2))
+* Update minutes and seconds methods to return float values and normalize fractions ([e324539](https://github.com/longitude-one/geo-parser/commit/e324539e24bdee12a708923a3d83857abc10d137))
 
 ### 📚 Documentation
 
@@ -38,7 +55,7 @@ All notable changes to this project will be documented in this file. See [commit
 
 ### 🌳 Environmental Impact
 
-* **ci:** reduce cache storage ([cc0beeb](https://github.com/longitude-one/geo-parser/commit/cc0beeb0ead79dc12e7c6f63ea6febd2ebdde4a9))
+* **ci:** Reduce cache storage ([cc0beeb](https://github.com/longitude-one/geo-parser/commit/cc0beeb0ead79dc12e7c6f63ea6febd2ebdde4a9))
 
 ### 👷 CI/CD
 
