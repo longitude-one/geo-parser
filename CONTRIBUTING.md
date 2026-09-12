@@ -68,26 +68,3 @@ The following command runs the tests, enforces a 99% minimum line-coverage thres
 ```bash
 composer test
 ```
-
-## Docker (optional)
-
-Docker is an optional aid that provides the supported PHP 8.3 environment and PCOV. Install [Docker Desktop](https://www.docker.com/products/docker-desktop), then build and start the container:
-
-```bash
-docker compose build
-docker compose up -d
-```
-
-Prefix any Composer command above with `docker compose exec app`. For example:
-
-```bash
-docker compose exec app composer quality
-docker compose exec app composer fix
-docker compose exec app composer test-with-docker
-```
-
-When running tests in Docker, use `test-with-docker` to generate a local code-coverage report with paths rewritten from `/var/www`:
-
-```bash
-docker compose exec app composer test-with-docker
-```
