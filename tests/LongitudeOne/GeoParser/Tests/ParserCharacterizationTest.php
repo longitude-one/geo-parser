@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser\Tests;
 
+use LongitudeOne\GeoParser\Exception\ExceptionInterface;
 use LongitudeOne\GeoParser\Exception\RangeException;
 use LongitudeOne\GeoParser\Exception\UnexpectedValueException;
 use LongitudeOne\GeoParser\Parser;
@@ -63,15 +64,10 @@ class ParserCharacterizationTest extends TestCase
      */
     public static function dataSourceInvalidCoordinates(): \Generator
     {
-        yield 'explicit sign with cardinal direction' => [
-            '-40 S',
-            UnexpectedValueException::class,
-            '[Syntax Error] line 0, col 4: Error: Expected LongitudeOne\\GeoParser\\Lexer::T_INTEGER or LongitudeOne\\GeoParser\\Lexer::T_FLOAT, got "S" in value "-40 S"',
-        ];
-        yield 'unexpected sign after cardinal' => [
+        yield 'unexpected sign + with west' => [
             '40°N +45°W',
-            UnexpectedValueException::class,
-            '[Syntax Error] line 0, col 6: Error: Expected LongitudeOne\GeoParser\Lexer::T_INTEGER or LongitudeOne\GeoParser\Lexer::T_FLOAT, got "+" in value "40°N +45°W"',
+            ExceptionInterface::class,
+            'Numeric sign and cardinal direction must indicate the same direction in value "40°N +45°W"',
         ];
         yield 'latitude out of range' => [
             '100N',

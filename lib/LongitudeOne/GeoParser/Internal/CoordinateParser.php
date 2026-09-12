@@ -104,7 +104,7 @@ final class CoordinateParser
     /**
      * Match a cardinal direction, validate its axis range, and apply its sign.
      */
-    private function cardinal(int|float $value): Coordinate
+    private function cardinal(int|float $value, ?int $sign): Coordinate
     {
         $axis = $this->nextAxis ?? match ($this->tokens->current()?->type) {
             Lexer::T_CARDINAL_LAT => AxisEnum::LATITUDE,
@@ -118,6 +118,10 @@ final class CoordinateParser
 
         $cardinal = $this->tokens->consumeCardinal($tokenType);
         $this->nextAxis = $cardinal->axis()->other();
+
+        if (null !== $sign && $sign !== $cardinal->sign()) {
+            throw new UnexpectedValueException(sprintf('Numeric sign and cardinal direction must indicate the same direction in value "%s".', $this->sanitizeForError($this->input)));
+        }
 
         if ($value > $axis->rangeLimit()) {
             throw new RangeException($this->input, match ($axis) {
@@ -146,17 +150,16 @@ final class CoordinateParser
     {
         $sign = null;
 
-        if (null === $this->nextAxis && $this->tokens->matchesAny([Lexer::T_PLUS, Lexer::T_MINUS])) {
+        if ($this->tokens->matchesAny([Lexer::T_PLUS, Lexer::T_MINUS])) {
             $sign = $this->sign();
         }
 
         $coordinate = $this->degrees();
-        $hasCardinal = null === $sign
-            && (null !== $this->nextAxis || ($this->isFirstCoordinate && $this->tokens->matchesAny([Lexer::T_CARDINAL_LAT, Lexer::T_CARDINAL_LON])));
+        $hasCardinal = null !== $this->nextAxis || ($this->isFirstCoordinate && $this->tokens->matchesAny([Lexer::T_CARDINAL_LAT, Lexer::T_CARDINAL_LON]));
         $this->isFirstCoordinate = false;
 
         if ($hasCardinal) {
-            return $this->cardinal($coordinate);
+            return $this->cardinal($coordinate, $sign);
         }
 
         $this->nextAxis = null;
