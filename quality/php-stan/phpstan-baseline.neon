@@ -4,10 +4,10 @@ parameters:
 			message: '#^Method LongitudeOne\\GeoParser\\Lexer\:\:getType\(\) never assigns int to &\$value so it can be removed from the @param\-out type\.$#'
 			identifier: paramOut.unusedType
 			count: 1
-			path: ../../lib/LongitudeOne/GeoParser/Lexer.php
+			path: ../../lib/Lexer.php
 
 		-
 			message: '#^Method LongitudeOne\\GeoParser\\Tests\\LexerTest\:\:dataProvider\(\) return type with generic class Doctrine\\Common\\Lexer\\Token does not specify its types\: T, V$#'
 			identifier: missingType.generics
 			count: 1
-			path: ../../tests/LongitudeOne/GeoParser/Tests/LexerTest.php
+			path: ../../tests/LexerTest.php
