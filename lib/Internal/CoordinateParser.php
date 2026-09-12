@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser\Internal;
 
+use LongitudeOne\Core\Diagnostic\DiagnosticValueFormatter;
 use LongitudeOne\Core\Enum\AxisEnum;
 use LongitudeOne\GeoParser\Coordinate;
 use LongitudeOne\GeoParser\Exception\LogicException;
@@ -28,11 +29,6 @@ use LongitudeOne\GeoParser\Point;
  */
 final class CoordinateParser
 {
-    /**
-     * Maximum length of a value embedded in an exception message.
-     */
-    private const MAX_ERROR_VALUE_LENGTH = 100;
-
     /**
      * Whether an optional colon or degree symbol can still be matched.
      */
@@ -120,7 +116,7 @@ final class CoordinateParser
         $this->nextAxis = $cardinal->axis()->other();
 
         if (null !== $sign && $sign !== $cardinal->sign()) {
-            throw new UnexpectedValueException(sprintf('Numeric sign and cardinal direction must indicate the same direction in value "%s".', $this->sanitizeForError($this->input)));
+            throw new UnexpectedValueException(sprintf('Numeric sign and cardinal direction must indicate the same direction in value "%s".', DiagnosticValueFormatter::format($this->input)));
         }
 
         if ($value > $axis->rangeLimit()) {
@@ -256,20 +252,6 @@ final class CoordinateParser
     }
 
     /**
-     * Strip control characters and truncate a value before embedding it in an error message.
-     */
-    private function sanitizeForError(string $value): string
-    {
-        $value = (string) preg_replace('/[\x00-\x1F\x7F]/', ' ', $value);
-
-        if (strlen($value) > self::MAX_ERROR_VALUE_LENGTH) {
-            return substr($value, 0, self::MAX_ERROR_VALUE_LENGTH).'...';
-        }
-
-        return $value;
-    }
-
-    /**
      * Match plus or minus sign and return its coefficient.
      */
     private function sign(): int
@@ -292,14 +274,14 @@ final class CoordinateParser
     {
         $expected = sprintf('Expected %s, got', $expected);
         $token = $this->tokens->current();
-        $found = null === $token ? 'end of string.' : sprintf('"%s"', $this->sanitizeForError((string) $token->value));
+        $found = null === $token ? 'end of string.' : sprintf('"%s"', DiagnosticValueFormatter::format((string) $token->value));
 
         $message = sprintf(
             '[Syntax Error] line 0, col %d: Error: %s %s in value "%s"',
             $token->position ?? -1,
             $expected,
             $found,
-            $this->sanitizeForError($this->input)
+            DiagnosticValueFormatter::format($this->input)
         );
 
         return new UnexpectedValueException($message);

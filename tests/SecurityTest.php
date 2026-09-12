@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser\Tests;
 
+use LongitudeOne\Core\Diagnostic\DiagnosticValueFormatter;
 use LongitudeOne\GeoParser\Exception\ExceptionInterface;
 use LongitudeOne\GeoParser\Exception\InvalidArgumentException;
 use LongitudeOne\GeoParser\Exception\RangeException;
@@ -113,11 +114,8 @@ class SecurityTest extends TestCase
 
     /**
      * The exception message must not grow proportionally to the size of the
-     * attacker-controlled input: today the offending token and the full input
-     * are both copied verbatim into the message, so a large invalid payload
-     * produces a message of a similar size.
-     *
-     * This test currently fails: there is no bound on the message length.
+     * attacker-controlled input. The offending token and full input are each
+     * bounded by the shared formatter's character limit.
      */
     public function testExceptionMessageLengthIsBounded(): void
     {
@@ -127,9 +125,13 @@ class SecurityTest extends TestCase
             (new Parser($input))->parse();
             self::fail('Expected an UnexpectedValueException to be thrown.');
         } catch (UnexpectedValueException $exception) {
+            $truncated = str_repeat('x', DiagnosticValueFormatter::MAX_LENGTH - 1).'…';
+
+            self::assertSame(2, substr_count($exception->getMessage(), '"'.$truncated.'"'));
+            self::assertStringNotContainsString($input, $exception->getMessage());
             self::assertLessThan(
-                1000,
-                strlen($exception->getMessage()),
+                2 * DiagnosticValueFormatter::MAX_LENGTH + 200,
+                mb_strlen($exception->getMessage()),
                 'Exception message length grows with the attacker-controlled input length.'
             );
         }
@@ -213,13 +215,14 @@ class SecurityTest extends TestCase
      */
     public function testRangeExceptionTruncatesLongValue(): void
     {
-        $value = str_repeat('9', 200);
+        $value = str_repeat('9', DiagnosticValueFormatter::MAX_LENGTH + 1);
 
         $exception = new RangeException($value, RangeException::LATITUDE_OUT_OF_RANGE);
 
         self::assertStringNotContainsString($value, $exception->getMessage());
-        self::assertStringContainsString('...', $exception->getMessage());
-        self::assertLessThan(200, strlen($exception->getMessage()));
+        $truncated = str_repeat('9', DiagnosticValueFormatter::MAX_LENGTH - 1).'…';
+
+        self::assertSame('[RangeException] Latitude must be between -90 and 90, got "'.$truncated.'".', $exception->getMessage());
     }
 
     /**

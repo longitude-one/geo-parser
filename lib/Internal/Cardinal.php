@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser\Internal;
 
+use LongitudeOne\Core\Diagnostic\DiagnosticValueFormatter;
 use LongitudeOne\Core\Enum\AxisEnum;
 use LongitudeOne\GeoParser\Exception\LogicException;
 
@@ -38,7 +39,7 @@ enum Cardinal: string
             self::NORTH->value => self::NORTH,
             self::SOUTH->value => self::SOUTH,
             self::WEST->value => self::WEST,
-            default => throw new LogicException(sprintf('Token "%s" is not a cardinal direction.', $token)),
+            default => throw new LogicException(sprintf('Token "%s" is not a cardinal direction.', DiagnosticValueFormatter::format($token))),
         };
     }
 

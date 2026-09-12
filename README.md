@@ -160,6 +160,9 @@ including their type, without passing through the lexer or geographic range vali
 
 ## Exceptions
 
+Untrusted values in exception messages are formatted by spatial-core's `DiagnosticValueFormatter`:
+control characters and invalid UTF-8 bytes are escaped, and each value is limited to 2,048 characters.
+
 Library exceptions thrown by the `Lexer` and `Parser` implement the
 `LongitudeOne\GeoParser\Exception\ExceptionInterface` interface:
 
