@@ -194,14 +194,10 @@ final class CoordinateParser
     }
 
     /**
-     * Match a token and return its value.
+     * Consume a token whose type has already been checked by the caller.
      */
     private function match(int $token): string|int
     {
-        if (!$this->tokens->matches($token)) {
-            throw $this->syntaxError($this->tokens->literal($token));
-        }
-
         return $this->tokens->consume($token)->value;
     }
 

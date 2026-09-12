@@ -17,6 +17,7 @@ use LongitudeOne\GeoParser\Exception\ExceptionInterface;
 use LongitudeOne\GeoParser\Exception\RangeException;
 use LongitudeOne\GeoParser\Exception\UnexpectedValueException;
 use LongitudeOne\GeoParser\Parser;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\TestCase;
 
@@ -29,6 +30,20 @@ use PHPUnit\Framework\TestCase;
  */
 class ParserInvalidInputTest extends TestCase
 {
+    /**
+     * @return \Generator<string, array{string}, null, void>
+     */
+    public static function malformedSignsAndSeparators(): \Generator
+    {
+        yield 'missing second coordinate' => ['40,'];
+        yield 'duplicate comma' => ['40,,75'];
+        yield 'missing first coordinate' => [',75'];
+        yield 'positive sign without value' => ['+'];
+        yield 'negative sign without value' => ['-'];
+        yield 'contradictory signs' => ['+-40'];
+        yield 'sign before separator' => ['40,-,75'];
+    }
+
     /**
      * Structured parsing shares the same grammar rather than introducing a
      * second validation path. Keep its failure contract in lockstep with
@@ -70,6 +85,24 @@ class ParserInvalidInputTest extends TestCase
         self::expectExceptionMessage('Latitude must be between -90 and 90');
 
         (new Parser('100N'))->parseAsCoordinates();
+    }
+
+    /**
+     * Invalid user input must fail through syntax validation, without reaching
+     * the internal token-consumption guard, for either public parsing API.
+     */
+    #[DataProvider('malformedSignsAndSeparators')]
+    public function testRejectsMalformedSignsAndSeparators(string $input): void
+    {
+        foreach (['parse', 'parseAsCoordinates'] as $method) {
+            try {
+                (new Parser($input))->{$method}();
+                self::fail('Expected a syntax error for malformed coordinates.');
+            } catch (UnexpectedValueException $exception) {
+                self::assertStringStartsWith('[Syntax Error]', $exception->getMessage());
+                self::assertStringContainsString('in value "'.$input.'"', $exception->getMessage());
+            }
+        }
     }
 
     /**
