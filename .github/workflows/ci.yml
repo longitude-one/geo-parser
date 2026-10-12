@@ -75,9 +75,9 @@ jobs:
             - name: Install PHP-MESS-DETECTOR
               run: composer update --working-dir=quality/php-mess-detector
             - name: Run PHP-MESS-DETECTOR on lib directory
-              run: ./quality/php-mess-detector/vendor/bin/phpmd lib text quality/php-mess-detector/ruleset.xml
+              run: ./quality/php-mess-detector/vendor/bin/phpmd analyze lib --ruleset quality/php-mess-detector/ruleset.yml --format text
             - name: Run PHP-MESS-DETECTOR on tests directory
-              run: ./quality/php-mess-detector/vendor/bin/phpmd tests text quality/php-mess-detector/test-ruleset.xml
+              run: ./quality/php-mess-detector/vendor/bin/phpmd analyze tests --ruleset quality/php-mess-detector/test-ruleset.yml --format text
 
             ## PHP-STAN
             - name: Install PHP-STAN

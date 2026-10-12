@@ -15,7 +15,7 @@ Tests use the `LongitudeOne\GeoParser\Tests\` namespace, mapped to `tests/`. Qua
 - `composer fix` applies the configured PHP-CS-Fixer rules.
 - `composer update-quality-tools` updates project and quality-tool dependencies; review lockfile changes carefully.
 
-Install project dependencies with `composer install`. Quality tools have separate Composer projects in `quality/php-cs-fixer/`, `quality/php-stan/`, and `quality/php-mess-detector/`; run `composer install --working-dir=<directory>` for each before running quality checks. PHPMD currently requires `^2.15`; dependency migrations must be assessed explicitly.
+Install project dependencies with `composer install`. Quality tools have separate Composer projects in `quality/php-cs-fixer/`, `quality/php-stan/`, and `quality/php-mess-detector/`; run `composer install --working-dir=<directory>` for each before running quality checks. PHPMD requires `^3.0.0` and uses YAML rulesets through the `analyze` command; dependency migrations must be assessed explicitly.
 
 ## Coding Style & Naming Conventions
 
@@ -35,4 +35,4 @@ Pull requests should explain what changed and why, link the relevant issue when 
 
 `main` and `dev` are protected: do not push directly to them. Publish changes on a working branch and open a pull request. Stay on the current working branch unless the task requires switching branches.
 
-The workflow in `.github/workflows/ci.yml` runs only on `pull_request`; it has no longer push job. Changes limited to Markdown files or `LICENSE` do not trigger CI. The stable PHP 8.3 job runs coverage and quality checks; the remaining jobs test newer PHP versions and development versions of Doctrine Lexer after the stable job succeeds.
+The workflow in `.github/workflows/ci.yml` runs on `pull_request` and every Friday at 17:00 UTC (`0 17 * * 5`); it has no push trigger. Pull requests limited to Markdown files or `LICENSE` do not trigger CI. The stable PHP 8.3 job runs coverage and quality checks; the remaining jobs test newer PHP versions and development versions of Doctrine Lexer after the stable job succeeds.
