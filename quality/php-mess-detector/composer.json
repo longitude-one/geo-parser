@@ -1,5 +1,5 @@
 {
     "require": {
-        "phpmd/phpmd": "^2.15"
+        "phpmd/phpmd": "^3.0.0"
     }
 }
