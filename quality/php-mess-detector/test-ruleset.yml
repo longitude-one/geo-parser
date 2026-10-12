@@ -1,0 +1,18 @@
+# PHPMD configuration, see https://phpmd.org/documentation/creating-a-ruleset.html
+name: 'LongitudeOne GeoParser rule set'
+description: 'Specific custom rule set that checks longitude-one/geo-parser test code.'
+rules:
+  - ref: rulesets/unusedcode.xml
+  - ref: rulesets/codesize.xml
+    exclude:
+      # There never are too much asserts in tests.
+      - ExcessiveMethodLength
+  - ref: rulesets/codesize.xml/ExcessiveMethodLength
+    properties:
+      maximum: 120
+  - ref: rulesets/naming.xml
+    exclude:
+      # Test methods are allowed to have long names. Method names are used to describe the test case.
+      - LongMethodName
+  - ref: rulesets/controversial.xml
+  - ref: rulesets/design.xml
