@@ -1,6 +1,8 @@
 name: PHP CI
 
 on:
+    schedule:
+        - cron: '0 17 * * 5'
     pull_request:
         paths-ignore:
             - '**.md'

@@ -2,11 +2,11 @@
 
 ## Project Structure & Module Organization
 
-This is a PHP 8.3 library for parsing geographic coordinate strings. Code uses PSR-0 paths under `lib/LongitudeOne/GeoParser/`; public entry points include `Lexer`, `Parser`, and `AxisEnum`. Version 4.0.0 also exposes `Coordinate` and `Point` through `Parser::parseAsCoordinates()`. Keep parser implementation details in `lib/LongitudeOne/GeoParser/Internal/` and library exceptions in `Exception/`.
+This library parses geographic coordinate strings and requires PHP 8.3 or later; CI tests PHP 8.3, 8.4, and 8.5. Code uses PSR-4: `LongitudeOne\GeoParser\` maps to `lib/`. Public classes include `Lexer`, `Parser`, `Coordinate`, and `Point`. The axis enum is `LongitudeOne\Core\Enum\AxisEnum`, provided by `longitude-one/spatial-core`. Keep parser implementation details in `lib/Internal/` and library exceptions in `lib/Exception/`.
 
 `parse()` returns a scalar or numeric pair. `parseAsCoordinates()` returns a `Coordinate` or `Point`; an axis is present only when the input explicitly contains `N`, `S`, `E`, or `W`.
 
-Tests mirror the namespace in `tests/LongitudeOne/GeoParser/Tests/`. Quality-tool configuration lives in `quality/`; `phpunit.xml.dist` defines the test suite and coverage output. Docker support is in `docker/` and `compose.yaml`.
+Tests use the `LongitudeOne\GeoParser\Tests\` namespace, mapped to `tests/`. Quality-tool configuration lives in `quality/`; `phpunit.xml.dist` defines the test suite and coverage output under `.phpunit.cache/`. The repository no longer provides a Docker environment.
 
 ## Build, Test, and Development Commands
 
@@ -15,11 +15,11 @@ Tests mirror the namespace in `tests/LongitudeOne/GeoParser/Tests/`. Quality-too
 - `composer fix` applies the configured PHP-CS-Fixer rules.
 - `composer update-quality-tools` updates project and quality-tool dependencies; review lockfile changes carefully.
 
-To use the supported container environment, run `docker compose build`, `docker compose up -d`, then prefix commands with `docker compose exec app`. Use `docker compose exec app composer test-with-docker` for Docker coverage paths.
+Install project dependencies with `composer install`. Quality tools have separate Composer projects in `quality/php-cs-fixer/`, `quality/php-stan/`, and `quality/php-mess-detector/`; run `composer install --working-dir=<directory>` for each before running quality checks. PHPMD currently requires `^2.15`; dependency migrations must be assessed explicitly.
 
 ## Coding Style & Naming Conventions
 
-Follow the PHP-CS-Fixer configuration exactly: Symfony-style formatting, `declare(strict_types=1);`, and the standard project copyright header in every PHP file. Use four spaces, typed properties and return types, and PSR-0 namespaces beginning with `LongitudeOne\GeoParser`.
+Follow the PHP-CS-Fixer configuration exactly: Symfony-style formatting, `declare(strict_types=1);`, and the standard project copyright header in every PHP file. Use four spaces, typed properties and return types, and PSR-4 namespaces beginning with `LongitudeOne\GeoParser`.
 
 Name classes in `PascalCase`, methods in `camelCase`, and test files as `<Subject>Test.php`. Keep public API changes limited to documented supported classes; other implementation classes are internal and may change.
 
@@ -32,3 +32,7 @@ Write PHPUnit tests with `PHPUnit\Framework\TestCase`; use data providers for co
 Use Conventional Commits: `type(scope): description`, for example `fix(parser): reject invalid cardinal pair`. Common types are `feat`, `fix`, `refactor`, `docs`, `quality`, `test`, `ci`, and `chore`. Keep commits focused.
 
 Pull requests should explain what changed and why, link the relevant issue when available, and include tests that demonstrate fixes or new behavior. Update documentation when public behavior or supported formats change.
+
+`main` and `dev` are protected: do not push directly to them. Publish changes on a working branch and open a pull request. Stay on the current working branch unless the task requires switching branches.
+
+The workflow in `.github/workflows/ci.yml` runs only on `pull_request`; it has no longer push job. Changes limited to Markdown files or `LICENSE` do not trigger CI. The stable PHP 8.3 job runs coverage and quality checks; the remaining jobs test newer PHP versions and development versions of Doctrine Lexer after the stable job succeeds.
