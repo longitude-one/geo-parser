@@ -51,15 +51,24 @@ jobs:
 
             - name: Run test suite and with coverage for PHP 8.3
               run: |
-                composer run-script test
-                cat .phpunit.cache/coverage-results.txt
+                composer coverage
+                composer coverage-check
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v7
+              with:
+                  node-version: '22'
+            - name: Install Markdown tools
+              run: npm install --ignore-scripts
+            - name: Check Markdown
+              run: composer markdown
 
             - name: Upload coverage to CodeCov
               if: ${{ env.HAS_CC_SECRET == 'true' }}
               uses: codecov/codecov-action@v7
               with:
                 token: ${{ secrets.CODECOV_TOKEN }}
-                files: .phpunit.cache/coverage.xml
+                files: build/coverage/clover.xml
                 slug: longitude-one/geo-parser
 
 
@@ -132,7 +141,7 @@ jobs:
               run: composer show
 
             - name: Run tests for forks or version without code coverage
-              run: vendor/bin/phpunit
+              run: composer test
     dev-version-build:
         needs: stable-build
         runs-on: ubuntu-latest
@@ -174,4 +183,4 @@ jobs:
               run: composer show
 
             - name: Run tests for forks or version without code coverage
-              run: vendor/bin/phpunit
+              run: composer test

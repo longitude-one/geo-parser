@@ -6,14 +6,14 @@ This library parses geographic coordinate strings and requires PHP 8.3 or later;
 
 `parse()` returns a scalar or numeric pair. `parseAsCoordinates()` returns a `Coordinate` or `Point`; an axis is present only when the input explicitly contains `N`, `S`, `E`, or `W`.
 
-Tests use the `LongitudeOne\GeoParser\Tests\` namespace, mapped to `tests/`. Quality-tool configuration lives in `quality/`; `phpunit.xml.dist` defines the test suite and coverage output under `.phpunit.cache/`. The repository no longer provides a Docker environment.
+Tests use the `LongitudeOne\GeoParser\Tests\` namespace, mapped to `tests/`. Quality-tool configuration lives in `quality/`; `phpunit.xml.dist` defines the test suite and coverage output under `build/coverage/`. The repository no longer provides a Docker environment.
 
 ## Build, Test, and Development Commands
 
-- `composer test` runs PHPUnit, enforces 99% line coverage, and prints the summary. It requires PHP, Composer, and PCOV/Xdebug coverage support.
+- `composer test` runs PHPUnit without coverage. Use `composer coverage` and `composer coverage-check` for reports and the 99% coverage threshold.
 - `composer quality` runs PHP-CS-Fixer in check mode, PHPStan at level 9, and PHPMD against code and tests.
-- `composer fix` applies the configured PHP-CS-Fixer rules.
-- `composer update-quality-tools` updates project and quality-tool dependencies; review lockfile changes carefully.
+- `composer cs-fix` applies the configured PHP-CS-Fixer rules.
+- `composer update-tools` updates only the four isolated quality-tool environments; review lockfile changes carefully.
 
 Install project dependencies with `composer install`. Quality tools have separate Composer projects in `quality/php-cs-fixer/`, `quality/php-stan/`, and `quality/php-mess-detector/`; run `composer install --working-dir=<directory>` for each before running quality checks. PHPMD requires `^3.0.0` and uses YAML rulesets through the `analyze` command; dependency migrations must be assessed explicitly.
 

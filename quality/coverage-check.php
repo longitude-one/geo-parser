@@ -12,9 +12,10 @@
 
 declare(strict_types=1);
 
-const MINIMUM_LINE_COVERAGE = 99.0;
+// A zero minimum validates the report without introducing a coverage threshold.
+$minimumLineCoverage = isset($argv[2]) ? (float) $argv[2] : 0.0;
 
-$coverageFile = $argv[1] ?? '.phpunit.cache/coverage.xml';
+$coverageFile = $argv[1] ?? 'build/coverage/clover.xml';
 
 if (!is_file($coverageFile)) {
     fwrite(\STDERR, sprintf("Coverage report not found: %s\n", $coverageFile));
@@ -48,9 +49,9 @@ if (0 === $statements) {
 
 $lineCoverage = 100 * $coveredStatements / $statements;
 
-printf("Line coverage: %.2f%% (minimum: %.2f%%)\n", $lineCoverage, MINIMUM_LINE_COVERAGE);
+printf("Line coverage: %.2f%% (minimum: %.2f%%)\n", $lineCoverage, $minimumLineCoverage);
 
-if ($lineCoverage < MINIMUM_LINE_COVERAGE) {
+if ($lineCoverage < $minimumLineCoverage) {
     fwrite(\STDERR, "Line coverage is below the required minimum.\n");
 
     exit(1);
