@@ -1,10 +1,8 @@
 includes:
-#    - vendor/phpstan/phpstan-doctrine/extension.neon
-#    - vendor/phpstan/phpstan-doctrine/rules.neon
 #    - vendor/phpstan/phpstan-phpunit/rules.neon
-#    - vendor/phpstan/phpstan-phpunit/extension.neon
      - phpstan-baseline.neon
 parameters:
+    treatPhpDocTypesAsCertain: false
     paths:
         - ../../quality
         - ../../lib
