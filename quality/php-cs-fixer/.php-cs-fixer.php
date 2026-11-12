@@ -1,15 +1,18 @@
 <?php
 
+/*
+ * This file is part of the LongitudeOne Spatial project.
+ *
+ * Copyright (c) 2024-2026 Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * Copyright (c) 2014-2019 Derek J. Lambert (creof/geo-parser)
+ *
+ * See LICENSE for copyright and license information.
+ *
+ */
+
 declare(strict_types=1);
 
-/**
- * This file is part of the LongitudeOne GeoParser project.
- *
- * PHP 8.3 | 8.4 | 8.5
- *
- * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024-2026.
- */
+
 
 // Replace the value of this variable with the project's launch year.
 $firstYear = 2024;
@@ -18,7 +21,7 @@ function __copyright(int $launchYear): string
 {
     $currentYear = (int) date('Y');
     if ($currentYear === $launchYear) {
-        return $currentYear;
+        return (string) $currentYear;
     }
 
     return "$launchYear-$currentYear";
@@ -31,19 +34,39 @@ $finder = PhpCsFixer\Finder::create()
     ->in([
         __DIR__.'/../../lib/',
         __DIR__.'/../../tests/',
+        __DIR__.'/../../quality/',
     ])
     ->append([
         __FILE__,
-    ]);
+    ])
+;
 
 $config = new PhpCsFixer\Config();
 
 return $config->setRules([
     '@Symfony' => true,
+    '@Symfony:risky' => true,
+    '@autoPHPMigration' => true,
+    '@autoPHPMigration:risky' => true,
+    '@autoPHPUnitMigration:risky' => true,
     'declare_strict_types' => true,
+    // Keep parentheses for PHP 8.3 compatibility.
+    'new_expression_parentheses' => [
+        'use_parentheses' => true,
+    ],
+    'ordered_interfaces' => [
+        'direction' => 'ascend',
+        'order' => 'alpha',
+    ],
+    'php_unit_test_case_static_method_calls' => [
+        'call_type' => 'self',
+        'target' => 'newest',
+    ],
     'header_comment' => [
         'header' => $header,
-        'comment_type' => 'PHPDoc',
+        'comment_type' => 'comment',
+        'location' => 'after_open',
+        'separate' => 'bottom',
     ],
     'ordered_class_elements' => [
         'order' => [
@@ -60,6 +83,7 @@ return $config->setRules([
         'sort_algorithm' => 'alpha',
     ],
 ])
+    ->setRiskyAllowed(true)
     ->setFinder($finder)
     ->setCacheFile(__DIR__.'/.php_cs.cache')
 ;
