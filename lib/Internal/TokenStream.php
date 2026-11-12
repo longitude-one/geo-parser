@@ -33,6 +33,7 @@ final class TokenStream
     /**
      * Tokenize the input and position the cursor on its first token.
      *
+     * @param string     $input coordinate input to parse
      * @param Lexer|null $lexer optional lexer used for controlled internal tests
      */
     public function __construct(string $input, ?Lexer $lexer = null)
@@ -48,6 +49,8 @@ final class TokenStream
 
     /**
      * Consume the current token after confirming its type.
+     *
+     * @param int $type expected token type
      *
      * @return Token<int, int|string>
      */
@@ -70,6 +73,8 @@ final class TokenStream
 
     /**
      * Consume a cardinal token and return its direction details.
+     *
+     * @param int $type expected token type
      */
     public function consumeCardinal(int $type): Cardinal
     {
@@ -98,6 +103,8 @@ final class TokenStream
 
     /**
      * Return the lexer literal associated with a token type.
+     *
+     * @param int $type expected token type
      */
     public function literal(int $type): string
     {
@@ -106,6 +113,8 @@ final class TokenStream
 
     /**
      * Whether the current token has the given type.
+     *
+     * @param int $type expected token type
      */
     public function matches(int $type): bool
     {
@@ -115,7 +124,9 @@ final class TokenStream
     /**
      * Whether the current token has one of the given types.
      *
-     * @param list<int> $types token types to match
+     * @param int[] $types token types to match
+     *
+     * @phpstan-param list<int> $types
      */
     public function matchesAny(array $types): bool
     {

@@ -103,9 +103,11 @@ class ParserCharacterizationTest extends TestCase
     /**
      * Invalid input must continue to expose the same exception contract.
      *
-     * @param string                   $input     invalid coordinate input
-     * @param class-string<\Throwable> $exception expected exception class
-     * @param string                   $message   expected exception message
+     * @param string $input     invalid coordinate input
+     * @param string $exception expected exception class
+     * @param string $message   expected exception message
+     *
+     * @phpstan-param class-string<\Throwable> $exception
      */
     #[DataProvider('dataSourceInvalidCoordinates')]
     public function testInvalidInputMatchesCurrentExceptionContract(string $input, string $exception, string $message): void

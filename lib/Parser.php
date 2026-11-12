@@ -29,6 +29,8 @@ final class Parser
 
     /**
      * Create a parser with an optional coordinate input.
+     *
+     * @param string|int|float|null $input coordinate input to parse
      */
     public function __construct(string|int|float|null $input = null)
     {
@@ -37,6 +39,8 @@ final class Parser
 
     /**
      * Parse a native numeric value or textual coordinate input.
+     *
+     * @param string|int|float|null $input coordinate input to parse
      *
      * @return float|int|array<int, int|float>
      */
@@ -57,6 +61,11 @@ final class Parser
         return (new CoordinateParser($this->input))->parse();
     }
 
+    /**
+     * Parse As Coordinates.
+     *
+     * @param string|int|float|null $input coordinate input to parse
+     */
     public function parseAsCoordinates(string|int|float|null $input = null): Coordinate|Point
     {
         if (null !== $input) {

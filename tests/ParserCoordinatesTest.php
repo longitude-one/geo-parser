@@ -73,6 +73,9 @@ class ParserCoordinatesTest extends TestCase
      * Every accepted format is checked against an explicit structured result.
      * This prevents a change in token consumption from losing a cardinal axis,
      * or from inventing one where the grammar gives no such information.
+     *
+     * @param string|int       $input               coordinate input to parse
+     * @param Coordinate|Point $expectedCoordinates expected structured coordinates
      */
     #[DataProvider('dataSourceStructuredCoordinates')]
     public function testParseAsCoordinatesReturnsExpectedStructure(string|int $input, Coordinate|Point $expectedCoordinates): void

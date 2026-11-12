@@ -38,6 +38,11 @@ final class DiagnosticExceptionsTest extends TestCase
         yield 'long unicode' => [str_repeat('é', 3000)];
     }
 
+    /**
+     * Test Invalid Cardinal Formats Token.
+     *
+     * @param string $value coordinate or token value to process
+     */
     #[DataProvider('diagnosticValues')]
     public function testInvalidCardinalFormatsToken(string $value): void
     {
@@ -49,6 +54,11 @@ final class DiagnosticExceptionsTest extends TestCase
         }
     }
 
+    /**
+     * Test Parser Formats Every Untrusted Value.
+     *
+     * @param string $value coordinate or token value to process
+     */
     #[DataProvider('diagnosticValues')]
     public function testParserFormatsEveryUntrustedValue(string $value): void
     {
@@ -66,6 +76,11 @@ final class DiagnosticExceptionsTest extends TestCase
         }
     }
 
+    /**
+     * Test Range Exception Formats Value And Preserves Cause.
+     *
+     * @param string $value coordinate or token value to process
+     */
     #[DataProvider('diagnosticValues')]
     public function testRangeExceptionFormatsValueAndPreservesCause(string $value): void
     {

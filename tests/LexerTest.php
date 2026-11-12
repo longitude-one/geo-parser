@@ -151,7 +151,12 @@ class LexerTest extends TestCase
         ]];
     }
 
-    /** @param Token<int, string|int>[] $expectedTokens */
+    /**
+     * Tokenize coordinate input into the expected token sequence.
+     *
+     * @param string                   $input          coordinate input to tokenize
+     * @param Token<int, string|int>[] $expectedTokens expected token sequence
+     */
     #[DataProvider('dataProvider')]
     public function testLexer(string $input, array $expectedTokens): void
     {
@@ -163,6 +168,9 @@ class LexerTest extends TestCase
         }
     }
 
+    /**
+     * Test Reused Lexer.
+     */
     public function testReusedLexer(): void
     {
         $lexer = new Lexer();

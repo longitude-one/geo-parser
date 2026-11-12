@@ -32,6 +32,8 @@ enum Cardinal: string
 
     /**
      * Create a cardinal direction from a lexer token value.
+     *
+     * @param string $token token to inspect
      */
     public static function fromToken(string $token): self
     {

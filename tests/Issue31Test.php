@@ -69,6 +69,12 @@ final class Issue31Test extends TestCase
         }
     }
 
+    /**
+     * Test Normalizes Consistent Directions.
+     *
+     * @param string           $input    coordinate input to parse
+     * @param Coordinate|Point $expected expected parsing result
+     */
     #[DataProvider('acceptedInputs')]
     public function testNormalizesConsistentDirections(string $input, Coordinate|Point $expected): void
     {
@@ -81,7 +87,10 @@ final class Issue31Test extends TestCase
     }
 
     /**
-     * @param class-string<\Exception> $exception
+     * @param string $input     coordinate input to parse
+     * @param string $exception exception to use
+     *
+     * @phpstan-param class-string<\Exception> $exception
      */
     #[DataProvider('rejectedInputs')]
     public function testRejectsInvalidNumericInput(string $input, string $exception): void
@@ -92,7 +101,10 @@ final class Issue31Test extends TestCase
     }
 
     /**
-     * @param class-string<\Exception> $exception
+     * @param string $input     coordinate input to parse
+     * @param string $exception exception to use
+     *
+     * @phpstan-param class-string<\Exception> $exception
      */
     #[DataProvider('rejectedInputs')]
     public function testRejectsInvalidStructuredInput(string $input, string $exception): void

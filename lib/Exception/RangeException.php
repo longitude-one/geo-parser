@@ -31,6 +31,13 @@ class RangeException extends \RangeException implements ExceptionInterface
     public const SECONDS_MESSAGE = 'Seconds must be between 0 and 59';
     public const SECONDS_OUT_OF_RANGE = 60;
 
+    /**
+     * Create the instance with the supplied values.
+     *
+     * @param string          $value    coordinate or token value to process
+     * @param int             $code     code to use
+     * @param \Throwable|null $previous previous to use
+     */
     public function __construct(string $value, int $code, ?\Throwable $previous = null)
     {
         $message = \sprintf('[RangeException] %s, got "%s".', $this->setMessage($code), DiagnosticValueFormatter::format($value));
@@ -38,6 +45,11 @@ class RangeException extends \RangeException implements ExceptionInterface
         parent::__construct($message, $code, $previous);
     }
 
+    /**
+     * Set Message.
+     *
+     * @param int $code code to use
+     */
     private function setMessage(int $code): string
     {
         return match ($code) {

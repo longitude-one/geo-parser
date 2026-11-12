@@ -66,6 +66,8 @@ class SecurityTest extends TestCase
 
     /**
      * Generate a reproducible sequence of mixed coordinate-like input.
+     *
+     * @param int $case input category to verify
      */
     private static function fuzzInput(int $case): string
     {
@@ -83,6 +85,8 @@ class SecurityTest extends TestCase
     /**
      * An empty or blank input must fail cleanly with a syntax error, not a fatal
      * error, a warning, or a silent "empty" value.
+     *
+     * @param string $input coordinate input to parse
      */
     #[DataProvider('dataSourceEmptyOrBlank')]
     public function testEmptyOrBlankInputThrowsSyntaxError(string $input): void
@@ -143,6 +147,9 @@ class SecurityTest extends TestCase
      * plain integers) are currently accepted and returned as-is when there is no
      * cardinal direction to range-check against. This test documents today's
      * behaviour; it is not necessarily the desired behaviour.
+     *
+     * @param string $input    coordinate input to parse
+     * @param float  $expected expected parsing result
      */
     #[DataProvider('dataSourceExtremeValues')]
     public function testExtremeValueWithoutCardinalIsNotRangeChecked(string $input, float $expected): void
@@ -254,6 +261,9 @@ class SecurityTest extends TestCase
     /**
      * Assert that both public APIs reject malformed fuzz input only through
      * the library's documented exception hierarchy.
+     *
+     * @param Parser $parser parser instance under test
+     * @param string $input  coordinate input to parse
      */
     private function assertFuzzInputIsHandledByPublicApis(Parser $parser, string $input): void
     {
@@ -276,6 +286,9 @@ class SecurityTest extends TestCase
 
     /**
      * Assert that a very large malformed input is rejected by one public API.
+     *
+     * @param string $input         coordinate input to parse
+     * @param bool   $asCoordinates whether to exercise the structured-coordinate API
      */
     private function assertVeryLongInvalidInputIsRejected(string $input, bool $asCoordinates): void
     {

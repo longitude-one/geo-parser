@@ -55,6 +55,8 @@ final readonly class Angle
 
     /**
      * Normalize a fractional component while preserving the parser's historical precision.
+     *
+     * @param float $value coordinate or token value to process
      */
     private function normalizeFraction(float $value): float
     {

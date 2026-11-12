@@ -49,14 +49,24 @@ class FloatTest extends TestCase
         yield 'fractional seconds in a coordinate pair' => ["44°58'53.9\"N 93°19'25.7\"W", [44.98163888888889, -93.32380555555557]];
     }
 
-    /** @param float|array<int, float> $expected */
+    /**
+     * Normalize fractional minutes into decimal degrees.
+     *
+     * @param string                  $input    coordinate input to parse
+     * @param float|array<int, float> $expected expected parsing result
+     */
     #[DataProvider('dataSourceFractionalMinutes')]
     public function testFractionalMinutesAreNormalized(string $input, float|array $expected): void
     {
         self::assertSame($expected, (new Parser($input))->parse());
     }
 
-    /** @param float|array<int, float> $expected */
+    /**
+     * Normalize fractional seconds into decimal degrees.
+     *
+     * @param string                  $input    coordinate input to parse
+     * @param float|array<int, float> $expected expected parsing result
+     */
     #[DataProvider('dataSourceFractionalSeconds')]
     public function testFractionalSecondsAreNormalized(string $input, float|array $expected): void
     {

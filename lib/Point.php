@@ -21,6 +21,9 @@ final readonly class Point
 {
     /**
      * Create a point from its first and second coordinates.
+     *
+     * @param Coordinate $first  first coordinate of the pair
+     * @param Coordinate $second second coordinate of the pair
      */
     public function __construct(
         private readonly Coordinate $first,

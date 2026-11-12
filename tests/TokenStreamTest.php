@@ -41,6 +41,8 @@ class TokenStreamTest extends TestCase
 
     /**
      * Token literals must be available for parser error messages.
+     *
+     * @param Lexer|null $lexer lexer to use
      */
     #[DataProvider('dataSourceLexers')]
     public function testExposesTokenLiteral(?Lexer $lexer): void
@@ -53,6 +55,8 @@ class TokenStreamTest extends TestCase
     /**
      * The stream must expose the current token, glimpse ahead, and advance
      * without leaking the lexer's cursor mechanics to its caller.
+     *
+     * @param Lexer|null $lexer lexer to use
      */
     #[DataProvider('dataSourceLexers')]
     public function testReadsAndConsumesTokens(?Lexer $lexer): void
@@ -76,6 +80,8 @@ class TokenStreamTest extends TestCase
 
     /**
      * The stream must reject an attempt to consume a token of the wrong type.
+     *
+     * @param Lexer|null $lexer lexer to use
      */
     #[DataProvider('dataSourceLexers')]
     public function testRejectsUnexpectedTokenConsumption(?Lexer $lexer): void
