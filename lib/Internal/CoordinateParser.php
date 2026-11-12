@@ -1,15 +1,18 @@
 <?php
 
+/*
+ * This file is part of the LongitudeOne Spatial project.
+ *
+ * Copyright (c) 2024-2026 Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * Copyright (c) 2014-2019 Derek J. Lambert (creof/geo-parser)
+ *
+ * See LICENSE for copyright and license information.
+ *
+ */
+
 declare(strict_types=1);
 
-/**
- * This file is part of the LongitudeOne GeoParser project.
- *
- * PHP 8.3 | 8.4 | 8.5
- *
- * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024-2026.
- */
+
 
 namespace LongitudeOne\GeoParser\Internal;
 
@@ -105,7 +108,7 @@ final class CoordinateParser
         $axis = $this->nextAxis ?? match ($this->tokens->current()?->type) {
             Lexer::T_CARDINAL_LAT => AxisEnum::LATITUDE,
             Lexer::T_CARDINAL_LON => AxisEnum::LONGITUDE,
-            default => throw new LogicException(sprintf('Token type %d is not a cardinal direction.', $this->tokens->current()?->type)),
+            default => throw new LogicException(\sprintf('Token type %d is not a cardinal direction.', $this->tokens->current()?->type)),
         };
         $tokenType = $this->cardinalTokenType($axis);
         if (!$this->tokens->matches($tokenType)) {
@@ -116,7 +119,7 @@ final class CoordinateParser
         $this->nextAxis = $cardinal->axis()->other();
 
         if (null !== $sign && $sign !== $cardinal->sign()) {
-            throw new UnexpectedValueException(sprintf('Numeric sign and cardinal direction must indicate the same direction in value "%s".', DiagnosticValueFormatter::format($this->input)));
+            throw new UnexpectedValueException(\sprintf('Numeric sign and cardinal direction must indicate the same direction in value "%s".', DiagnosticValueFormatter::format($this->input)));
         }
 
         if ($value > $axis->rangeLimit()) {
@@ -268,11 +271,11 @@ final class CoordinateParser
      */
     private function syntaxError(string $expected): UnexpectedValueException
     {
-        $expected = sprintf('Expected %s, got', $expected);
+        $expected = \sprintf('Expected %s, got', $expected);
         $token = $this->tokens->current();
-        $found = null === $token ? 'end of string.' : sprintf('"%s"', DiagnosticValueFormatter::format((string) $token->value));
+        $found = null === $token ? 'end of string.' : \sprintf('"%s"', DiagnosticValueFormatter::format((string) $token->value));
 
-        $message = sprintf(
+        $message = \sprintf(
             '[Syntax Error] line 0, col %d: Error: %s %s in value "%s"',
             $token->position ?? -1,
             $expected,

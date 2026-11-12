@@ -1,15 +1,18 @@
 <?php
 
+/*
+ * This file is part of the LongitudeOne Spatial project.
+ *
+ * Copyright (c) 2024-2026 Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * Copyright (c) 2014-2019 Derek J. Lambert (creof/geo-parser)
+ *
+ * See LICENSE for copyright and license information.
+ *
+ */
+
 declare(strict_types=1);
 
-/**
- * This file is part of the LongitudeOne GeoParser project.
- *
- * PHP 8.3 | 8.4 | 8.5
- *
- * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024-2026.
- */
+
 
 namespace LongitudeOne\GeoParser\Internal;
 
@@ -53,7 +56,7 @@ final class TokenStream
     public function consume(int $type): Token
     {
         if (!$this->matches($type)) {
-            throw new LogicException(sprintf('Cannot consume token type %d.', $type));
+            throw new LogicException(\sprintf('Cannot consume token type %d.', $type));
         }
 
         $this->lexer->moveNext();

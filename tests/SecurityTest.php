@@ -1,15 +1,18 @@
 <?php
 
+/*
+ * This file is part of the LongitudeOne Spatial project.
+ *
+ * Copyright (c) 2024-2026 Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * Copyright (c) 2014-2019 Derek J. Lambert (creof/geo-parser)
+ *
+ * See LICENSE for copyright and license information.
+ *
+ */
+
 declare(strict_types=1);
 
-/**
- * This file is part of the LongitudeOne GeoParser project.
- *
- * PHP 8.3 | 8.4 | 8.5
- *
- * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024-2026.
- */
+
 
 namespace LongitudeOne\GeoParser\Tests;
 
@@ -72,8 +75,8 @@ class SecurityTest extends TestCase
         $length = 1 + $case % 96;
 
         for ($position = 0; $position < $length; ++$position) {
-            $byte = hash('sha256', sprintf('%d:%d', $case, $position), true)[0];
-            $input .= self::FUZZ_CHARACTERS[ord($byte) % strlen(self::FUZZ_CHARACTERS)];
+            $byte = hash('sha256', \sprintf('%d:%d', $case, $position), true)[0];
+            $input .= self::FUZZ_CHARACTERS[\ord($byte) % \strlen(self::FUZZ_CHARACTERS)];
         }
 
         return $input;
@@ -261,7 +264,7 @@ class SecurityTest extends TestCase
         } catch (ExceptionInterface) {
             self::addToAssertionCount(1);
         } catch (\Throwable $exception) {
-            self::fail(sprintf('Parser::parse() threw %s for fuzz input %s.', $exception::class, bin2hex($input)));
+            self::fail(\sprintf('Parser::parse() threw %s for fuzz input %s.', $exception::class, bin2hex($input)));
         }
 
         try {
@@ -269,7 +272,7 @@ class SecurityTest extends TestCase
         } catch (ExceptionInterface) {
             self::addToAssertionCount(1);
         } catch (\Throwable $exception) {
-            self::fail(sprintf('Parser::parseAsCoordinates() threw %s for fuzz input %s.', $exception::class, bin2hex($input)));
+            self::fail(\sprintf('Parser::parseAsCoordinates() threw %s for fuzz input %s.', $exception::class, bin2hex($input)));
         }
     }
 

@@ -1,15 +1,18 @@
 <?php
 
+/*
+ * This file is part of the LongitudeOne Spatial project.
+ *
+ * Copyright (c) 2024-2026 Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * Copyright (c) 2014-2019 Derek J. Lambert (creof/geo-parser)
+ *
+ * See LICENSE for copyright and license information.
+ *
+ */
+
 declare(strict_types=1);
 
-/**
- * This file is part of the LongitudeOne GeoParser project.
- *
- * PHP 8.3 | 8.4 | 8.5
- *
- * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024-2026.
- */
+
 
 namespace LongitudeOne\GeoParser\Tests;
 
@@ -33,7 +36,7 @@ final class Issue31Test extends TestCase
     public static function acceptedInputs(): \Generator
     {
         foreach (['N' => AxisEnum::LATITUDE, 'S' => AxisEnum::LATITUDE, 'E' => AxisEnum::LONGITUDE, 'W' => AxisEnum::LONGITUDE] as $cardinal => $axis) {
-            $sign = in_array($cardinal, ['S', 'W'], true) ? '-' : '+';
+            $sign = \in_array($cardinal, ['S', 'W'], true) ? '-' : '+';
             $factor = '-' === $sign ? -1 : 1;
             foreach (['40' => 40, '40.5' => 40.5, "40°30'" => 40.5, '40°30′36″' => 40.51, '40:30:36' => 40.51, '1e-5' => 0.00001, '0' => 0] as $angle => $value) {
                 yield $sign.$angle.$cardinal => [$sign.$angle.$cardinal, new Coordinate($factor * $value, $axis)];
