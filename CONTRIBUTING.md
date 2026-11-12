@@ -100,3 +100,23 @@ lockfiles remain local and ignored.
 | `composer check` | Run all checks |
 
 The coverage threshold is 99%.
+
+## Continuous integration
+
+Pull requests run the supported PHP combinations and a separate Markdown check
+when relevant files change. Superseded pull request runs are cancelled.
+The `CI` check summarizes the relevant jobs, including documentation-only changes.
+
+CI uses `composer coverage-ci` with `phpunit.ci.xml` to generate only
+`build/coverage/clover.xml` for Codecov. No HTML/text coverage reports or coverage
+artifacts are produced. `composer coverage` keeps the local reports unchanged.
+After relevant changes reach `main`, a lightweight workflow updates Codecov
+without repeating the PHP quality checks or compatibility matrix.
+
+Weekly runs resolve current dependencies and collect the complete matrix results.
+Composer and npm caches contain downloads; lockfiles remain local and ignored.
+Matrix jobs without coverage disable the coverage driver. They ignore only the
+optional development requirement `ext-pcov` during dependency installation.
+
+Pull requests test stable Doctrine Lexer on PHP 8.3, 8.4 and 8.5. Weekly
+and manual runs also test the five supported development-branch combinations.

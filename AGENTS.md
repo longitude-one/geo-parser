@@ -35,4 +35,8 @@ Pull requests should explain what changed and why, link the relevant issue when 
 
 `main` and `dev` are protected: do not push directly to them. Publish changes on a working branch and open a pull request. Stay on the current working branch unless the task requires switching branches.
 
-The workflow in `.github/workflows/ci.yml` runs on `pull_request` and every Friday at 17:00 UTC (`0 17 * * 5`); it has no push trigger. Pull requests limited to Markdown files or `LICENSE` do not trigger CI. The stable PHP 8.3 job runs coverage and quality checks; the remaining jobs test newer PHP versions and development versions of Doctrine Lexer after the stable job succeeds.
+The CI runs on pull requests, weekly and manually. Stable Doctrine Lexer is tested on PHP 8.3–8.5; development branches are tested weekly. Markdown checks are separate. A lightweight push workflow updates Codecov on main. See CONTRIBUTING.md for the CI policy.
+
+CI coverage uses `composer coverage-ci` and `phpunit.ci.xml` (Clover XML only).
+Local `composer coverage` reports are unchanged. See `CONTRIBUTING.md` for triggers,
+cache policy and the aggregate `CI` check.

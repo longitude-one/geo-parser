@@ -1,0 +1,61 @@
+name: Update Codecov baseline
+'on':
+  push:
+    branches:
+      - main
+    paths:
+      - lib/**
+      - tests/**
+      - composer.json
+      - phpunit*.xml
+      - phpunit*.dist
+      - quality/**
+      - tools/**
+      - .github/workflows/**
+  workflow_dispatch: {}
+permissions:
+  contents: read
+concurrency:
+  group: codecov-main-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  coverage:
+    name: Main branch coverage
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      COMPOSER_NO_INTERACTION: '1'
+      HAS_CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Prepare Composer cache
+        run: echo "COMPOSER_CACHE_DIR=$RUNNER_TEMP/composer-cache" >> "$GITHUB_ENV"
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: pcov
+          tools: composer:v2
+          extensions: mbstring
+      - name: Cache Composer downloads
+        uses: actions/cache@v6
+        with:
+          path: ${{ runner.temp }}/composer-cache
+          key: >-
+            ${{ runner.os }}-composer-8.3-${{ hashFiles('composer.json', 'quality/php-cs-fixer/composer.json',
+            'quality/php-stan/composer.json', 'quality/php-mess-detector/composer.json',
+            'quality/php-code-sniffer/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-8.3-
+      - name: Resolve library dependencies
+        run: composer update --prefer-dist --no-interaction
+      - name: Generate Clover coverage only
+        run: composer coverage-ci
+      - name: Send Clover report to Codecov
+        if: env.HAS_CODECOV_TOKEN == 'true'
+        uses: codecov/codecov-action@v7.1.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: longitude-one/geo-parser
+          files: build/coverage/clover.xml
+          disable_search: true
+          fail_ci_if_error: true
