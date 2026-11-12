@@ -2,6 +2,9 @@
 name: 'My first PHPMD rule set'
 description: 'Custom rule set that checks longitude-one/geo-parser code, but the test code.'
 rules:
+  - ref: rulesets/cleancode.xml
+    exclude:
+      - StaticAccess
   - ref: rulesets/unusedcode.xml
   - ref: rulesets/codesize.xml
   - ref: rulesets/naming.xml
@@ -9,7 +12,6 @@ rules:
       - ShortVariable
   - ref: rulesets/naming.xml/ShortVariable
     properties:
-      minimum: 3
       exceptions: 'x,y'
   - ref: rulesets/controversial.xml
   - ref: rulesets/design.xml
