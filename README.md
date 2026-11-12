@@ -26,7 +26,8 @@ composer require longitude-one/geo-parser:4.1.0
 
 ## Usage
 
-The parser supports two usage patterns. Pass the value to parse to the constructor, then call `parse()` on the
+The parser supports two usage patterns. Pass the value to parse to the
+constructor, then call `parse()` on the
 resulting `Parser` object:
 
 ```php
@@ -55,7 +56,10 @@ $value2 = $parser->parse($input2); //-40.446111111111
 
 ### Typed coordinates (since 4.0.0)
 
-Since version 4.0.0, use `parseAsCoordinates()` when the parsed value should retain its coordinate structure. It returns a `Coordinate` for a single value and a `Point` for a pair. An axis is set only when the input contains a cardinal direction; otherwise `getAxis()` returns `null`.
+Since version 4.0.0, use `parseAsCoordinates()` when the parsed value should
+retain its coordinate structure. It returns a `Coordinate` for a single value
+and a `Point` for a pair. An axis is set only when the input contains a cardinal
+direction; otherwise `getAxis()` returns `null` .
 
 ```php
 use LongitudeOne\Core\Enum\AxisEnum;
@@ -77,17 +81,23 @@ assert(AxisEnum::LONGITUDE === $point->getFirst()->getAxis());
 assert(AxisEnum::LATITUDE === $point->getSecond()->getAxis());
 ```
 
-For example, `(new Parser('40, 79'))->parseAsCoordinates()` returns a `Point` whose two coordinates both have a `null` axis.
+For example, `(new Parser('40, 79'))->parseAsCoordinates()` returns a `Point`
+whose two coordinates both have a `null` axis.
 
 ## Supported Formats
 
-Both single values and coordinate pairs are supported. The following examples illustrate the supported formats; they
+Both single values and coordinate pairs are supported. The following examples
+illustrate the supported formats; they
 are not exhaustive.
 
-A numeric sign may accompany a cardinal direction when both agree: `+40N`, `+75E`, `-40S`, and `-75W`
-are accepted. The direction is applied once (`-75W` returns `-75`); conflicting combinations such as `-40N`
-or `+75W` throw `UnexpectedValueException`. This also applies to DDM/DMS formats and coordinate pairs,
-for both parsing methods. Previously rejected signed cardinal inputs are now accepted when consistent (issue #31).
+A numeric sign may accompany a cardinal direction when both agree: `+40N` ,
+`+75E` , `-40S` , and `-75W`
+are accepted. The direction is applied once (`-75W` returns `-75` ); conflicting
+combinations such as `-40N`
+or `+75W` throw `UnexpectedValueException` . This also applies to DDM/DMS
+formats and coordinate pairs,
+for both parsing methods. Previously rejected signed cardinal inputs are now
+accepted when consistent (issue #31).
 
 1. Simple single-signed values
 
@@ -111,37 +121,44 @@ for both parsing methods. Previously rejected signed cardinal inputs are now acc
    - 40 S
    - 56.242 E
 
-4. Single values of signed integer degrees with degree symbol, and decimal minutes with apostrophe
+4. Single values of signed integer degrees with degree symbol, and decimal
+   minutes with apostrophe
 
    - 40° 26.222'
    - -65° 32.22'
    - +165° 52.22'
 
-5. Single values of unsigned integer degrees with degree symbol, decimal minutes with apostrophe, and cardinal direction
+5. Single values of unsigned integer degrees with degree symbol, decimal
+   minutes with apostrophe, and cardinal direction
 
    - 40° 26.222' E
    - 65° 32.22' S
 
-6. Single values of signed integer degrees with degree symbol, integer minutes with apostrophe, and optional integer or decimal seconds with quote
+6. Single values of signed integer degrees with degree symbol, integer minutes
+   with apostrophe, and optional integer or decimal seconds with quote
 
    - 40° 26' 46"
    - -79° 58' 56"
    - 93° 19' 25.8"
    - +120° 19' 25.8"
 
-7. Single values of signed integer degrees with colon symbol, integer minutes, and optional colon and integer or decimal seconds
+7. Single values of signed integer degrees with colon symbol, integer minutes,
+   and optional colon and integer or decimal seconds
 
    - +40:26:46
    - -79:58:56
    - 93:19:25.8
 
-8. Single values of unsigned integer degrees with degree symbol, integer minutes with apostrophe, optional integer or decimal seconds with quote, and cardinal direction
+8. Single values of unsigned integer degrees with degree symbol, integer
+   minutes with apostrophe, optional integer or decimal seconds with quote, and
+   cardinal direction
 
    - 40° 26' 46" S
    - 99° 58' 56" W
    - 44° 58' 53.9" N
 
-9. Single values of unsigned integer degrees with a colon, integer minutes, optional integer or decimal seconds, and a cardinal direction
+9. Single values of unsigned integer degrees with a colon, integer minutes,
+   optional integer or decimal seconds, and a cardinal direction
 
    - 40:26:46 S
    - 99:58:56 W
@@ -153,15 +170,20 @@ for both parsing methods. Previously rejected signed cardinal inputs are now acc
 
 ## Return
 
-The parser returns an integer or float for a single value, or an array containing a coordinate pair.
+The parser returns an integer or float for a single value, or an array
+containing a coordinate pair.
 
-String inputs are tokenized and parsed as geographic coordinates. Native integer and float inputs are returned unchanged,
-including their type, without passing through the lexer or geographic range validation.
+String inputs are tokenized and parsed as geographic coordinates. Native integer
+and float inputs are returned unchanged,
+including their type, without passing through the lexer or geographic range
+validation.
 
 ## Exceptions
 
-Untrusted values in exception messages are formatted by spatial-core's `DiagnosticValueFormatter`:
-control characters and invalid UTF-8 bytes are escaped, and each value is limited to 2,048 characters.
+Untrusted values in exception messages are formatted by spatial-core's
+`DiagnosticValueFormatter` :
+control characters and invalid UTF-8 bytes are escaped, and each value is
+limited to 2,048 characters.
 
 Library exceptions thrown by the `Lexer` and `Parser` implement the
 `LongitudeOne\GeoParser\Exception\ExceptionInterface` interface:
@@ -180,7 +202,10 @@ try {
 ## Roadmap
 
 > [!NOTE]
-> A major release may increase the minimum supported PHP version. Other breaking changes are documented in the changelog.
+> A major release may increase the minimum supported PHP version. Other
+> breaking changes are documented in the changelog.
+
+<!-- markdownlint-disable MD013 -->
 
 | Version | PHP compatibility           | Tested on       | Doctrine Lexer | Tested with Lexer         | Released     | Active Support   | Security fix     |
 |---------|-----------------------------|-----------------|----------------|---------------------------|--------------|------------------|------------------|
@@ -189,12 +214,20 @@ try {
 | 5       | 8.4 - 8.5                   | 8.4 - 8.5       |                | 3.0 3.1-xdev 4.0-xdev     | January 2027 | 31 December 2027 | 31 December 2028 |
 | 6       | 8.5                         | 8.5             |                | 3.0 3.1-xdev 4.0-xdev.    | January 2028 | 31 December 2028 | 31 December 2029 |
 
-PHP versions marked as “tested”, along with every listed Doctrine Lexer version, are part of the continuous integration matrix.
+<!-- markdownlint-enable MD013 -->
+
+PHP versions marked as “tested”, along with every listed Doctrine Lexer version,
+are part of the continuous integration matrix.
 
 ### Support Policy
 
-The non-breaking-change guarantee applies only to the `Lexer` and `Parser` classes. `AxisEnum` is provided by the `longitude-one/spatial-core` dependency. All other classes are internal implementation details and may change or be removed in any release.
+The non-breaking-change guarantee applies only to the `Lexer` and `Parser`
+classes. `AxisEnum` is provided by the `longitude-one/spatial-core` dependency.
+All other classes are internal implementation details and may change or be
+removed in any release.
 
-Only the latest major version receives feature and bug fixes. Non-security issues will not be addressed during the security-fixes period.
+Only the latest major version receives feature and bug fixes. Non-security
+issues will not be addressed during the security-fixes period.
 
-Previous major versions may receive security fixes only, according to the roadmap above.
+Previous major versions may receive security fixes only, according to the
+roadmap above.

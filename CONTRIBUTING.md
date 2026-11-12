@@ -5,11 +5,13 @@
 - Code formatting MUST follow the project's PHP-CS-Fixer configuration.
 - Issues SHOULD include code and/or data to reproduce the issue.
 - Pull requests that fix issues SHOULD include tests that reproduce the issue.
-- Pull requests SHOULD include adequate documentation (commit messages, comments, and so on) to explain what changed and why.
+- Pull requests SHOULD include adequate documentation (commit messages,
+  comments, and so on) to explain what changed and why.
 
 ## Commit message conventions
 
-All commits must follow the [Conventional Commits specification](https://www.conventionalcommits.org/):
+All commits must follow the
+[Conventional Commits specification](https://www.conventionalcommits.org/) :
 
 ```text
 type(scope): description
@@ -41,7 +43,8 @@ Allowed types include:
 
 ### Installation
 
-The following command updates only the four isolated quality-tool environments. Run it intentionally and review the resulting lock-file changes:
+The following command updates only the four isolated quality-tool environments.
+Run it intentionally and review the resulting lock-file changes:
 
 ```bash
 composer update-tools
@@ -63,7 +66,8 @@ composer cs-fix
 
 ### Run the tests
 
-The following command runs the tests without coverage. Use `composer coverage` and `composer coverage-check` to enforce 99% coverage.
+The following command runs the tests without coverage. Use `composer coverage`
+and `composer coverage-check` to enforce 99% coverage.
 
 ```bash
 composer test
@@ -105,15 +109,18 @@ The coverage threshold is 99%.
 
 Pull requests run the supported PHP combinations and a separate Markdown check
 when relevant files change. Superseded pull request runs are cancelled.
-The `CI` check summarizes the relevant jobs, including documentation-only changes.
+The `CI` check summarizes the relevant jobs, including documentation-only
+changes.
 
 CI uses `composer coverage-ci` with `phpunit.ci.xml` to generate only
-`build/coverage/clover.xml` for Codecov. No HTML/text coverage reports or coverage
+`build/coverage/clover.xml` for Codecov. No HTML/text coverage reports or
+coverage
 artifacts are produced. `composer coverage` keeps the local reports unchanged.
 After relevant changes reach `main`, a lightweight workflow updates Codecov
 without repeating the PHP quality checks or compatibility matrix.
 
-Weekly runs resolve current dependencies and collect the complete matrix results.
+Weekly runs resolve current dependencies and collect the complete matrix
+results.
 Composer and npm caches contain downloads; lockfiles remain local and ignored.
 Matrix jobs without coverage disable the coverage driver. They ignore only the
 optional development requirement `ext-pcov` during dependency installation.
