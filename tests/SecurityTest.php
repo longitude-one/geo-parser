@@ -12,8 +12,6 @@
 
 declare(strict_types=1);
 
-
-
 namespace LongitudeOne\GeoParser\Tests;
 
 use LongitudeOne\Core\Diagnostic\DiagnosticValueFormatter;
@@ -282,11 +280,8 @@ class SecurityTest extends TestCase
     private function assertVeryLongInvalidInputIsRejected(string $input, bool $asCoordinates): void
     {
         try {
-            if ($asCoordinates) {
-                (new Parser($input))->parseAsCoordinates();
-            } else {
-                (new Parser($input))->parse();
-            }
+            $method = $asCoordinates ? 'parseAsCoordinates' : 'parse';
+            (new Parser($input))->{$method}();
 
             self::fail('Expected an UnexpectedValueException to be thrown.');
         } catch (UnexpectedValueException) {

@@ -12,8 +12,6 @@
 
 declare(strict_types=1);
 
-
-
 namespace LongitudeOne\GeoParser\Internal;
 
 use LongitudeOne\GeoParser\Exception\RangeException;

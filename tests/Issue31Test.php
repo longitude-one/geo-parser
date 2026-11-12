@@ -12,8 +12,6 @@
 
 declare(strict_types=1);
 
-
-
 namespace LongitudeOne\GeoParser\Tests;
 
 use LongitudeOne\Core\Enum\AxisEnum;

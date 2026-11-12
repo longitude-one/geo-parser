@@ -12,8 +12,6 @@
 
 declare(strict_types=1);
 
-
-
 // Replace the value of this variable with the project's launch year.
 $firstYear = 2024;
 

@@ -12,8 +12,6 @@
 
 declare(strict_types=1);
 
-
-
 namespace LongitudeOne\GeoParser\Exception;
 
 use LongitudeOne\Core\Diagnostic\DiagnosticValueFormatter;
