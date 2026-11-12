@@ -1,16 +1,43 @@
-# CI / GitHub
-/.github/**            export-ignore
+# Normalize text files to LF while preserving binary files.
+* text=auto eol=lf
 
-# Development
-/quality/**            export-ignore
-/tests/**              export-ignore
+# Keep runtime code, composer.json, LICENSE, README and user documentation.
+# Exclude repository automation and local development configuration.
+/.github export-ignore
+/.agents export-ignore
+/.codex export-ignore
+/.idea export-ignore
+/.vscode export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/.markdownlint* export-ignore
+/.versionrc* export-ignore
+AGENTS.md export-ignore
+/CONTRIBUTING.md export-ignore
 
-# Configuration files
-/.gitattributes        export-ignore
-/.gitignore            export-ignore
-/.versionrc.json       export-ignore
-/phpunit.xml.dist      export-ignore
+# Exclude tests, quality tools, generated files and development dependencies.
+/tests export-ignore
+/quality export-ignore
+/tools export-ignore
+/build export-ignore
+/vendor export-ignore
+/node_modules export-ignore
+/.phpunit-cache export-ignore
+/.phpunit.cache export-ignore
+/.php-cs-fixer.cache export-ignore
+/.php_cs.cache export-ignore
+/.phpcs-cache export-ignore
+/phpunit.xml export-ignore
+/phpunit.xml.dist export-ignore
+/phpunit.dist.xml export-ignore
+/phpunit.*.xml export-ignore
+/pdepend.yml export-ignore
+/composer.lock export-ignore
+/package.json export-ignore
+/package-lock.json export-ignore
 
-# Developer documentation
-/CHANGELOG.md          export-ignore
-/CONTRIBUTING.md       export-ignore
+# Design documents are for contributors; user documentation remains included.
+/docs/design export-ignore
+
+# Exclude operating-system metadata wherever it appears.
+.DS_Store export-ignore
