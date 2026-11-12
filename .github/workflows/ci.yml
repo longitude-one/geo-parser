@@ -32,7 +32,7 @@ jobs:
               uses: actions/cache@v6
               with:
                   path: ${{ steps.composer-cache.outputs.dir }}
-                  key: ${{ format('{0}-composer-{1}', runner.os, hashFiles('composer.json', 'quality/php-cs-fixer/composer.json', 'quality/php-mess-detector/composer.json', 'quality/php-stan/composer.json')) }}
+                  key: ${{ format('{0}-composer-{1}', runner.os, hashFiles('composer.json', 'quality/php-cs-fixer/composer.json', 'quality/php-mess-detector/composer.json', 'quality/php-stan/composer.json', 'quality/php-code-sniffer/composer.json')) }}
                   restore-keys: |
                       ${{ format('{0}-composer-', runner.os) }}
 
@@ -78,6 +78,12 @@ jobs:
               run: ./quality/php-mess-detector/vendor/bin/phpmd analyze lib --ruleset quality/php-mess-detector/ruleset.yml --format text
             - name: Run PHP-MESS-DETECTOR on tests directory
               run: ./quality/php-mess-detector/vendor/bin/phpmd analyze tests --ruleset quality/php-mess-detector/test-ruleset.yml --format text
+
+            ## PHP_CodeSniffer
+            - name: Install PHP_CodeSniffer
+              run: composer update --working-dir=quality/php-code-sniffer
+            - name: Run PHP_CodeSniffer
+              run: ./quality/php-code-sniffer/vendor/bin/phpcs --standard=quality/php-code-sniffer/phpcs.xml -s
 
             ## PHP-STAN
             - name: Install PHP-STAN
