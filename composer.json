@@ -20,6 +20,7 @@
         "longitude-one/spatial-core": "^1.1"
     },
     "require-dev": {
+        "ext-dom": "*",
         "phpunit/phpunit": "^12.5.33"
     },
     "scripts": {

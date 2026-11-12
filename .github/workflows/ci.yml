@@ -77,7 +77,7 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: ${{ matrix.coverage && 'pcov' || 'none' }}
           tools: composer:v2
-          extensions: mbstring
+          extensions: dom, mbstring
       - name: Cache Composer downloads
         uses: actions/cache@v6
         with:
