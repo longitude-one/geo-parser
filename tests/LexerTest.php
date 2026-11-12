@@ -1,15 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
-/**
- * This file is part of the LongitudeOne GeoParser project.
+/*
+ * This file is part of the LongitudeOne Spatial project.
  *
- * PHP 8.3 | 8.4 | 8.5
+ * Copyright (c) 2024-2026 Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * Copyright (c) 2014-2019 Derek J. Lambert (creof/geo-parser)
  *
- * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024-2026.
+ * See LICENSE for copyright and license information.
+ *
  */
+
+declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser\Tests;
 
@@ -150,7 +151,12 @@ class LexerTest extends TestCase
         ]];
     }
 
-    /** @param Token<int, string|int>[] $expectedTokens */
+    /**
+     * Tokenize coordinate input into the expected token sequence.
+     *
+     * @param string                   $input          coordinate input to tokenize
+     * @param Token<int, string|int>[] $expectedTokens expected token sequence
+     */
     #[DataProvider('dataProvider')]
     public function testLexer(string $input, array $expectedTokens): void
     {
@@ -162,6 +168,9 @@ class LexerTest extends TestCase
         }
     }
 
+    /**
+     * Test Reused Lexer.
+     */
     public function testReusedLexer(): void
     {
         $lexer = new Lexer();

@@ -23,30 +23,46 @@
         "phpunit/phpunit": "^12.5.33"
     },
     "scripts": {
+        "test": "@php vendor/bin/phpunit --no-coverage",
+        "coverage": "@php -d pcov.enabled=1 -d pcov.directory=lib vendor/bin/phpunit --coverage-text=build/coverage/coverage.txt --coverage-clover=build/coverage/clover.xml --coverage-html=build/coverage/html",
+        "coverage-ci": "@php -d pcov.enabled=1 -d pcov.directory=lib vendor/bin/phpunit --configuration=phpunit.ci.xml --coverage-clover=build/coverage/clover.xml",
+        "coverage-check": "@php quality/coverage-check.php build/coverage/clover.xml 99",
+        "cs-check": "quality/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=quality/php-cs-fixer/.php-cs-fixer.php --allow-risky=yes --dry-run --diff",
+        "cs-fix": "quality/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=quality/php-cs-fixer/.php-cs-fixer.php --allow-risky=yes",
+        "phpstan": "quality/php-stan/vendor/bin/phpstan analyse --configuration=quality/php-stan/php-stan.neon lib tests --error-format=table --no-progress --no-interaction --no-ansi --level=9 --memory-limit=256M",
+        "phpmd": [
+            "quality/php-mess-detector/vendor/bin/phpmd analyze lib --format text --ruleset quality/php-mess-detector/ruleset.yml",
+            "quality/php-mess-detector/vendor/bin/phpmd analyze tests --format text --ruleset quality/php-mess-detector/test-ruleset.yml"
+        ],
+        "phpcs": "quality/php-code-sniffer/vendor/bin/phpcs --standard=quality/php-code-sniffer/phpcs.xml -s",
+        "markdown": "npm run lint:markdown",
         "quality": [
-            "quality/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=quality/php-cs-fixer/.php-cs-fixer.php --allow-risky=yes --dry-run",
-            "quality/php-stan/vendor/bin/phpstan analyse --configuration=quality/php-stan/php-stan.neon lib tests --error-format=table --no-progress --no-interaction --no-ansi --level=9 --memory-limit=256M",
-            "quality/php-mess-detector/vendor/bin/phpmd analyze lib --ruleset quality/php-mess-detector/ruleset.yml --format text",
-            "quality/php-mess-detector/vendor/bin/phpmd analyze tests --ruleset quality/php-mess-detector/test-ruleset.yml --format text"
+            "@cs-check",
+            "@phpstan",
+            "@phpmd",
+            "@phpcs",
+            "@markdown"
         ],
-        "update-quality-tools": [
-            "composer update",
-            "composer update --working-dir quality/php-cs-fixer",
-            "composer update --working-dir quality/php-stan",
-            "composer update --working-dir quality/php-mess-detector"
+        "update-tools": [
+            "@composer update --working-dir=quality/php-cs-fixer",
+            "@composer update --working-dir=quality/php-stan",
+            "@composer update --working-dir=quality/php-mess-detector",
+            "@composer update --working-dir=quality/php-code-sniffer"
         ],
-        "test": [
-            "phpunit",
+        "audit-dependencies": [
+            "@composer audit",
+            "@composer audit --working-dir=quality/php-cs-fixer",
+            "@composer audit --working-dir=quality/php-stan",
+            "@composer audit --working-dir=quality/php-mess-detector",
+            "@composer audit --working-dir=quality/php-code-sniffer"
+        ],
+        "check": [
+            "@composer validate --strict",
+            "@audit-dependencies",
+            "@coverage",
             "@coverage-check",
-            "cat .phpunit.cache/coverage-results.txt"
-        ],
-        "test-with-docker": [
-            "phpunit",
-            "@coverage-check",
-            "cat .phpunit.cache/coverage-results.txt"
-        ],
-        "coverage-check": "php quality/coverage-check.php .phpunit.cache/coverage.xml",
-        "fix": "quality/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=quality/php-cs-fixer/.php-cs-fixer.php --allow-risky=yes"
+            "@quality"
+        ]
     },
     "autoload": {
         "psr-4": {

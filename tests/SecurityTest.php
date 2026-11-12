@@ -1,15 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
-/**
- * This file is part of the LongitudeOne GeoParser project.
+/*
+ * This file is part of the LongitudeOne Spatial project.
  *
- * PHP 8.3 | 8.4 | 8.5
+ * Copyright (c) 2024-2026 Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * Copyright (c) 2014-2019 Derek J. Lambert (creof/geo-parser)
  *
- * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024-2026.
+ * See LICENSE for copyright and license information.
+ *
  */
+
+declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser\Tests;
 
@@ -65,6 +66,8 @@ class SecurityTest extends TestCase
 
     /**
      * Generate a reproducible sequence of mixed coordinate-like input.
+     *
+     * @param int $case input category to verify
      */
     private static function fuzzInput(int $case): string
     {
@@ -72,8 +75,8 @@ class SecurityTest extends TestCase
         $length = 1 + $case % 96;
 
         for ($position = 0; $position < $length; ++$position) {
-            $byte = hash('sha256', sprintf('%d:%d', $case, $position), true)[0];
-            $input .= self::FUZZ_CHARACTERS[ord($byte) % strlen(self::FUZZ_CHARACTERS)];
+            $byte = hash('sha256', \sprintf('%d:%d', $case, $position), true)[0];
+            $input .= self::FUZZ_CHARACTERS[\ord($byte) % \strlen(self::FUZZ_CHARACTERS)];
         }
 
         return $input;
@@ -82,6 +85,8 @@ class SecurityTest extends TestCase
     /**
      * An empty or blank input must fail cleanly with a syntax error, not a fatal
      * error, a warning, or a silent "empty" value.
+     *
+     * @param string $input coordinate input to parse
      */
     #[DataProvider('dataSourceEmptyOrBlank')]
     public function testEmptyOrBlankInputThrowsSyntaxError(string $input): void
@@ -142,6 +147,9 @@ class SecurityTest extends TestCase
      * plain integers) are currently accepted and returned as-is when there is no
      * cardinal direction to range-check against. This test documents today's
      * behaviour; it is not necessarily the desired behaviour.
+     *
+     * @param string $input    coordinate input to parse
+     * @param float  $expected expected parsing result
      */
     #[DataProvider('dataSourceExtremeValues')]
     public function testExtremeValueWithoutCardinalIsNotRangeChecked(string $input, float $expected): void
@@ -253,6 +261,9 @@ class SecurityTest extends TestCase
     /**
      * Assert that both public APIs reject malformed fuzz input only through
      * the library's documented exception hierarchy.
+     *
+     * @param Parser $parser parser instance under test
+     * @param string $input  coordinate input to parse
      */
     private function assertFuzzInputIsHandledByPublicApis(Parser $parser, string $input): void
     {
@@ -261,7 +272,7 @@ class SecurityTest extends TestCase
         } catch (ExceptionInterface) {
             self::addToAssertionCount(1);
         } catch (\Throwable $exception) {
-            self::fail(sprintf('Parser::parse() threw %s for fuzz input %s.', $exception::class, bin2hex($input)));
+            self::fail(\sprintf('Parser::parse() threw %s for fuzz input %s.', $exception::class, bin2hex($input)));
         }
 
         try {
@@ -269,21 +280,21 @@ class SecurityTest extends TestCase
         } catch (ExceptionInterface) {
             self::addToAssertionCount(1);
         } catch (\Throwable $exception) {
-            self::fail(sprintf('Parser::parseAsCoordinates() threw %s for fuzz input %s.', $exception::class, bin2hex($input)));
+            self::fail(\sprintf('Parser::parseAsCoordinates() threw %s for fuzz input %s.', $exception::class, bin2hex($input)));
         }
     }
 
     /**
      * Assert that a very large malformed input is rejected by one public API.
+     *
+     * @param string $input         coordinate input to parse
+     * @param bool   $asCoordinates whether to exercise the structured-coordinate API
      */
     private function assertVeryLongInvalidInputIsRejected(string $input, bool $asCoordinates): void
     {
         try {
-            if ($asCoordinates) {
-                (new Parser($input))->parseAsCoordinates();
-            } else {
-                (new Parser($input))->parse();
-            }
+            $method = $asCoordinates ? 'parseAsCoordinates' : 'parse';
+            (new Parser($input))->{$method}();
 
             self::fail('Expected an UnexpectedValueException to be thrown.');
         } catch (UnexpectedValueException) {

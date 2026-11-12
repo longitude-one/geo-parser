@@ -1,15 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
-/**
- * This file is part of the LongitudeOne GeoParser project.
+/*
+ * This file is part of the LongitudeOne Spatial project.
  *
- * PHP 8.3 | 8.4 | 8.5
+ * Copyright (c) 2024-2026 Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * Copyright (c) 2014-2019 Derek J. Lambert (creof/geo-parser)
  *
- * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024-2026.
+ * See LICENSE for copyright and license information.
+ *
  */
+
+declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser\Exception;
 
@@ -30,13 +31,25 @@ class RangeException extends \RangeException implements ExceptionInterface
     public const SECONDS_MESSAGE = 'Seconds must be between 0 and 59';
     public const SECONDS_OUT_OF_RANGE = 60;
 
+    /**
+     * Create the instance with the supplied values.
+     *
+     * @param string          $value    coordinate or token value to process
+     * @param int             $code     code to use
+     * @param \Throwable|null $previous previous to use
+     */
     public function __construct(string $value, int $code, ?\Throwable $previous = null)
     {
-        $message = sprintf('[RangeException] %s, got "%s".', $this->setMessage($code), DiagnosticValueFormatter::format($value));
+        $message = \sprintf('[RangeException] %s, got "%s".', $this->setMessage($code), DiagnosticValueFormatter::format($value));
 
         parent::__construct($message, $code, $previous);
     }
 
+    /**
+     * Set Message.
+     *
+     * @param int $code code to use
+     */
     private function setMessage(int $code): string
     {
         return match ($code) {

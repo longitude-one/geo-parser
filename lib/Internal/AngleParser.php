@@ -1,15 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
-/**
- * This file is part of the LongitudeOne GeoParser project.
+/*
+ * This file is part of the LongitudeOne Spatial project.
  *
- * PHP 8.3 | 8.4 | 8.5
+ * Copyright (c) 2024-2026 Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * Copyright (c) 2014-2019 Derek J. Lambert (creof/geo-parser)
  *
- * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024-2026.
+ * See LICENSE for copyright and license information.
+ *
  */
+
+declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser\Internal;
 
@@ -59,7 +60,13 @@ final class AngleParser
     /**
      * Create an angle parser with the current coordinate parsing state.
      *
-     * @param \Closure(string): UnexpectedValueException $syntaxError factory for syntax errors
+     * @param TokenStream $tokens         token stream to consume
+     * @param string      $input          coordinate input to parse
+     * @param ?int        $nextSymbol     expected separator for the next angle component
+     * @param bool        $canMatchSymbol whether an optional angle separator is allowed
+     * @param \Closure    $syntaxError    factory for syntax errors
+     *
+     * @phpstan-param \Closure(string): UnexpectedValueException $syntaxError
      */
     public function __construct(TokenStream $tokens, string $input, ?int $nextSymbol, bool $canMatchSymbol, \Closure $syntaxError)
     {
@@ -133,6 +140,8 @@ final class AngleParser
 
     /**
      * Consume a token or create the parser's existing syntax error.
+     *
+     * @param int $token token to inspect
      */
     private function match(int $token): string|int
     {

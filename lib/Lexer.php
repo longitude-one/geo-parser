@@ -1,15 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
-/**
- * This file is part of the LongitudeOne GeoParser project.
+/*
+ * This file is part of the LongitudeOne Spatial project.
  *
- * PHP 8.3 | 8.4 | 8.5
+ * Copyright (c) 2024-2026 Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * Copyright (c) 2014-2019 Derek J. Lambert (creof/geo-parser)
  *
- * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024-2026.
+ * See LICENSE for copyright and license information.
+ *
  */
+
+declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser;
 
@@ -36,11 +37,40 @@ final class Lexer extends AbstractLexer
     public const T_PLUS = 8;
     public const T_QUOTE = 13;
 
+    /**
+     * Create the instance with the supplied values.
+     *
+     * @param ?string $input coordinate input to parse
+     */
     public function __construct(?string $input = null)
     {
         if (null !== $input) {
             $this->setInput($input);
         }
+    }
+
+    /**
+     * Return the token type of a nonnumeric coordinate symbol.
+     *
+     * @param string $value symbol to classify
+     */
+    private static function symbolType(string $value): int
+    {
+        return [
+            ':' => self::T_COLON,
+            '\'' => self::T_APOSTROPHE,
+            "\xe2\x80\xb2" => self::T_APOSTROPHE,
+            '"' => self::T_QUOTE,
+            "\xe2\x80\xb3" => self::T_QUOTE,
+            ',' => self::T_COMMA,
+            '-' => self::T_MINUS,
+            '+' => self::T_PLUS,
+            '°' => self::T_DEGREE,
+            'N' => self::T_CARDINAL_LAT,
+            'S' => self::T_CARDINAL_LAT,
+            'E' => self::T_CARDINAL_LON,
+            'W' => self::T_CARDINAL_LON,
+        ][$value] ?? self::T_NONE;
     }
 
     /**
@@ -68,31 +98,20 @@ final class Lexer extends AbstractLexer
      * Retrieve a token type.
      * Also processes the token value if necessary.
      *
-     * @param string &$value
+     * @param string $value coordinate or token value to process
      */
     protected function getType(&$value): int
     {
         if (is_numeric($value)) {
             $numeric = $value + 0;
 
-            if (is_int($numeric)) {
+            if (\is_int($numeric)) {
                 return self::T_INTEGER;
             }
 
             return self::T_FLOAT;
         }
 
-        return match ($value) {
-            ':' => self::T_COLON,
-            '\'', "\xe2\x80\xb2" => self::T_APOSTROPHE,
-            '"', "\xe2\x80\xb3" => self::T_QUOTE,
-            ',' => self::T_COMMA,
-            '-' => self::T_MINUS,
-            '+' => self::T_PLUS,
-            '°' => self::T_DEGREE,
-            'N', 'S' => self::T_CARDINAL_LAT,
-            'E', 'W' => self::T_CARDINAL_LON,
-            default => self::T_NONE,
-        };
+        return self::symbolType($value);
     }
 }

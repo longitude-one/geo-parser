@@ -1,15 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
-/**
- * This file is part of the LongitudeOne GeoParser project.
+/*
+ * This file is part of the LongitudeOne Spatial project.
  *
- * PHP 8.3 | 8.4 | 8.5
+ * Copyright (c) 2024-2026 Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * Copyright (c) 2014-2019 Derek J. Lambert (creof/geo-parser)
  *
- * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024-2026.
+ * See LICENSE for copyright and license information.
+ *
  */
+
+declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser\Tests;
 
@@ -102,9 +103,11 @@ class ParserCharacterizationTest extends TestCase
     /**
      * Invalid input must continue to expose the same exception contract.
      *
-     * @param string                   $input     invalid coordinate input
-     * @param class-string<\Throwable> $exception expected exception class
-     * @param string                   $message   expected exception message
+     * @param string $input     invalid coordinate input
+     * @param string $exception expected exception class
+     * @param string $message   expected exception message
+     *
+     * @phpstan-param class-string<\Throwable> $exception
      */
     #[DataProvider('dataSourceInvalidCoordinates')]
     public function testInvalidInputMatchesCurrentExceptionContract(string $input, string $exception, string $message): void

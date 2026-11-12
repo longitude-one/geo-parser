@@ -1,15 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
-/**
- * This file is part of the LongitudeOne GeoParser project.
+/*
+ * This file is part of the LongitudeOne Spatial project.
  *
- * PHP 8.3 | 8.4 | 8.5
+ * Copyright (c) 2024-2026 Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * Copyright (c) 2014-2019 Derek J. Lambert (creof/geo-parser)
  *
- * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024-2026.
+ * See LICENSE for copyright and license information.
+ *
  */
+
+declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser;
 
@@ -28,6 +29,8 @@ final class Parser
 
     /**
      * Create a parser with an optional coordinate input.
+     *
+     * @param string|int|float|null $input coordinate input to parse
      */
     public function __construct(string|int|float|null $input = null)
     {
@@ -36,6 +39,8 @@ final class Parser
 
     /**
      * Parse a native numeric value or textual coordinate input.
+     *
+     * @param string|int|float|null $input coordinate input to parse
      *
      * @return float|int|array<int, int|float>
      */
@@ -49,13 +54,18 @@ final class Parser
             throw new InvalidArgumentException('An input value must be provided to either the constructor or the parse method.');
         }
 
-        if (is_int($this->input) || is_float($this->input)) {
+        if (\is_int($this->input) || \is_float($this->input)) {
             return $this->input;
         }
 
         return (new CoordinateParser($this->input))->parse();
     }
 
+    /**
+     * Parse As Coordinates.
+     *
+     * @param string|int|float|null $input coordinate input to parse
+     */
     public function parseAsCoordinates(string|int|float|null $input = null): Coordinate|Point
     {
         if (null !== $input) {
@@ -66,7 +76,7 @@ final class Parser
             throw new InvalidArgumentException('An input value must be provided to either the constructor or the parseAsCoordinates method.');
         }
 
-        if (is_int($this->input) || is_float($this->input)) {
+        if (\is_int($this->input) || \is_float($this->input)) {
             return new Coordinate($this->input);
         }
 

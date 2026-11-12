@@ -1,15 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
-/**
- * This file is part of the LongitudeOne GeoParser project.
+/*
+ * This file is part of the LongitudeOne Spatial project.
  *
- * PHP 8.3 | 8.4 | 8.5
+ * Copyright (c) 2024-2026 Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * Copyright (c) 2014-2019 Derek J. Lambert (creof/geo-parser)
  *
- * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024-2026.
+ * See LICENSE for copyright and license information.
+ *
  */
+
+declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser\Tests;
 
@@ -33,7 +34,7 @@ final class Issue31Test extends TestCase
     public static function acceptedInputs(): \Generator
     {
         foreach (['N' => AxisEnum::LATITUDE, 'S' => AxisEnum::LATITUDE, 'E' => AxisEnum::LONGITUDE, 'W' => AxisEnum::LONGITUDE] as $cardinal => $axis) {
-            $sign = in_array($cardinal, ['S', 'W'], true) ? '-' : '+';
+            $sign = \in_array($cardinal, ['S', 'W'], true) ? '-' : '+';
             $factor = '-' === $sign ? -1 : 1;
             foreach (['40' => 40, '40.5' => 40.5, "40°30'" => 40.5, '40°30′36″' => 40.51, '40:30:36' => 40.51, '1e-5' => 0.00001, '0' => 0] as $angle => $value) {
                 yield $sign.$angle.$cardinal => [$sign.$angle.$cardinal, new Coordinate($factor * $value, $axis)];
@@ -68,6 +69,12 @@ final class Issue31Test extends TestCase
         }
     }
 
+    /**
+     * Test Normalizes Consistent Directions.
+     *
+     * @param string           $input    coordinate input to parse
+     * @param Coordinate|Point $expected expected parsing result
+     */
     #[DataProvider('acceptedInputs')]
     public function testNormalizesConsistentDirections(string $input, Coordinate|Point $expected): void
     {
@@ -80,7 +87,10 @@ final class Issue31Test extends TestCase
     }
 
     /**
-     * @param class-string<\Exception> $exception
+     * @param string $input     coordinate input to parse
+     * @param string $exception exception to use
+     *
+     * @phpstan-param class-string<\Exception> $exception
      */
     #[DataProvider('rejectedInputs')]
     public function testRejectsInvalidNumericInput(string $input, string $exception): void
@@ -91,7 +101,10 @@ final class Issue31Test extends TestCase
     }
 
     /**
-     * @param class-string<\Exception> $exception
+     * @param string $input     coordinate input to parse
+     * @param string $exception exception to use
+     *
+     * @phpstan-param class-string<\Exception> $exception
      */
     #[DataProvider('rejectedInputs')]
     public function testRejectsInvalidStructuredInput(string $input, string $exception): void

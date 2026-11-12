@@ -1,15 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
-/**
- * This file is part of the LongitudeOne GeoParser project.
+/*
+ * This file is part of the LongitudeOne Spatial project.
  *
- * PHP 8.3 | 8.4 | 8.5
+ * Copyright (c) 2024-2026 Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * Copyright (c) 2014-2019 Derek J. Lambert (creof/geo-parser)
  *
- * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024-2026.
+ * See LICENSE for copyright and license information.
+ *
  */
+
+declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser\Tests;
 
@@ -37,6 +38,11 @@ final class DiagnosticExceptionsTest extends TestCase
         yield 'long unicode' => [str_repeat('é', 3000)];
     }
 
+    /**
+     * Test Invalid Cardinal Formats Token.
+     *
+     * @param string $value coordinate or token value to process
+     */
     #[DataProvider('diagnosticValues')]
     public function testInvalidCardinalFormatsToken(string $value): void
     {
@@ -48,6 +54,11 @@ final class DiagnosticExceptionsTest extends TestCase
         }
     }
 
+    /**
+     * Test Parser Formats Every Untrusted Value.
+     *
+     * @param string $value coordinate or token value to process
+     */
     #[DataProvider('diagnosticValues')]
     public function testParserFormatsEveryUntrustedValue(string $value): void
     {
@@ -65,6 +76,11 @@ final class DiagnosticExceptionsTest extends TestCase
         }
     }
 
+    /**
+     * Test Range Exception Formats Value And Preserves Cause.
+     *
+     * @param string $value coordinate or token value to process
+     */
     #[DataProvider('diagnosticValues')]
     public function testRangeExceptionFormatsValueAndPreservesCause(string $value): void
     {

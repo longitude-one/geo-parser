@@ -1,15 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
-/**
- * This file is part of the LongitudeOne GeoParser project.
+/*
+ * This file is part of the LongitudeOne Spatial project.
  *
- * PHP 8.3 | 8.4 | 8.5
+ * Copyright (c) 2024-2026 Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * Copyright (c) 2014-2019 Derek J. Lambert (creof/geo-parser)
  *
- * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024-2026.
+ * See LICENSE for copyright and license information.
+ *
  */
+
+declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser\Internal;
 
@@ -32,6 +33,7 @@ final class TokenStream
     /**
      * Tokenize the input and position the cursor on its first token.
      *
+     * @param string     $input coordinate input to parse
      * @param Lexer|null $lexer optional lexer used for controlled internal tests
      */
     public function __construct(string $input, ?Lexer $lexer = null)
@@ -48,12 +50,14 @@ final class TokenStream
     /**
      * Consume the current token after confirming its type.
      *
+     * @param int $type expected token type
+     *
      * @return Token<int, int|string>
      */
     public function consume(int $type): Token
     {
         if (!$this->matches($type)) {
-            throw new LogicException(sprintf('Cannot consume token type %d.', $type));
+            throw new LogicException(\sprintf('Cannot consume token type %d.', $type));
         }
 
         $this->lexer->moveNext();
@@ -69,6 +73,8 @@ final class TokenStream
 
     /**
      * Consume a cardinal token and return its direction details.
+     *
+     * @param int $type expected token type
      */
     public function consumeCardinal(int $type): Cardinal
     {
@@ -97,6 +103,8 @@ final class TokenStream
 
     /**
      * Return the lexer literal associated with a token type.
+     *
+     * @param int $type expected token type
      */
     public function literal(int $type): string
     {
@@ -105,6 +113,8 @@ final class TokenStream
 
     /**
      * Whether the current token has the given type.
+     *
+     * @param int $type expected token type
      */
     public function matches(int $type): bool
     {
@@ -114,7 +124,9 @@ final class TokenStream
     /**
      * Whether the current token has one of the given types.
      *
-     * @param list<int> $types token types to match
+     * @param int[] $types token types to match
+     *
+     * @phpstan-param list<int> $types
      */
     public function matchesAny(array $types): bool
     {

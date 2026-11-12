@@ -1,15 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
-/**
- * This file is part of the LongitudeOne GeoParser project.
+/*
+ * This file is part of the LongitudeOne Spatial project.
  *
- * PHP 8.3 | 8.4 | 8.5
+ * Copyright (c) 2024-2026 Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * Copyright (c) 2014-2019 Derek J. Lambert (creof/geo-parser)
  *
- * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024-2026.
+ * See LICENSE for copyright and license information.
+ *
  */
+
+declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser\Tests;
 
@@ -49,7 +50,11 @@ class ParserInvalidInputTest extends TestCase
      * second validation path. Keep its failure contract in lockstep with
      * Parser::parse() as the implementation evolves.
      *
-     * @param class-string<ExceptionInterface> $exception
+     * @param string $input     coordinate input to parse
+     * @param string $exception exception to use
+     * @param string $message   message to use
+     *
+     * @phpstan-param class-string<ExceptionInterface> $exception
      */
     #[DataProviderExternal(ParserDataProvider::class, 'dataSourceBad')]
     public function testParseAsCoordinatesRejectsInvalidInput(string $input, string $exception, string $message): void
@@ -64,7 +69,11 @@ class ParserInvalidInputTest extends TestCase
      * The legacy API must preserve the expected library exception for each
      * invalid grammar, cardinal-axis mismatch, and geographic range error.
      *
-     * @param class-string<ExceptionInterface> $exception
+     * @param string $input     coordinate input to parse
+     * @param string $exception exception to use
+     * @param string $message   message to use
+     *
+     * @phpstan-param class-string<ExceptionInterface> $exception
      */
     #[DataProviderExternal(ParserDataProvider::class, 'dataSourceBad')]
     public function testParseRejectsInvalidInput(string $input, string $exception, string $message): void
@@ -90,6 +99,8 @@ class ParserInvalidInputTest extends TestCase
     /**
      * Invalid user input must fail through syntax validation, without reaching
      * the internal token-consumption guard, for either public parsing API.
+     *
+     * @param string $input coordinate input to parse
      */
     #[DataProvider('malformedSignsAndSeparators')]
     public function testRejectsMalformedSignsAndSeparators(string $input): void

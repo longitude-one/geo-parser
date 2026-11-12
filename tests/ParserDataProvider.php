@@ -1,15 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
-/**
- * This file is part of the LongitudeOne GeoParser project.
+/*
+ * This file is part of the LongitudeOne Spatial project.
  *
- * PHP 8.3 | 8.4 | 8.5
+ * Copyright (c) 2024-2026 Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * Copyright (c) 2014-2019 Derek J. Lambert (creof/geo-parser)
  *
- * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024-2026.
+ * See LICENSE for copyright and license information.
+ *
  */
+
+declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser\Tests;
 
@@ -36,13 +37,19 @@ final class ParserDataProvider
     public static function dataSourceBad(): \Generator
     {
         yield ['-40°N 45°W', UnexpectedValueException::class, 'Numeric sign and cardinal direction must indicate the same direction in value "-40°N 45°W".'];
+        yield ['40°N +45°W', UnexpectedValueException::class, 'Numeric sign and cardinal direction must indicate the same direction in value "40°N +45°W".'];
+        // phpcs:disable Squiz.PHP.CommentedOutCode -- Historical examples retained for issue #31.
         // ISSUE #31: the parser now accept concordent sign and cardinal direction
         // yield ['+40°N 45°W', UnexpectedValueException::class, '[Syntax Error] line 0, col 5: Error: Expected LongitudeOne\GeoParser\Lexer::T_INTEGER or LongitudeOne\GeoParser\Lexer::T_FLOAT, got "N" in value "+40°N 45°W"'];
-        yield ['40°N +45°W', UnexpectedValueException::class, 'Numeric sign and cardinal direction must indicate the same direction in value "40°N +45°W".'];
+
         // ISSUE #31: the parser now accept concordent sign and cardinal direction
         // yield ['-40°N 45°W', UnexpectedValueException::class, '[Syntax Error] line 0, col 5: Error: Expected LongitudeOne\GeoParser\Lexer::T_INTEGER or LongitudeOne\GeoParser\Lexer::T_FLOAT, got "N" in value "-40°N 45°W"'];
         // yield ['+40°N 45°W', UnexpectedValueException::class, '[Syntax Error] line 0, col 5: Error: Expected LongitudeOne\GeoParser\Lexer::T_INTEGER or LongitudeOne\GeoParser\Lexer::T_FLOAT, got "N" in value "+40°N 45°W"'];
         // yield ['40°N +45°W', UnexpectedValueException::class, '[Syntax Error] line 0, col 6: Error: Expected LongitudeOne\GeoParser\Lexer::T_INTEGER or LongitudeOne\GeoParser\Lexer::T_FLOAT, got "+" in value "40°N +45°W"'];
+
+        // ISSUE #31: the parser now accept concordent sign and cardinal direction
+        // yield ['40.757°N -45.567°W', UnexpectedValueException::class, '[Syntax Error] line 0, col 10: Error: Expected LongitudeOne\GeoParser\Lexer::T_INTEGER or LongitudeOne\GeoParser\Lexer::T_FLOAT, got "-" in value "40.757°N -45.567°W"'];
+        // phpcs:enable Squiz.PHP.CommentedOutCode
         yield ['40°N 45°S', UnexpectedValueException::class, '[Syntax Error] line 0, col 10: Error: Expected LongitudeOne\GeoParser\Lexer::T_CARDINAL_LON, got "S" in value "40°N 45°S"'];
         yield ['40°W 45°E', UnexpectedValueException::class, '[Syntax Error] line 0, col 10: Error: Expected LongitudeOne\GeoParser\Lexer::T_CARDINAL_LAT, got "E" in value "40°W 45°E"'];
         yield ['40° 45', UnexpectedValueException::class, '[Syntax Error] line 0, col -1: Error: Expected LongitudeOne\GeoParser\Lexer::T_APOSTROPHE, got end of string. in value "40° 45"'];
@@ -50,8 +57,6 @@ final class ParserDataProvider
         yield ['40N 45', UnexpectedValueException::class, '[Syntax Error] line 0, col -1: Error: Expected LongitudeOne\GeoParser\Lexer::T_CARDINAL_LON, got end of string. in value "40N 45"'];
         yield ['40 45W', UnexpectedValueException::class, '[Syntax Error] line 0, col 5: Error: Expected end of string, got "W" in value "40 45W"'];
         yield ['-40.757° 45°W', UnexpectedValueException::class, '[Syntax Error] line 0, col 14: Error: Expected end of string, got "W" in value "-40.757° 45°W"'];
-        // ISSUE #31: the parser now accept concordent sign and cardinal direction
-        // yield ['40.757°N -45.567°W', UnexpectedValueException::class, '[Syntax Error] line 0, col 10: Error: Expected LongitudeOne\GeoParser\Lexer::T_INTEGER or LongitudeOne\GeoParser\Lexer::T_FLOAT, got "-" in value "40.757°N -45.567°W"'];
         yield ['44°58\'53.9N 93°19\'25.8"W', UnexpectedValueException::class, '[Syntax Error] line 0, col 11: Error: Expected LongitudeOne\GeoParser\Lexer::T_QUOTE, got "N" in value "44°58\'53.9N 93°19\'25.8"W"'];
         yield ['40:26\'', UnexpectedValueException::class, '[Syntax Error] line 0, col 5: Error: Expected LongitudeOne\GeoParser\Lexer::T_INTEGER or LongitudeOne\GeoParser\Lexer::T_FLOAT, got "\'" in value "40:26\'"'];
         yield ['132.4432:', UnexpectedValueException::class, '[Syntax Error] line 0, col 8: Error: Expected LongitudeOne\GeoParser\Lexer::T_INTEGER or LongitudeOne\GeoParser\Lexer::T_FLOAT, got ":" in value "132.4432:"'];

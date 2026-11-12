@@ -1,15 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
-/**
- * This file is part of the LongitudeOne GeoParser project.
+/*
+ * This file is part of the LongitudeOne Spatial project.
  *
- * PHP 8.3 | 8.4 | 8.5
+ * Copyright (c) 2024-2026 Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * Copyright (c) 2014-2019 Derek J. Lambert (creof/geo-parser)
  *
- * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024-2026.
+ * See LICENSE for copyright and license information.
+ *
  */
+
+declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser\Tests;
 
@@ -44,7 +45,8 @@ class ParserFormatsTest extends TestCase
      * Both constructor input and method input are supported public entry
      * points. This test exercises the latter across the full accepted grammar.
      *
-     * @param int|float|array<int, int|float> $expected
+     * @param string|int                      $input    coordinate input to parse
+     * @param int|float|array<int, int|float> $expected expected parsing result
      */
     #[DataProvider('dataSourceSupportedValues')]
     public function testAcceptedSyntaxReturnsExpectedNumericValue(string|int $input, int|float|array $expected): void
@@ -56,8 +58,8 @@ class ParserFormatsTest extends TestCase
      * Documentation examples are exercised with all supported pair separators
      * so prose examples remain executable compatibility tests.
      *
-     * @param array{0: float|int|string, 1: float|int|string} $coordinates
-     * @param array{0: float|int, 1: float|int}               $expected
+     * @param array{0: float|int|string, 1: float|int|string} $coordinates coordinates to use
+     * @param array{0: float|int, 1: float|int}               $expected    expected parsing result
      */
     #[DataProviderExternal(ParserDataProvider::class, 'dataSourceFromDocumentation')]
     public function testDocumentationPairsAcceptEverySeparator(array $coordinates, array $expected): void

@@ -1,15 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
-/**
- * This file is part of the LongitudeOne GeoParser project.
+/*
+ * This file is part of the LongitudeOne Spatial project.
  *
- * PHP 8.3 | 8.4 | 8.5
+ * Copyright (c) 2024-2026 Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * Copyright (c) 2014-2019 Derek J. Lambert (creof/geo-parser)
  *
- * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024-2026.
+ * See LICENSE for copyright and license information.
+ *
  */
+
+declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser\Tests;
 
@@ -72,6 +73,9 @@ class ParserCoordinatesTest extends TestCase
      * Every accepted format is checked against an explicit structured result.
      * This prevents a change in token consumption from losing a cardinal axis,
      * or from inventing one where the grammar gives no such information.
+     *
+     * @param string|int       $input               coordinate input to parse
+     * @param Coordinate|Point $expectedCoordinates expected structured coordinates
      */
     #[DataProvider('dataSourceStructuredCoordinates')]
     public function testParseAsCoordinatesReturnsExpectedStructure(string|int $input, Coordinate|Point $expectedCoordinates): void

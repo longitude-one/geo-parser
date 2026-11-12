@@ -1,15 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
-/**
- * This file is part of the LongitudeOne GeoParser project.
+/*
+ * This file is part of the LongitudeOne Spatial project.
  *
- * PHP 8.3 | 8.4 | 8.5
+ * Copyright (c) 2024-2026 Alexandre Tranchant <alexandre.tranchant@gmail.com>
+ * Copyright (c) 2014-2019 Derek J. Lambert (creof/geo-parser)
  *
- * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024-2026.
+ * See LICENSE for copyright and license information.
+ *
  */
+
+declare(strict_types=1);
 
 namespace LongitudeOne\GeoParser\Internal;
 
@@ -31,6 +32,8 @@ enum Cardinal: string
 
     /**
      * Create a cardinal direction from a lexer token value.
+     *
+     * @param string $token token to inspect
      */
     public static function fromToken(string $token): self
     {
@@ -39,7 +42,7 @@ enum Cardinal: string
             self::NORTH->value => self::NORTH,
             self::SOUTH->value => self::SOUTH,
             self::WEST->value => self::WEST,
-            default => throw new LogicException(sprintf('Token "%s" is not a cardinal direction.', DiagnosticValueFormatter::format($token))),
+            default => throw new LogicException(\sprintf('Token "%s" is not a cardinal direction.', DiagnosticValueFormatter::format($token))),
         };
     }
 
