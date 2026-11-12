@@ -62,6 +62,8 @@ final class CoordinateParser
 
     /**
      * Create a parser for a textual coordinate value.
+     *
+     * @param string $input coordinate input to parse
      */
     public function __construct(string $input)
     {
@@ -100,14 +102,13 @@ final class CoordinateParser
 
     /**
      * Match a cardinal direction, validate its axis range, and apply its sign.
+     *
+     * @param int|float $value coordinate or token value to process
+     * @param ?int      $sign  explicit numeric sign, when present
      */
     private function cardinal(int|float $value, ?int $sign): Coordinate
     {
-        $axis = $this->nextAxis ?? match ($this->tokens->current()?->type) {
-            Lexer::T_CARDINAL_LAT => AxisEnum::LATITUDE,
-            Lexer::T_CARDINAL_LON => AxisEnum::LONGITUDE,
-            default => throw new LogicException(\sprintf('Token type %d is not a cardinal direction.', $this->tokens->current()?->type)),
-        };
+        $axis = $this->cardinalAxis();
         $tokenType = $this->cardinalTokenType($axis);
         if (!$this->tokens->matches($tokenType)) {
             throw $this->syntaxError($this->tokens->literal($tokenType));
@@ -130,7 +131,21 @@ final class CoordinateParser
     }
 
     /**
+     * Resolve the axis of the current cardinal token or the expected next axis.
+     */
+    private function cardinalAxis(): AxisEnum
+    {
+        return $this->nextAxis ?? match ($this->tokens->current()?->type) {
+            Lexer::T_CARDINAL_LAT => AxisEnum::LATITUDE,
+            Lexer::T_CARDINAL_LON => AxisEnum::LONGITUDE,
+            default => throw new LogicException(\sprintf('Token type %d is not a cardinal direction.', $this->tokens->current()?->type)),
+        };
+    }
+
+    /**
      * Return the cardinal token type expected for an axis.
+     *
+     * @param AxisEnum $axis coordinate axis to inspect
      */
     private function cardinalTokenType(AxisEnum $axis): int
     {
@@ -196,6 +211,8 @@ final class CoordinateParser
 
     /**
      * Consume a token whose type has already been checked by the caller.
+     *
+     * @param int $token token to inspect
      */
     private function match(int $token): string|int
     {
@@ -266,6 +283,8 @@ final class CoordinateParser
 
     /**
      * Create an exception with a descriptive error message.
+     *
+     * @param string $expected expected parsing result
      */
     private function syntaxError(string $expected): UnexpectedValueException
     {
