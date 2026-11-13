@@ -1,35 +1,35 @@
 /**
- * Custom updater for `commit-and-tag-version` to update README.md.
- *
- * The built-in `plain-text` type replaces the entire file with the version number,
- * which is unusable for a README. This updater only replaces the version number
- * in the "Version: x.y.z" mention (first occurrence) and leaves the rest of the file intact.
+ * Custom updater for commit-and-tag-version to update the README installation example and documentation version.
  */
 
-const fs = require('node:fs');
-
-// Capture "Version: " (group 1) followed by a semver, optionally with a
-// pre-release or build metadata (group 2).
-const VERSION_PATTERN = /\s*(\d+\.\d+\.\d+(?:[-+][0-9A-Za-z-.]+)?)/;
+const SEMVER_PATTERN = '\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?';
+const PACKAGE_VERSION_PATTERN = new RegExp(
+  `(composer require longitude-one/geo-parser:)\\^?(${SEMVER_PATTERN})(?=\\s|$)`,
+);
 
 module.exports.readVersion = function (contents) {
-  const match = contents.match(VERSION_PATTERN);
-  return match ? match[1] : '0.0.0';
+  const match = contents.match(PACKAGE_VERSION_PATTERN);
+
+  if (!match) {
+    throw new Error('readme-version-updater: No Geo Parser installation version found in README.md.');
+  }
+
+  return match[2];
 };
 
 module.exports.writeVersion = function (contents, version) {
-  if (!VERSION_PATTERN.test(contents)) {
-    throw new Error(
-      "readme-version-updater: No 'x.y.z' mention found in README.md. " +
-        "The version cannot be updated.",
-    );
-  }
-  const updatedContents = contents.replace(VERSION_PATTERN, `${version}`);
+  module.exports.readVersion(contents);
 
-  // Log the updated file contents (equivalent to `cat`)
-  console.log("\n--- Updated README.md ---");
-  console.log(updatedContents);
-  console.log("--- End of file ---\n");
+  const major = version.split('.')[0];
 
-  return updatedContents;
+  return contents.replace(
+    new RegExp(PACKAGE_VERSION_PATTERN.source, 'g'),
+    (_, prefix) => `${prefix}^${version}`,
+  ).replace(
+    /(https:\/\/img\.shields\.io\/badge\/docs-v)\d+(-blue)/g,
+    (_, prefix, suffix) => `${prefix}${major}${suffix}`,
+  ).replace(
+    /(https:\/\/www\.longitude-one\.fr\/geo-parser\/v)\d+(\/index\.html)/g,
+    (_, prefix, suffix) => `${prefix}${major}${suffix}`,
+  );
 };
