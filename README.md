@@ -1,24 +1,17 @@
-# Geographic parser: longitude-one/geo-parser
+# Geo Parser
 
-![longitude-one/geo-parser](https://img.shields.io/badge/longitude--one-geo--parser-blue)
-![Stable release](https://img.shields.io/github/v/release/longitude-one/geo-parser)
-[![Packagist License](https://img.shields.io/packagist/l/longitude-one/geo-parser)](https://github.com/longitude-one/geo-parser/blob/main/LICENSE)
+[![Release](https://img.shields.io/github/v/release/longitude-one/geo-parser?include_prereleases&sort=semver&label=release)](https://github.com/longitude-one/geo-parser/releases)
+[![PHP](https://img.shields.io/packagist/php-v/longitude-one/geo-parser?label=php)](https://packagist.org/packages/longitude-one/geo-parser)
+[![License](https://img.shields.io/packagist/l/longitude-one/geo-parser)](https://github.com/longitude-one/geo-parser/blob/main/LICENSE)
+[![CI](https://github.com/longitude-one/geo-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/longitude-one/geo-parser/actions/workflows/ci.yml)
+[![Coverage](https://codecov.io/gh/longitude-one/geo-parser/branch/main/graph/badge.svg)](https://codecov.io/gh/longitude-one/geo-parser/tree/main)
+[![Monthly downloads](https://img.shields.io/packagist/dm/longitude-one/geo-parser)](https://packagist.org/packages/longitude-one/geo-parser)
+[![Documentation](https://img.shields.io/badge/docs-v4-blue)](https://www.longitude-one.fr/geo-parser/v4/index.html)
 
-Lexer and parser library for geographic coordinate strings.
-
-[![PHP CI](https://github.com/longitude-one/geo-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/longitude-one/geo-parser/actions/workflows/ci.yml)
-[![Coverage Status](https://codecov.io/gh/longitude-one/geo-parser/graph/badge.svg?token=0YC8GNTY8L)](https://codecov.io/gh/longitude-one/geo-parser)
-![Minimum PHP Version](https://img.shields.io/packagist/php-v/longitude-one/geo-parser.svg?maxAge=3600)
-
-[![Downloads](https://img.shields.io/packagist/dm/longitude-one/geo-parser.svg)](https://packagist.org/packages/longitude-one/geo-parser)
+Parse geographic coordinate strings into decimal values or typed coordinates.
+Use scalar results for simple conversions, or retain explicit cardinal axes with typed results.
 
 ## Installation
-
-```bash
-composer require longitude-one/geo-parser
-```
-
-Current version:
 
 ```bash
 composer require longitude-one/geo-parser:^4.1.0
@@ -54,9 +47,9 @@ $value1 = $parser->parse($input1); //56.242
 $value2 = $parser->parse($input2); //-40.446111111111
 ```
 
-### Typed coordinates (since 4.0.0)
+### Typed coordinates
 
-Since version 4.0.0, use `parseAsCoordinates()` when the parsed value should
+Use `parseAsCoordinates()` when the parsed value should
 retain its coordinate structure. It returns a `Coordinate` for a single value
 and a `Point` for a pair. An axis is set only when the input contains a cardinal
 direction; otherwise `getAxis()` returns `null` .
@@ -84,120 +77,25 @@ assert(AxisEnum::LATITUDE === $point->getSecond()->getAxis());
 For example, `(new Parser('40, 79'))->parseAsCoordinates()` returns a `Point`
 whose two coordinates both have a `null` axis.
 
-## Supported Formats
+## Documentation
 
-Both single values and coordinate pairs are supported. The following examples
-illustrate the supported formats; they
-are not exhaustive.
+Read the [official documentation](https://www.longitude-one.fr/geo-parser/v4/index.html).
 
-A numeric sign may accompany a cardinal direction when both agree: `+40N` ,
-`+75E` , `-40S` , and `-75W`
-are accepted. The direction is applied once (`-75W` returns `-75` ); conflicting
-combinations such as `-40N`
-or `+75W` throw `UnexpectedValueException` . This also applies to DDM/DMS
-formats and coordinate pairs,
-for both parsing methods. Previously rejected signed cardinal inputs are now
-accepted when consistent (issue #31).
+See the [coordinate format guide](docs/coordinate-formats.md) for accepted syntax, return values and exceptions.
 
-1. Simple single-signed values
+## Supported formats
 
-   - 40
-   - -40
-   - -8.543
-   - +132
-   - +77.2
+| Format | Example |
+| --- | --- |
+| Decimal degrees | `-79.948611` |
+| Degrees and decimal minutes | `79° 56.91666' W` |
+| Degrees, minutes and seconds | `79° 56' 55" W` |
+| Colon-separated angles | `40:26:46 N` |
+| Coordinate pairs | `79°56′55″W, 40°26′46″N` |
 
-2. Simple single signed values with degree symbol
-
-   - 40°
-   - -40°
-   - -5.234°
-   - +43°
-   - +38.43°
-
-3. Single unsigned values with or without degree symbol, and cardinal direction
-
-   - 40° N
-   - 40 S
-   - 56.242 E
-
-4. Single values of signed integer degrees with degree symbol, and decimal
-   minutes with apostrophe
-
-   - 40° 26.222'
-   - -65° 32.22'
-   - +165° 52.22'
-
-5. Single values of unsigned integer degrees with degree symbol, decimal
-   minutes with apostrophe, and cardinal direction
-
-   - 40° 26.222' E
-   - 65° 32.22' S
-
-6. Single values of signed integer degrees with degree symbol, integer minutes
-   with apostrophe, and optional integer or decimal seconds with quote
-
-   - 40° 26' 46"
-   - -79° 58' 56"
-   - 93° 19' 25.8"
-   - +120° 19' 25.8"
-
-7. Single values of signed integer degrees with colon symbol, integer minutes,
-   and optional colon and integer or decimal seconds
-
-   - +40:26:46
-   - -79:58:56
-   - 93:19:25.8
-
-8. Single values of unsigned integer degrees with degree symbol, integer
-   minutes with apostrophe, optional integer or decimal seconds with quote, and
-   cardinal direction
-
-   - 40° 26' 46" S
-   - 99° 58' 56" W
-   - 44° 58' 53.9" N
-
-9. Single values of unsigned integer degrees with a colon, integer minutes,
-   optional integer or decimal seconds, and a cardinal direction
-
-   - 40:26:46 S
-   - 99:58:56 W
-   - 44:58:53.9 N
-
-10. Two of any one format separated by whitespace
-
-11. Two of any one format separated by a comma
-
-## Return
-
-The parser returns an integer or float for a single value, or an array
-containing a coordinate pair.
-
-String inputs are tokenized and parsed as geographic coordinates. Native integer
-and float inputs are returned unchanged,
-including their type, without passing through the lexer or geographic range
-validation.
-
-## Exceptions
-
-Untrusted values in exception messages are formatted by spatial-core's
-`DiagnosticValueFormatter` :
-control characters and invalid UTF-8 bytes are escaped, and each value is
-limited to 2,048 characters.
-
-Library exceptions thrown by the `Lexer` and `Parser` implement the
-`LongitudeOne\GeoParser\Exception\ExceptionInterface` interface:
-
-```php
-use LongitudeOne\GeoParser\Exception\ExceptionInterface;
-use LongitudeOne\GeoParser\Parser;
-
-try {
-    $value = (new Parser('100N'))->parse();
-} catch (ExceptionInterface $exception) {
-    // Handle a library parsing exception.
-}
-```
+Signs and cardinal directions must agree: `-75W` is accepted; `+75W` is rejected.
+Library parsing exceptions implement `LongitudeOne\GeoParser\Exception\ExceptionInterface`.
+Native integers and floats are returned unchanged, without geographic range validation.
 
 ## Roadmap
 
@@ -231,3 +129,7 @@ issues will not be addressed during the security-fixes period.
 
 Previous major versions may receive security fixes only, according to the
 roadmap above.
+
+## Contributing
+
+See [Contributing](CONTRIBUTING.md) for development setup, checks and contribution guidelines.
