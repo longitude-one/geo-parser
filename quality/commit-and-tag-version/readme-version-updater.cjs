@@ -4,7 +4,7 @@
 
 const SEMVER_PATTERN = '\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?';
 const PACKAGE_VERSION_PATTERN = new RegExp(
-  `(composer require longitude-one/geo-parser:)(${SEMVER_PATTERN})(?=\\s|$)`,
+  `(composer require longitude-one/geo-parser:)\\^?(${SEMVER_PATTERN})(?=\\s|$)`,
 );
 
 module.exports.readVersion = function (contents) {
@@ -22,6 +22,6 @@ module.exports.writeVersion = function (contents, version) {
 
   return contents.replace(
     new RegExp(PACKAGE_VERSION_PATTERN.source, 'g'),
-    (_, prefix) => `${prefix}${version}`,
+    (_, prefix) => `${prefix}^${version}`,
   );
 };
