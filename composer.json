@@ -36,7 +36,7 @@
             "quality/php-mess-detector/vendor/bin/phpmd analyze tests --format text --ruleset quality/php-mess-detector/test-ruleset.yml"
         ],
         "phpcs": "quality/php-code-sniffer/vendor/bin/phpcs --standard=quality/php-code-sniffer/phpcs.xml -s",
-        "markdown": "npm run lint:markdown",
+        "markdown": "npm run lint:markdown -- --config quality/.markdownlint.json",
         "quality": [
             "@cs-check",
             "@phpstan",

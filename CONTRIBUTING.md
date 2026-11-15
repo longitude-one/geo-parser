@@ -40,7 +40,10 @@ fix(parser): handle empty input
 docs: clarify installation
 ```
 
-Use the commit types configured in [.versionrc.json](.versionrc.json).
+Use the commit types configured in [.versionrc.json](quality/commit-and-tag-version/.versionrc.json).
+Run release tooling from the repository root with
+`commit-and-tag-version --config quality/commit-and-tag-version/.versionrc.cjs`.
+Add `--dry-run` to preview a release; actual releases require the maintainer's authorization.
 
 ## Submitting a pull request
 

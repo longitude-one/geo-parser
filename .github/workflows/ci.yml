@@ -36,7 +36,7 @@ jobs:
               });
               const paths = files.flatMap(file => [file.filename, file.previous_filename].filter(Boolean));
               const markdownOnly = path => path.endsWith('.md') || path.startsWith('docs/') ||
-                ['package.json', 'package-lock.json'].includes(path) || path.startsWith('.markdownlint');
+                ['package.json', 'package-lock.json'].includes(path) || path === 'quality/.markdownlint.json';
               code = paths.some(path => path !== 'LICENSE' && !markdownOnly(path));
               markdown = paths.some(path => markdownOnly(path) || path.startsWith('.github/'));
             }
