@@ -2,7 +2,7 @@
   "name": "geo-parser-quality",
   "private": true,
   "scripts": {
-    "lint:markdown": "markdownlint \"**/*.md\" --ignore \"**/vendor/**\" --ignore \"**/node_modules/**\" --ignore \"build/**\""
+    "lint:markdown": "markdownlint --config quality/.markdownlint.json \"**/*.md\" --ignore \"**/vendor/**\" --ignore \"**/node_modules/**\" --ignore \"build/**\""
   },
   "devDependencies": {
     "markdownlint-cli": "^0.50.0"
